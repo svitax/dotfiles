@@ -158,7 +158,6 @@
 ;;;;;;;;;;;;;;;
 ;;;; faces ;;;;
 
-;; NOTE document fontaine more
 (use-package fontaine
   :if (display-graphic-p)
   :config
@@ -177,8 +176,24 @@
 			      ;; font height is 1/10pt.
 			      :default-height 150
 			      :variable-family "Iosevka Comfy Motion Duo")))
-  (fontaine-set-preset 'regular)
-  (fontaine-mode 1))
+  ;; Themes re-apply face definitions when they are loaded. This is necessary to
+  ;; render the theme. For certain faces, such as `bold' and `italic', it means
+  ;; that their font family may be reset (depending on the particularities of
+  ;; the theme.)
+  ;;
+  ;; To avoid such a potential problem, we can arrange to restore the current
+  ;; font preset which was applied by `fontaine-set-preset'. Fontaine provides
+  ;; the command `fontaine-apply-current-preset'. It can be called interactively
+  ;; after loading a theme or be assigned to a hook that is ran at the post
+  ;; `load-theme' phase.
+  ;;
+  ;; `fontaine-mode' does this automatically, persisting the latest font preset
+  ;; when closing/starting Emacs and while switching between themes.
+  (fontaine-mode 1)
+
+  ;; Set the last preset or fall back to desired style from `fontaine-presets'
+  ;; (the `regular' in this case).
+  (fontaine-set-preset 'regular))
 
 (use-package variable-pitch
   :no-require
