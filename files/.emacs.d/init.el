@@ -1102,8 +1102,31 @@ When the region is active, comment its lines instead."
 ;;;;;;;;;;;;;;
 ;;;; diff ;;;;
 
+;; I would like to lean into native/built-in Emacs functionality where it's
+;; equal or better than the third-party alternatives. `diff-hl' relies on the
+;; built-in `vc.el' library instead of talking to git directly (thus expanding
+;; support to whatever VCs vc.el supports, and not git alone), which also means
+;; it can take advantage of its caching and other user configuration for
+;; vc.el. Overall, it should be faster and lighter.
+;;
+;; However, everytime I have tried to use diff-hl, it has been buggy or slow to
+;; refresh on changes. It still has issues with Magit altering the git state. It
+;; is also easier to redefine fringe bitmaps for git-gutter than it is for
+;; diff-hl.
+;;
+;; Doom Emacs has a lot of configuration code for diff-hl that I might look into
+;; incorporating someday. In the meantime I'll keep using git-gutter.
+
 (use-package git-gutter
   :config
+  ;; `git-gutter' and `git-gutter-fringe' use the margins or fringes to
+  ;; highlight changes in the current buffer. The indicators are colour-coded to
+  ;; denote whether a change is an addition, removal, or change that includes a
+  ;; bit of both.
+  ;;
+  ;; This package offers some more features, such as the ability to move between
+  ;; diff hunks while editing the buffers. I still need to experiment with those
+  ;; before customizing them to my liking.
   (add-hook 'prog-mode-hook #'git-gutter-mode)
   (setopt fringes-outside-margins t
 	  git-gutter:update-interval 0))
@@ -1111,6 +1134,10 @@ When the region is active, comment its lines instead."
 (use-package git-gutter-fringe
   :config
   (setopt git-gutter-fr:side 'left-fringe)
+  ;; Redefine fringe bitmaps to present the diff in the fringe as solid bars
+  ;; (with no border) taking up less horizontal space in the fringe. However
+  ;; this will look bad with themes that invert the foreground/background of
+  ;; git-gutter-fr's faces (like `modus-themes' does.)
   (define-fringe-bitmap 'git-gutter-fr:added [#b11111000] nil nil '(center repeated))
   (define-fringe-bitmap 'git-gutter-fr:modified [#b11111000] nil nil '(center repeated))
   (define-fringe-bitmap 'git-gutter-fr:deleted [#b11111000] nil nil '(center repeated)))
