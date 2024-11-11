@@ -30,6 +30,7 @@
 	emacs-magit
 	emacs-git-gutter
 	emacs-git-gutter-fringe
+	emacs-citar
 	))
 
 (define home-emacs-config-service-type

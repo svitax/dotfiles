@@ -1183,7 +1183,17 @@ When the region is active, comment its lines instead."
 ;;;;;;;;;;;;;;;;;;;;;;
 ;;;; bibliography ;;;;
 
-;; (use-package citar)
+;; NOTE document citar
+(use-package citar
+  :config
+  (setopt citar-select-multiple nil
+	  citar-bibliography '("~/OneDrive/zettelkasten/reference/bibliography.bib")
+	  citar-library-paths '("~/OneDrive/zettelkasten/reference/")
+	  citar-notes-paths '("~/OneDrive/zettelkasten/"))
+  (bind-keys
+   :map +org-prefix
+   ("b" . citar-open)))
+
 ;; (use-package biblio)
 ;; (use-package biblio-openlibrary)
 ;; (use-package biblio-gbooks)
