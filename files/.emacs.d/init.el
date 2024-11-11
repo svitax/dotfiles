@@ -108,6 +108,9 @@
     "f" #'find-file
     "l" #'find-library
     "m" #'man)
+  (defvar-keymap +org-prefix-map
+    :doc "Prefix keymap for Org."
+    :prefix '+org-prefix)
   (defvar-keymap +window-prefix-map
     :doc "Prefix map for windows."
     :prefix '+window-prefix)
@@ -138,7 +141,7 @@
    ;; "l"
    ;; ("m" . +mail-prefix) ; C-x m
    ;; ("n" . +narrow-prefix)
-   ;; "o" org
+   ("o" . +org-prefix)
    ;; ("p" . +project-prefix)
    ;; "q"
    ;; "r" registers
