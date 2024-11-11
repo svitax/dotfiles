@@ -220,6 +220,23 @@
 	    ;; all accent colors are desaturated. Is makes the themes less
 	    ;; attention-grabbing.
 	    ,@modus-themes-preset-overrides-faint))
+
+  ;; We use the `enable-theme-functions' hook to ensure that these values are
+  ;; updated after we switch themes. This special hook available in Emacs 29+
+  ;; works with anything that uses the basic `enable-theme' function.
+  (defun +customize-theme-faces (&rest _)
+    (modus-themes-with-colors
+      (custom-set-faces
+       ;; The `git-gutter' and `git-gutter-fr' packages default to drawing
+       ;; bitmaps for the indicators they display (e.g. bitmap of a plus sign
+       ;; for added lines). I replace these bitmaps with contiguous lines which
+       ;; look nicer, but require a change to the foreground of the relevant
+       ;; faces to yield the desired color combinations.
+       `(git-gutter-fr:added ((,c :foreground ,bg-added-fringe :background ,fringe)))
+       `(git-gutter-fr:deleted ((,c :foreground ,bg-removed-fringe :background ,fringe)))
+       `(git-gutter-fr:modified ((,c :foreground ,bg-changed-fringe :background ,fringe))))))
+  (add-hook 'enable-theme-functions #'+customize-theme-faces)
+
   (modus-themes-select 'modus-vivendi))
 
 (use-package pulsar
