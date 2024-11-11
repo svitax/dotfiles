@@ -1152,7 +1152,23 @@ When the region is active, comment its lines instead."
 ;;;;;;;;;;;;;
 ;;;; org ;;;;
 
-;; (use-package org)
+;; NOTE document org
+(use-package org
+  :config
+  (setopt org-return-follows-link t
+	  org-startup-folded 'content)
+  ;; Open Org links in current window. Default is `'find-file-other-window'
+  ;;
+  ;; HACK: Can I replace this hack with some `display-buffer-alist'
+  ;; configuration?
+  (setf (cdr (assoc 'file org-link-frame-setup)) 'find-file)
+
+  ;; Recenter and pulse the current line, and display the hidden contents of Org and Outline headings.
+  (with-eval-after-load 'pulsar
+    (dolist (hook '(org-follow-link-hook))
+      (add-hook hook #'pulsar-recenter-middle)
+      (add-hook hook #'pulsar-reveal-entry))))
+
 ;; (use-package org-gtd)
 
 (use-package org-agenda
