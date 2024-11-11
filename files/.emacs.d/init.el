@@ -1128,8 +1128,14 @@ When the region is active, comment its lines instead."
   ;; diff hunks while editing the buffers. I still need to experiment with those
   ;; before customizing them to my liking.
   (add-hook 'prog-mode-hook #'git-gutter-mode)
-  (setopt fringes-outside-margins t
-	  git-gutter:update-interval 0))
+  ;; The `git-gutter:update-interval' customizable variable was defined with
+  ;; type 'integer, but I like it between 0.3 and 0.5 so I redefine it with type
+  ;; 'number.
+  (defcustom git-gutter:update-interval 0
+  "Time interval in seconds for updating diff information."
+  :type 'number
+  :group 'git-gutter)
+  (setopt git-gutter:update-interval 0.5))
 
 (use-package git-gutter-fringe
   :config
@@ -1138,6 +1144,7 @@ When the region is active, comment its lines instead."
   ;; (with no border) taking up less horizontal space in the fringe. However
   ;; this will look bad with themes that invert the foreground/background of
   ;; git-gutter-fr's faces (like `modus-themes' does.)
+  (setq-default fringes-outside-margins t)
   (define-fringe-bitmap 'git-gutter-fr:added [#b11111000] nil nil '(center repeated))
   (define-fringe-bitmap 'git-gutter-fr:modified [#b11111000] nil nil '(center repeated))
   (define-fringe-bitmap 'git-gutter-fr:deleted [#b11111000] nil nil '(center repeated)))
