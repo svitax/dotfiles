@@ -227,6 +227,10 @@
   (defun +customize-theme-faces (&rest _)
     (modus-themes-with-colors
       (custom-set-faces
+       ;; By default, the background of the `region' face extends from the end
+       ;; of the line to the edge of the window. To limit it to the end of the
+       ;; line, we need to override the face's `:extend' attribute.
+       '(region ((t :extend nil)))
        ;; The `git-gutter' and `git-gutter-fr' packages default to drawing
        ;; bitmaps for the indicators they display (e.g. bitmap of a plus sign
        ;; for added lines). I replace these bitmaps with contiguous lines which
