@@ -16,6 +16,9 @@
  (packages (list git
 		 font-iosevka
 		 librewolf
+		 ;; NOTE make a home-onedrive-service-type
+		 ;; or use owncloud/nextcloud
+		 +onedrive
 		 ))
  (services (list
 	    (service home-emacs-config-service-type)
