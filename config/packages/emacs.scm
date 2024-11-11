@@ -6,7 +6,12 @@
   #:use-module (guix download)
   #:use-module (guix git-download)
   #:use-module (guix build-system emacs)
-  #:use-module (guix licenses))
+  #:use-module (guix licenses)
+  #:export (+emacs-super-save
+	    +emacs-mowie
+	    +emacs-cursory
+	    +emacs-bind
+	    +emacs-better-jumper))
 
 ;; TODO delete emacs-super-save because its already in guix/emacs-xyz
 (define-public +emacs-super-save
