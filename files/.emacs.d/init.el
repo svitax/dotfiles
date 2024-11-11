@@ -163,6 +163,10 @@
   :if (display-graphic-p)
   :config
   ;; Define detailed font configurations and set them on command.
+  (bind-keys
+   :map +toggle-prefix
+   ("f" . fontaine-set-preset))
+
   (setopt x-underline-at-descent-line nil
 	  text-scale-remap-header-line t
 	  fontaine-presets '((regular)
