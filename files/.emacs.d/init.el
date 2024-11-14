@@ -129,7 +129,7 @@
     "n" #'display-line-numbers-mode
     ;; "s" #'spacious-padding-mode
     ;; "r" #'rainbow-mode
-    "v" #'variable-pitch-mode)
+    )
 
   (bind-keys
    :map ctl-x-map
@@ -255,7 +255,11 @@
       (variable-pitch-mode 1)))
   (add-hook 'text-mode-hook #'+enable-variable-pitch)
   (add-hook 'notmuch-show-mode-hook #'+enable-variable-pitch)
-  (add-hook 'elfeed-show-mode-hook #'+enable-variable-pitch))
+  (add-hook 'elfeed-show-mode-hook #'+enable-variable-pitch)
+
+  (bind-keys
+   :map +toggle-prefix-map
+       ("v" . variable-pitch-mode)))
 
 (use-package modus-themes
   :config
