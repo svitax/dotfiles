@@ -37,28 +37,6 @@
    ;; minimal as possible in exchange for harder use-package debugging sessions
    use-package-expand-minimally t))
 
-;;;;;;;;;;;;;;
-;;;; guix ;;;;
-
-(use-package guix)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;; native-compilation ;;;;
-
-(use-package native-comp
-  :no-require
-  :config
-  ;; The default setting for reporting native compilation errors is set to a
-  ;; verbose value which is confusing: it produces warnings for compilation
-  ;; issues that only the developer of the given package needs to deal
-  ;; with. These include innocuous facts like docstrings being wider than a
-  ;; certain character count. To make things even worse, the buffer that shows
-  ;; these warnings uses the stop sign character, resulting in a long list of
-  ;; lines with red spots everywhere, as if we have totally broken Emacs.
-  (when (native-comp-available-p)
-    (setq native-comp-async-report-warnings-errors 'silent)
-    (setq native-compile-prune-cache t)))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; :xdg-cache and :xdg-state ;;;;
 
@@ -98,27 +76,52 @@
   :no-require
   :config
   ;; Define a set of keymaps with commonly used commands and put them behind the
-  ;; mode-specific-map (`C-c'). The idea is to hit a series of keys to get the
-  ;; desired command. Keymaps are organised thematically and rely on strong
-  ;; mnemonics, such as `b' for buffers, `w' for windows, and so on.
+  ;; mode-specific-map (`C-c') or the ctl-x-map (`C-x'). The idea is to hit a
+  ;; series of keys to get the desired command. Keymaps are organised
+  ;; thematically and rely on strong mnemonics, such as `b' for buffers, `w' for
+  ;; windows, and so on.
+  (defvar-keymap +bib-prefix-map
+    :doc "Prefix keymap for bibliography."
+    :prefix '+bib-prefix-map)
   (defvar-keymap +buffer-prefix-map
     :doc "Prefix keymap for buffers."
-    :prefix '+buffer-prefix)
+    :prefix '+buffer-prefix-map)
+  (defvar-keymap +dap-prefix-map
+    :doc "Prefix keymap for debugging."
+    :prefix '+dap-prefix-map)
+  (defvar-keymap +eval-prefix-map
+    :doc "Prefix keymap for evaluating."
+    :prefix '+eval-prefix-map)
   (defvar-keymap +file-prefix-map
     :doc "Prefix keymap for files."
-    :prefix '+file-prefix
-    "f" #'find-file
-    "l" #'find-library
-    "m" #'man)
-  (defvar-keymap +org-prefix-map
-    :doc "Prefix keymap for Org."
-    :prefix '+org-prefix)
+    :prefix '+file-prefix-map)
+  (defvar-keymap +guix-prefix-map
+    :doc "Prefix keymap for Guix commands."
+    :prefix '+guix-prefix-map)
+  (defvar-keymap +mail-prefix-map
+    :doc "Prefix keymap for mail."
+    :prefix '+mail-prefix-map)
+  (defvar-keymap +notes-prefix-map
+    :doc "Prefix keymap for notes commands."
+    :prefix '+notes-prefix-map)
+  (defvar-keymap +project-prefix-map
+    :doc "Prefix map for project."
+    :prefix '+project-prefix-map)
+  (defvar-keymap +registers-prefix-map
+    :doc "Prefix map for registers."
+    :prefix '+registers-prefix-map)
+  (defvar-keymap +tab-prefix-map
+    :doc "Prefix map for tabs."
+    :prefix '+tab-prefix-map)
+  (defvar-keymap +vc-prefix-map
+    :doc "Prefix map for version control."
+    :prefix '+vc-prefix-map)
   (defvar-keymap +window-prefix-map
     :doc "Prefix map for windows."
-    :prefix '+window-prefix)
+    :prefix '+window-prefix-map)
   (defvar-keymap +toggle-prefix-map
     :doc "Prefix map for minor mode toggles."
-    :prefix '+toggle-prefix
+    :prefix '+toggle-prefix-map
     "f" #'flymake-mode
     "h" #'hl-line-mode
     ;; "k" #'keycast-mode-line-mode
@@ -127,38 +130,76 @@
     ;; "s" #'spacious-padding-mode
     ;; "r" #'rainbow-mode
     "v" #'variable-pitch-mode)
-  (bind-keys
-   :map mode-specific-map
-   ;; "a" org-agenda ; replace abbrev stuff
-   ("b" . +buffer-prefix)
-   ;; "c" org-capture
-   ;; "d" +dap-prefix
-   ;; "e" +eval-prefix
-   ("f" . +file-prefix)
-   ;; "g"
-   ;; "h"
-   ;; "i"
-   ("j" . dired-jump)
-   ;; "k"
-   ;; "l"
-   ;; ("m" . +mail-prefix) ; C-x m
-   ;; ("n" . +narrow-prefix)
-   ("o" . +org-prefix)
-   ;; ("p" . +project-prefix)
-   ;; "q"
-   ;; "r" registers
-   ;; "s" +search-prefix
-   ;; "t" tab
-   ;; "u" undo?
-   ;; ("v" . +vc-prefix)
-   ("w" . +window-prefix)
-   ("x" . +toggle-prefix)
-   ;; "y"
-   ;; "z"
-   ))
 
+  (bind-keys
+   :map ctl-x-map
+   ;; ("C-a" . )
+   ("b" . +buffer-prefix-map)
+   ("C-b" . ibuffer) ; list-buffers
+   ;; ("c" . org-capture)
+   ("d" . dired-jump)
+   ("C-d" . dired)
+   ("e" . +eval-prefix-map)
+   ("f" . +file-prefix-map)
+   ("g" . +guix-prefix-map)
+   ("h" . mark-whole-buffer)
+   ;; ("i" . ) ; insert-file
+   ("j" . +dap-prefix-map) ; i don't like dap/debug on j
+   ;; ("C-j" . ) ; dired
+   ("k" . kill-buffer)
+   ("C-k" . kmacro-keymap)
+   ("l" . +bib-prefix-map) ; i don't like bib on l
+   ;; ("C-l" . ) ; downcase-region
+   ("m" . +mail-prefix-map)
+   ("n" . +notes-prefix-map)
+   ;; ("C-n" . ) ; set-goal-column
+   ;; ("C-o" . delete-blank-lines) 
+   ("p" . +project-prefix-map)
+   ;; "C-p" . mark-page
+   ;; "q" ; kbd-macro-query
+   ;; "C-q" . read-only-mode
+   ("r" . +registers-prefix-map)
+   ;; "C-r" . find-file-read-only
+   ;; "s" ; save-some-buffers
+   ;; ("C-s" . save-buffers)
+   ("t" . +tab-prefix-map)
+   ;; "C-t" . transpose-lines
+   ;; "u" undo? undo-prefix?
+   ;; ("C-u" . upcase-region) ; don't need
+   ("v" . +vc-prefix-map)
+   ;; "C-v" . find-alternate-file
+   ("w" . +window-prefix-map)
+   ;; "C-w" . write-file
+   ("x" . +toggle-prefix-map)))
+  
 ;; TODO replace with embark
 (use-package which-key)
+
+;;;;;;;;;;;;;;
+;;;; guix ;;;;
+
+(use-package guix
+  :config
+  (bind-keys
+   :map +guix-prefix-map
+   ("g" . guix)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; native-compilation ;;;;
+
+(use-package native-comp
+  :no-require
+  :config
+  ;; The default setting for reporting native compilation errors is set to a
+  ;; verbose value which is confusing: it produces warnings for compilation
+  ;; issues that only the developer of the given package needs to deal
+  ;; with. These include innocuous facts like docstrings being wider than a
+  ;; certain character count. To make things even worse, the buffer that shows
+  ;; these warnings uses the stop sign character, resulting in a long list of
+  ;; lines with red spots everywhere, as if we have totally broken Emacs.
+  (when (native-comp-available-p)
+    (setq native-comp-async-report-warnings-errors 'silent)
+    (setq native-compile-prune-cache t)))
 
 ;;;;;;;;;;;;;;;
 ;;;; faces ;;;;
@@ -168,7 +209,7 @@
   :config
   ;; Define detailed font configurations and set them on command.
   (bind-keys
-   :map +toggle-prefix
+   :map +toggle-prefix-map
    ("f" . fontaine-set-preset))
 
   (setopt x-underline-at-descent-line nil
@@ -294,12 +335,20 @@
 ;;;;;;;;;;;;;;;
 ;;;; files ;;;;
 
+;; NOTE document files
 (use-package files
   :config
   (setopt y-or-n-p-use-read-key t
 	  use-short-answers t
 	  confirm-kill-processes nil
-	  confirm-kill-emacs 'yes-or-no-p))
+	  confirm-kill-emacs 'yes-or-no-p)
+
+  (bind-keys
+   :map +file-prefix-map
+   ("f" . find-file)
+   ;; TODO add mark to xref before navigating to library
+   ("l" . find-library)
+   ("m" . man)))
 
 ;; TODO savehist
 
@@ -585,9 +634,9 @@ This is dote to accomodate `+vertico-multiform-minimal'."
   (bind-keys
    :map global-map
    ("M-y" . consult-yank-pop)
-   ("C-x b" . consult-buffer)
    :map goto-map
    ("g" . consult-goto-line)
+   ("i")
    :map search-map
    ("b" . consult-buffer)
    ("f" . consult-find) ; fd
@@ -597,7 +646,7 @@ This is dote to accomodate `+vertico-multiform-minimal'."
    ("l" . consult-line)
    ("m" . consult-mark)
    ("s" . consult-outline)
-   :map +buffer-prefix
+   :map +buffer-prefix-map
    ("b" . consult-buffer)
    :map consult-narrow-map
    ;; Available filters are displayed with the `consult-narrow-help' command at
@@ -664,17 +713,17 @@ This is dote to accomodate `+vertico-multiform-minimal'."
 ;;;; buffers ;;;;
 
 ;; NOTE document buffer
-(use-package buffer
+(use-package buffers
   :no-require
   :config
   (bind-keys
-   :map +buffer-prefix
+   :map +buffer-prefix-map
    ("c" . clone-indirect-buffer-other-window)
    ("g" . revert-buffer-quick)
    ("k" . +kill-current-buffer)
-   ;; "m" #'+buffers-major-mode (prot) ; if i can filter in consult-buffer by major mode i don't need this
+   ;; ("m" . +buffers-major-mode) ; (prot) if i can filter in consult-buffer by major mode i don't need this
    ("r" . +rename-file-and-buffer)
-   ;; "v" #'+buffers-vc-root (prot) ; if i can filter in consult-buffer by vc root i don't need this
+   ;; ("v" . +buffers-vc-root) ; (prot) if i can filter in consult-buffer by vc root i don't need this
    )
 
   (defun +kill-current-buffer (&optional arg)
@@ -702,9 +751,7 @@ buffer's window as well."
   :no-require
   :config
   (bind-keys
-   :map global-map
-   ("M-o" . other-window)
-   :map +window-prefix
+   :map +window-prefix-map
    ("0" . delete-window)
    ("1" . delete-other-windows)
    ("2" . split-window-below)
@@ -791,6 +838,20 @@ buffer's window as well."
 		    +golden-ratio-scroll-screen-down))
       (add-to-list 'pulsar-pulse-functions func))))
 
+;;;;;;;;;;;;;;;;
+;;;; narrow ;;;;
+
+(use-package narrow
+  :no-require
+  :config
+  (bind-keys
+   :map +buffer-prefix-map
+   ("d" . narrow-to-defun)
+   ;; ("g" . goto-line-relative) ; if narrowed, make "M-g g" do goto-line-relative instead
+   ("n" . narrow-to-region)
+   ("p" . narrow-to-page)
+   ("w" . widen)))
+
 ;;;;;;;;;;;;;;;;;;;;
 ;;;; navigation ;;;;
 
@@ -801,9 +862,7 @@ buffer's window as well."
 	  avy-single-candidate-jump nil)
   (bind-keys
    :map global-map
-   ;; NOTE i dont know which key i prefer yet
-   ("C-'" . avy-goto-char-timer)
-   ("M-j" . avy-goto-char-timer)))
+   ("C-j" . avy-goto-char-timer)))
 
 (use-package dogears
   :load-path "plugins/dogears/"
@@ -964,7 +1023,7 @@ When the region is active, comment its lines instead."
    ("C-M-o" . +open-line-above)
 
    ;; Join the current line with the line below it similar to Vim's J command.
-   ("C-j" . +join-line-below)
+   ("M-j" . +join-line-below)
 
    ;; The `+comment-dwim' command is like the built-in `comment-dwim', but
    ;; toggles linewise commenting instead of appending them by default.
@@ -1100,8 +1159,7 @@ When the region is active, comment its lines instead."
   (setopt magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
   
   (bind-keys
-   :map mode-specific-map
-   ;; NOTE potentially add to vc-prefix-map instead
+   :map +vc-prefix-map
    ("v" . magit-status)))
 
 ;;;;;;;;;;;;;;
@@ -1180,6 +1238,7 @@ When the region is active, comment its lines instead."
   :config
   (bind-keys
    :map ctl-x-map
+   ;; NOTE replaced abbrev maps, find somewhere to relocate them later
    ("a" . org-agenda)))
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -1193,8 +1252,8 @@ When the region is active, comment its lines instead."
 	  citar-library-paths '("~/OneDrive/zettelkasten/reference/")
 	  citar-notes-paths '("~/OneDrive/zettelkasten/"))
   (bind-keys
-   :map +org-prefix
-   ("b" . citar-open)))
+   :map +notes-prefix-map
+   ("o" . citar-open)))
 
 ;; (use-package biblio)
 ;; (use-package biblio-openlibrary)
