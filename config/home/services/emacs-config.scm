@@ -31,6 +31,8 @@
 	emacs-git-gutter
 	emacs-git-gutter-fringe
 	emacs-citar
+	emacs-denote
+	emacs-consult-denote
 	))
 
 (define home-emacs-config-service-type

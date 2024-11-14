@@ -1262,8 +1262,86 @@ When the region is active, comment its lines instead."
 ;;;;;;;;;;;;;;;
 ;;;; notes ;;;;
 
-;; (use-package denote)
-;; (use-package consult-denote)
+(use-package denote
+  :config
+  ;; Denote is a simple note-taking tool for Emacs. It is based on the idea that
+  ;; notes should follow a predictable and descriptive file-naming scheme. The
+  ;; file name must offer a clear indication of what the note is about, without
+  ;; reference to any other metadata. Denote basically streamlines the creation
+  ;; of such files while providing facilities to link between them.
+  ;;
+  ;; Denote's file-naming scheme is not limited to "notes". It can be used for
+  ;; all types of files, including those that are not editable in Emacs, such as
+  ;; videos. Naming files in a consistent way makes their filtering and
+  ;; retrieval easier. Denote provides facilities to rename files, regardless of
+  ;; file type.
+  (setopt denote-directory (expand-file-name "~/OneDrive/zettelkasten")
+	  ;; If you want to have a "controlled vocabulary" of keywords, meaning
+	  ;; that you only use a predefined set of them, then you want
+	  ;; `denote-infer-keywords' set to nil, and `denote-known-keywords' to
+	  ;; have the keywords you need.
+	  denote-infer-keywords t
+	  denote-sort-keywords t
+	  denote-known-keywords '("emacs"))
+  ;; Highlight Denote file names in Dired buffers.
+  ;;
+  ;; If you only want the `denote-dired-mode' in select directories, then modify
+  ;; the variable `denote-dired-directories' and use
+  ;; `denote-dired-mode-in-directories'.
+  ;;
+  ;; If you want the generic approach, which is great if you rename files
+  ;; Denote-style in lots of different places, use `denote-dired-mode'.
+  (setopt denote-dired-directories `(,(expand-file-name "~/OneDrive/zettelkasten"))
+	  denote-dired-directories-include-subdirectories t)
+  (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories)
+
+  ;; Automatically rename Denote buffers when opening them so that instead of
+  ;; their long file name they have a literal "[D]" followed by the file's title
+  ;; and then the backlinks indicator. Read the doc string of
+  ;; `denote-rename-buffer-format' for how to modify this.
+  (setopt denote-rename-buffer-format "[D] %t%b")
+  ;; Customize what the backlink indicator looks like.
+  (setopt denote-buffer-has-backlinks-string " (<--->)")
+  ;; `denote-rename-buffer-mode' provides the means to automatically rename the
+  ;; buffer of a Denote file upon visiting the file.
+  (denote-rename-buffer-mode 1)
+
+  (bind-keys
+   :map +notes-prefix-map
+   ("n" . denote)
+   ("N" . denote-type)
+   ("o" . denote-sort-dired) ; "order" mnemonic
+   ;; Note that `denote-rename-file' can work from any context, not just Dired
+   ;; buffers. That is why we bind it globally.
+   ("r" . denote-rename-file)
+   :map text-mode-map
+   ("C-c n b" . denote-backlinks)
+   ("C-c n i" . denote-link) ; "insert" mnemonic
+   ("C-c n I" . denote-add-links)
+   ("C-c n r" . denote-rename-file)
+   ("C-c n R" . denote-rename-file-using-front-matter)
+   :map org-mode-map
+   ("C-c n d b" . denote-org-extras-dblock-insert-backlinks)
+   ("C-c n d l" . denote-org-extras-dblock-insert-links)
+   :map dired-mode-map
+   ("C-c n i" . denote-dired-link-marked-notes)
+   ("C-c n r" . denote-dired-rename-marked-files)
+   ("C-c n R" . denote-dired-rename-marked-files-using-front-matter)
+   ("C-c n t" . denote-dired-rename-marked-files-with-keywords)))
+
+(use-package consult-denote
+  :config
+  ;; This package is glue code to integrate `denote' with Daniel Mendler's
+  ;; `consult' package. The idea is to enhance minibuffer interactions, such as
+  ;; by providing a preview of the file-to-be-linked/opened and by adding more
+  ;; sources to the `consult-buffer' command.
+  (consult-denote-mode 1)
+  (bind-keys
+   :map +file-prefix-map
+   ("n" . consult-denote-find)
+   :map search-map
+   ("n" . consult-denote-grep)))
+
 ;; (use-package org-remark)
 
 ;;;;;;;;;;;;;
