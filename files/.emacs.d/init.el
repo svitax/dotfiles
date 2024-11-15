@@ -1248,20 +1248,114 @@ When the region is active, comment its lines instead."
 ;;;;;;;;;;;;;;;;;;;;;;
 ;;;; bibliography ;;;;
 
-;; NOTE document citar
+(use-package biblio
+  :config
+  ;; A bibliography provides pointers to stuff in the world outside of our
+  ;; writings like books, articles, web pages, videos, etc. When we want to
+  ;; reference these outside things, we attach an indicator which is used to look
+  ;; up that reference in our bibliography. Think of the bibliography as a
+  ;; database of links and information about those links. Now when we want to
+  ;; associate a piece of writing to some external thing, we don't have to rely on
+  ;; the physical form of that thing.
+  ;;
+  ;; Biblio provides facilities to browse and gather bibliographic references from
+  ;; various well-curated sources, and formats them as BibTeX entries, the file
+  ;; format of my bibliography. This is better than typing all entries manually
+  ;; with the built-in BibTeX mode, which is inefficient and could easily lead to
+  ;; errors. Simply run `biblio-lookup', select the source, and enter a search
+  ;; query. Once the search has completed, a new buffer opens with the
+  ;; results. You can then select your target entry and insert it into the buffer
+  ;; you called biblio-lookup from, copy it and paste it later, or a perform a
+  ;; number of other possible commands.
+  (defvar +bibliography-files
+    '("~/OneDrive/zettelkasten/reference/bibliography.bib")
+    "List of bibliography files.")
+
+  (defun +biblio--combined-lookup ()
+    "Combines `biblio-lookup' and `biblio-doi-insert-bibtex'."
+    (let* ((dbs (biblio--named-backends))
+	   (db-list (append dbs '(("DOI" . biblio-doi-backend))))
+	   (db-selected (biblio-completing-read-alist
+			 "Backend: "
+			 db-list)))
+      (if (eq db-selected 'biblio-doi-backend)
+	  (let ((doi (read-string "DOI: ")))
+	    (biblio-doi-insert-bibtex doi))
+	(biblio-lookup db-selected))))
+  (defun +biblio-lookup ()
+    "Insert Biblio search results into the current buffer or selected
+BibTeX file."
+    (interactive)
+    (if-let ((current-mode major-mode)
+	     +bibliography-files
+	     (bibfiles (length +bibliography-files))
+	     (bibfile (cond ((eq bibfiles 1)
+			     (car +bibliography-files))
+			    ((equal major-mode 'bibtex-mode)
+			     (buffer-file-name))
+			    (t
+			     (completing-read
+			      "Select BibTeX file: " +bibliography-files)))))
+	(progn
+	  (find-file bibfile)
+	  (goto-char (point-max))
+	  (+biblio--combined-lookup)
+	  (save-buffer))
+      (message "No BibTeX file(s) defined.")))
+
+  (bind-keys
+   :map +bib-prefix-map
+   ;; One minor inconvenience is that you must jump to the relevant bibliography
+   ;; file before inserting a new entry, and it provides two seperate search
+   ;; functions (`biblio-lookup' and `biblio-doi-insert-bibtex'). We write a
+   ;; function that prompts for a BibTeX file to insert into, and combines the
+   ;; two search functions.
+   ("b" . +biblio-lookup)))
+
+;; `biblio-openlibrary' provides a backend for `biblio' that supports queries
+;; based on ISBN using OpenLibrary's Read API. The API does allow queries based
+;; on a multitude of identifiers, but this package only allows and expects
+;; queries based on an ISBN idetifier because biblio already provides
+;; functionality for the other more common use cases.
+(use-package biblio-openlibrary)
+
+;; `biblio-gbooks' provides a backend for `biblio' that supports queries using
+;; Google's Books API. While the existing biblio backends provide good coverage
+;; of peer-reviewed scientific articles, they don't have good coverage of
+;; fiction and non-fiction books.
+(use-package biblio-gbooks)
+
 (use-package citar
   :config
-  (setopt citar-select-multiple nil
-	  citar-bibliography '("~/OneDrive/zettelkasten/reference/bibliography.bib")
-	  citar-library-paths '("~/OneDrive/zettelkasten/reference/")
-	  citar-notes-paths '("~/OneDrive/zettelkasten/"))
-  (bind-keys
-   :map +notes-prefix-map
-   ("o" . citar-open)))
+  ;; Citar provides a highly configurable `completing-read' front-end to browse
+  ;; and act on bibliographic data. It is a reference manager of sorts because
+  ;; it is the tool I use to access and manage my bibliography. It has support
+  ;; for cross-referenced entries, completion-at-point, bibliographic notes,
+  ;; attachments, navigating to the source bibliography file, and contextual
+  ;; Embark actions. It also integrates with `org-cite', Org mode's citation
+  ;; module.
+  ;;
+  ;; `citar-embark-mode' adds contextual Embark actions in the minibuffer and
+  ;; with org-at-point. The actions are generic and work the same across Org,
+  ;; Markdown, and LaTeX modes.
+  (citar-embark-mode 1)
+  ;; I prefer to have the Embark menu open with `org-open-at-point'.
+  (setopt citar-at-point-function 'embark-act)
 
-;; (use-package biblio)
-;; (use-package biblio-openlibrary)
-;; (use-package biblio-gbooks)
+  (setopt
+   ;; citar-select-multiple nil
+   org-cite-global-bibliography +bibliography-files
+   org-cite-insert-processor 'citar
+   org-cite-follow-processor 'citar
+   org-cite-activate-processor 'citar
+   citar-bibliography org-cite-global-bibliography
+   citar-library-paths '("~/OneDrive/zettelkasten/reference/")
+   citar-notes-paths '("~/OneDrive/zettelkasten/"))
+  (bind-keys
+   :map +bib-prefix-map
+   ("o" . citar-open)
+   :map org-mode-map
+   ("C-c i" . org-cite-insert)))
 
 ;;;;;;;;;;;;;;;
 ;;;; notes ;;;;
@@ -1345,6 +1439,34 @@ When the region is active, comment its lines instead."
    ("n" . consult-denote-find)
    :map search-map
    ("n" . consult-denote-grep)))
+
+(use-package citar-denote
+  :config
+  ;; `citar-denote' makes it possible to write notes on BibTeX entries with the
+  ;; help of the `citar' package. These notes have the citation's unique key
+  ;; associated with them in the file's front matter. They also get a
+  ;; configurable keyword in their file name (`citar-denote-keyword'), making it
+  ;; easy to find them in Dired and/or retrieve them with the various Denote
+  ;; methods.
+  (citar-denote-mode)
+
+  (setopt
+   ;; Allow multiple notes per bibliographic entry.
+   citar-open-always-create-notes nil
+   ;; Change the default keyword for bibliographic notes. I'm using these like
+   ;; the literature notes in my zettelkasten.
+   citar-denote-keyword "literature")
+
+  (bind-keys
+   :map +bib-prefix-map
+   ;; Adds citation keys or converts existing Denote file to a bibliographic
+   ;; note. When converting a regular Denote file, adds the
+   ;; `citar-denote-keyword' to the front matter and renames the file
+   ;; accordingly.
+   ("t" . citar-denote-add-citekey)
+   ;; Remove citation keys. When no more reference items are left, the
+   ;; `citar-denote-keyword' is removed and the file is renamed.
+   ("T" . citar-denote-remove-citekey)))
 
 ;; (use-package org-remark)
 

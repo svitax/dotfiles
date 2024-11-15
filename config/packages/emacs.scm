@@ -166,4 +166,50 @@ support prefix, autoload, and repeat-mode.")
 easily jump back to previous locations.")
    (license gpl3+)))
 
+(define-public +emacs-biblio-openlibrary
+  (let ((commit "c3e349c5521e75c308a45216437850e528bdceed")
+	(revision "0"))
+    (package
+     (name "emacs-biblio-openlibrary")
+     (version (git-version "0.0.1" revision commit))
+     (source
+      (origin
+       (uri (git-reference
+	     (url "https://github.com/fabcontigiani/biblio-openlibrary")
+	     (commit commit)))
+       (method git-fetch)
+       (sha256
+	(base32 "0y626gj76p51sfyv2xq1kmj3k56by0yhkk5nxj1dfzd9jngfb80a"))
+       (file-name (git-file-name name version))))
+     (build-system emacs-build-system)
+     (propagated-inputs (list emacs-biblio))
+     (home-page "https://github.com/fabcontigiani/biblio-openlibrary")
+     (synopsis "Emacs package for looking up and importing bibliographic entries from OpenLibrary.")
+     (description
+      "`biblio-openlibrary' provides a backend for `biblio.el', which allows you to easily search and retrieve bibliographic entries by ISBN using OpenLibrary's Read API.")
+     (license gpl3+))))
+
+(define-public +emacs-biblio-gbooks
+  (let ((commit "c7bdaba4dde8fca8b8e923f3c004d050a32c06c2")
+	(revision "0"))
+    (package
+     (name "emacs-biblio-gbooks")
+     (version (git-version "1.0.0" revision commit))
+     (source
+      (origin
+       (uri (git-reference
+	     (url "https://github.com/jrasband/biblio-gbooks")
+	     (commit commit)))
+       (method git-fetch)
+       (sha256
+	(base32 "18fg3anm09bigv8zlb2hd3mf83kghf8261xjpklpxy77d80j7gv7"))
+       (file-name (git-file-name name version))))
+     (build-system emacs-build-system)
+     (propagated-inputs (list emacs-biblio emacs-compat))
+     (home-page "https://github.com/jrasband/biblio-gbooks")
+     (synopsis "Emacs package for looking up and importing bibliographic entries from Google Books.")
+     (description
+      "`biblio-openlibrary' provides a backend for `biblio.el', which allows you to easily search and retrieve bibliographic entries using Google's Books API.")
+     (license gpl3+))))
+
 

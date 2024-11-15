@@ -30,9 +30,13 @@
 	emacs-magit
 	emacs-git-gutter
 	emacs-git-gutter-fringe
+	emacs-biblio
+	+emacs-biblio-openlibrary
+	+emacs-biblio-gbooks
 	emacs-citar
 	emacs-denote
 	emacs-consult-denote
+	emacs-citar-denote
 	))
 
 (define home-emacs-config-service-type
