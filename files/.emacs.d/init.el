@@ -1404,7 +1404,7 @@ BibTeX file."
   ;; `denote-rename-buffer-format' for how to modify this.
   (setopt denote-rename-buffer-format "[D] %t%b")
   ;; Customize what the backlink indicator looks like.
-  (setopt denote-buffer-has-backlinks-string " (<--->)")
+  (setopt denote-buffer-has-backlinks-string " (<-->)")
   ;; `denote-rename-buffer-mode' provides the means to automatically rename the
   ;; buffer of a Denote file upon visiting the file.
   (denote-rename-buffer-mode 1)
