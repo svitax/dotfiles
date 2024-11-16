@@ -755,6 +755,8 @@ buffer's window as well."
   :no-require
   :config
   (bind-keys
+   :map global-map
+   ("M-o" . other-window)
    :map +window-prefix-map
    ("0" . delete-window)
    ("1" . delete-other-windows)
@@ -780,6 +782,76 @@ buffer's window as well."
    ("H" . windmove-swap-states-down)
    ("A" . windmove-swap-states-up)
    ("E" . windmove-swap-states-right)))
+
+;; NOTE document popper
+(use-package popper
+  :config
+  (popper-mode)
+  (defvar +help-modes-list '(helpful-mode help-mode "^\\*eldoc" apropos-mode)
+    "List of major modes used in documentation buffers.")
+  (defvar +man-modes-list '(Man-mode woman-mode)
+    "List of major modes used in Man-type buffers.")
+  ;; This does not work at buffer creation since the major mode for REPLs is not
+  ;; yet set when `display-buffer' is called, but it is useful afterwards.
+  (defvar +repl-modes-list '(matlab-shell-mode
+			     geiser-repl-mode
+			     inferior-python-mode
+			     cider-repl-mode
+			     fennel-repl-mode
+			     jupyter-repl-mode
+			     inferior-ess-julia-mode
+			     eshell-mode
+			     shell-mode
+			     eat-mode
+			     vterm-mode)
+    "List of major modes used in REPL buffers.")
+  (defvar +repl-names-list '("^\\*\\(?:.*?-\\)\\{0,1\\}e*shell[^z-a]*\\(?:\\*\\|<[[:digit:]]+>\\)$"
+			     "\\*.*REPL.*\\*"
+			     "\\*MATLAB\\*"
+			     "\\*Python\\*"
+			     "^\\*jupyter-repl.*?\\(\\*\\|<[[:digit:]]>\\)$"
+			     "\\*Inferior .*\\*$"
+			     "^\\*julia.*\\*$"
+			     "^\\*cider-repl.*\\*$"
+			     "^\\*vterm.*\\*$"
+			     "\\*ielm\\*"
+			     "\\*edebug\\*")
+    "List of buffer names used in REPL buffers.")
+  (defvar +occur-grep-modes-list '(occur-mode
+				   grep-mode
+				   xref--xref-buffer-mode
+				   locate-mode
+				   flymake-diagnostics-buffer-mode
+				   rg-mode)
+    "List of major modes used in occur-type buffers.")
+  (defvar +message-modes-list '(compilation-mode
+				messages-buffer-mode
+				edebug-eval-mode)
+    "List of major modes used in message buffers.")
+  (defvar +shell-command-names-list '("\\*Shell Command Output\\*"
+				      "\\*Async Shell Command\\*"
+				      "\\*Detached Shell Command\\*" )
+    "List of buffer names used in Shell Command buffers.")
+  (setopt popper-reference-buffers (append +help-modes-list
+					   +man-modes-list
+					   +repl-modes-list
+					   +repl-names-list
+					   +occur-grep-modes-list
+					   +message-modes-list
+					   '(("^\\*Warnings\\*$" . hide)
+					     "[Oo]utput\\*$"
+					     "\\*Completions\\*")))
+  ;; Set popper height to 30% of frame height
+  (setopt popper-window-height (lambda (win)
+				 (fit-window-to-buffer
+				  win
+				  (floor (frame-height) 3)
+				  (floor (frame-height) 3))))
+  (bind-keys
+   :map global-map
+   ("C-`" . popper-toggle-latest)
+   ("M-`" . popper-cycle)
+   ("C-M-`" . popper-toggle-type)))
 
 ;; NOTE document golden-ratio-scroll
 (use-package golden-ratio-scroll
