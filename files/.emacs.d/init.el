@@ -1382,7 +1382,10 @@ BibTeX file."
 	  ;; have the keywords you need.
 	  denote-infer-keywords t
 	  denote-sort-keywords t
-	  denote-known-keywords '("emacs"))
+	  denote-known-keywords '("emacs")
+	  ;; Prompt for title, keywords, and signature in Denote commands that
+	  ;; prompt for user input to construct a Denote file name.
+	  denote-prompts '(title keywords signature))
   ;; Highlight Denote file names in Dired buffers.
   ;;
   ;; If you only want the `denote-dired-mode' in select directories, then modify
