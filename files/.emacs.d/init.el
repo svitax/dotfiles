@@ -1310,7 +1310,7 @@ BibTeX file."
    ;; functions (`biblio-lookup' and `biblio-doi-insert-bibtex'). We write a
    ;; function that prompts for a BibTeX file to insert into, and combines the
    ;; two search functions.
-   ("b" . +biblio-lookup)))
+   ("l" . +biblio-lookup)))
 
 ;; `biblio-openlibrary' provides a backend for `biblio' that supports queries
 ;; based on ISBN using OpenLibrary's Read API. The API does allow queries based
@@ -1352,8 +1352,10 @@ BibTeX file."
    citar-library-paths '("~/OneDrive/zettelkasten/reference/")
    citar-notes-paths '("~/OneDrive/zettelkasten/"))
   (bind-keys
+   :map +file-prefix-map
+   ("b" . citar-open)
    :map +bib-prefix-map
-   ("o" . citar-open)
+   ("f" . citar-open) ; "find" mnemonic
    :map org-mode-map
    ("C-c i" . org-cite-insert)))
 
@@ -1435,6 +1437,9 @@ BibTeX file."
   ;; sources to the `consult-buffer' command.
   (consult-denote-mode 1)
   (bind-keys
+   :map +notes-prefix-map
+   ("f" . consult-denote-find)
+   ("g" . consult-denote-grep)
    :map +file-prefix-map
    ("n" . consult-denote-find)
    :map search-map
