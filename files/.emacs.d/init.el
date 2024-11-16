@@ -472,7 +472,21 @@
   ;; completion styles parses the empty space (the default
   ;; orderless-component-separator), so as soon as I type a space after some
   ;; characters I am using orderless.
-  (setopt completion-styles '(basic partial-completion orderless)))
+  (setopt completion-styles '(basic partial-completion orderless))
+  ;; While we can override only the categories we care about, the presence of
+  ;; those `completion-category-defaults' will surprise us in some cases because
+  ;; we will not be using what was specified in the `completion-styles'. As
+  ;; such, I set `completion-category-defaults' to nil, to always fall back to
+  ;; my preferred `completion-styles' and then I further configure overrides
+  ;; where those make sense to me.
+  (setopt completion-category-defaults nil)
+  ;; We can opt for per-category styles by configuring the user option
+  ;; `completion-category-overrides'.
+  (setq completion-category-overrides
+	;; In order to narrow our Citar searches not only using citation keys
+	;; (i.e. using authors, titles, etc.), we need a completion style that
+	;; is order independent.
+	'((citar-candidate (styles . (orderless basic))))))
 
 ;;;;;;;;;;;;;;;;;
 ;;;; vertico ;;;;
