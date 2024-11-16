@@ -1427,6 +1427,11 @@ BibTeX file."
   (citar-embark-mode 1)
   ;; I prefer to have the Embark menu open with `org-open-at-point'.
   (setopt citar-at-point-function 'embark-act)
+  ;; Configure the formatting for the sections in the completing-read UI.
+  (setopt citar-templates '((main . "${author editor:30%sn}    ${date year issued:4}    ${title:80}")
+			    (suffix . "${=key= id:15}    ${=type=:15}    ${tags keywords keywords:*}")
+			    (preview . "${author editor} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}.\n")
+			    (note . "#+title: Notes on ${author editor}, ${title}")))
 
   (setopt
    citar-select-multiple nil
