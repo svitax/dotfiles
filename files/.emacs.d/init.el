@@ -1468,7 +1468,109 @@ BibTeX file."
    ;; `citar-denote-keyword' is removed and the file is renamed.
    ("T" . citar-denote-remove-citekey)))
 
-;; (use-package org-remark)
+;; Simply saving, excerpting, or copying materials is not enough; information
+;; needs to be processed to be transformed into useful knowledge. The reason is
+;; that merely transporting material only increases the amount of information
+;; without reprocessing it.
+
+;; The Zettelkasten method emphasizes summarizing/reviewing in your own words
+;; and establishing connections, providing multiple opportunities for
+;; information processing. However, many introductions to the Zettelkasten
+;; method often get caught up in the craze of double-linking, falling into the
+;; trap of merely saving data-- essentially ignoring the method Niklas Luhmann
+;; used to handle a large amount of literature notes.
+;;
+;; Luhmann had a habit of taking literature notes while reading. Each literature
+;; was essentially an index of the material. He only excerpted the original text
+;; from the book when absolutely necessary. Literature notes are an efficient
+;; and in-depth method that records key points and inspirations, faciliting
+;; quick review and deep reading, while also helping distinguish between
+;; existing and new information.
+(use-package org-remark
+  :config
+  ;; `org-remark' allows us to highlight and annotate any text file. It can
+  ;; automatically create a literature note for a given text file. We can select
+  ;; any text and highlight it, which applies an overlay with a a user-defined
+  ;; text face through its custom highlighter pens facility. The highlight and
+  ;; any associated notes are kept in an Org file functioning as a plain text
+  ;; database. This lets us easily manage our marginal notes and use the
+  ;; built-in Org facilities on them. The entries in this file simply save the
+  ;; locations of our highlighted text. We can automatically load the highlights
+  ;; from previous sessions, and we can display the marginal notes for the
+  ;; highlight at point.
+  ;;
+  ;; These marginal notes are external to the source document, leveraging all
+  ;; the power of Org while acting like notes that are made inside of the
+  ;; document. They are an incredibly efficient way of taking literature notes
+  ;; while reading any text document.
+  ;;
+  ;; These minor modes lets us highlight and annotate Info documentation,
+  ;; websites, and EPUB books just like text files.
+  (use-package org-remark-info :after info :config (org-remark-info-mode +1))
+  (use-package org-remark-eww :after eww :config (org-remark-eww-mode +1))
+  (use-package org-remark-nov :after nov :config (org-remark-nov-mode +1))
+  ;; Automatically turn on highlights after re-starting Emacs. Without this
+  ;; global minor mode we would need to remember to activate `org-remark-mode'
+  ;; for each file where we add highlights and annotations, which is often
+  ;; impractical.
+  (org-remark-global-tracking-mode)
+  ;; Create a Denote-compatible marginal note
+  (defun +org-remark-denote-filename-has-note-p (filename)
+    "Find the Denote filename similar to FILENAME but with the 'literature' keyword."
+    (let* ((files (denote-directory-files))
+	   (source-title (denote-retrieve-filename-title filename))
+	   (source-signature (denote-retrieve-filename-signature filename))
+	   (source-keywords (denote-retrieve-filename-keywords filename))
+	   (source-keywords (if source-keywords
+				(split-string source-keywords "_")
+			      nil)))
+      (cl-find-if (lambda (file)
+		    (let* ((file-title (denote-retrieve-filename-title file))
+			   (file-signature (denote-retrieve-filename-signature file))
+			   (file-keywords (denote-retrieve-filename-keywords file))
+			   (file-keywords
+			    (if (and source-keywords file-keywords)
+				(split-string file-keywords "_")
+			      nil)))
+		      (and (string= file-title source-title)
+			   (string= file-signature source-signature)
+			   (member "literature" file-keywords)
+			   (seq-set-equal-p source-keywords (remove "literature" file-keywords)))))
+		  files)))
+  (defun +org-remark-denote-file-name-function ()
+    "Return a Denote-compatible file name for the current buffer.
+
+When the current buffer is visiting a file, the name of the
+marginal notes file will be \"DATE==SIGNATURE--TITLE__literature.org\"
+in your `denote-directory'."
+    (let* ((source-filename (file-name-sans-extension (file-name-nondirectory (org-remark-source-find-file-name))))
+	   (denote-id (denote-retrieve-filename-identifier source-filename))
+	   (denote-signature (denote-retrieve-filename-signature source-filename))
+	   (denote-title (denote-retrieve-filename-title source-filename))
+	   ;; TODO remove "reference" keyword if present
+	   (denote-keywords (denote-retrieve-filename-keywords source-filename)))
+      (if-let ((literature-note (+org-remark-denote-filename-has-note-p source-filename)))
+	  literature-note
+	(file-name-nondirectory
+	 (denote-format-file-name
+	  (denote-directory)
+	  (denote--find-first-unused-id (denote-get-identifier nil))
+	  (if denote-keywords
+	      (append (split-string denote-keywords "_") '("literature"))
+	    nil)
+	  (or denote-title "")
+	  (or denote-file-type ".org")
+	  (or denote-signature ""))))))
+  (setopt org-remark-notes-file-name #'+org-remark-denote-file-name-function)
+
+  (bind-keys
+   :map +notes-prefix-map
+   ("m" . org-remark-mark)
+   ("M" . org-remark-mark-line)
+   ("d" . org-remark-remove)
+   ("D" . org-remark-delete)
+   ("v" . org-remark-view)
+   ("V" . org-remark-open)))
 
 ;;;;;;;;;;;;;
 ;;;; pdf ;;;;
