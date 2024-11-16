@@ -1343,7 +1343,7 @@ BibTeX file."
   (setopt citar-at-point-function 'embark-act)
 
   (setopt
-   ;; citar-select-multiple nil
+   citar-select-multiple nil
    org-cite-global-bibliography +bibliography-files
    org-cite-insert-processor 'citar
    org-cite-follow-processor 'citar
@@ -1589,4 +1589,10 @@ in your `denote-directory'."
 ;;;;;;;;;;;;;;
 ;;;; epub ;;;;
 
-;; (use-package nov)
+;; NOTE document nov
+(use-package nov
+  :init
+  ;; Activate nov-mode for epub files
+  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+  :config
+  (setq nov-text-width 80))

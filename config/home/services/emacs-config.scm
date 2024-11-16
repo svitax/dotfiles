@@ -38,6 +38,7 @@
 	emacs-consult-denote
 	emacs-citar-denote
 	emacs-org-remark
+	emacs-nov-el
 	))
 
 (define home-emacs-config-service-type
