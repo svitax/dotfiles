@@ -1242,11 +1242,10 @@ When the region is active, comment its lines instead."
   ;; text as well as triggering completion at point. (See my `corfu'
   ;; configuration). When it can perform indentation, it does that, otherwise it
   ;; starts a completion loop. The `tab-first-completion' determines when not to
-  ;; complete. In my case complete unless the next character is part of a word,
-  ;; parenthesis, or punctuation. Typing `TAB' a second time always results in
-  ;; completion.
+  ;; complete. In my case complete unless the next character is part of a word.
+  ;; Typing `TAB' a second time always results in completion.
   (setopt tab-always-indent 'complete
-          tab-first-completion 'word-or-paren-or-punct)
+          tab-first-completion 'word)
 
   ;; `tab-width' and `indent-tabs-mode' are about the use of tabs. I never want
   ;; them, as I only use spaces.
