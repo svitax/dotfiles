@@ -14,7 +14,7 @@
   :no-require
   :init
   (setopt inhibit-startup-screen t
-	  inhibit-startup-echo-area-message user-login-name))
+          inhibit-startup-echo-area-message user-login-name))
 
 ;;;;;;;;;;;;;;
 ;;;; lisp ;;;;
@@ -37,9 +37,6 @@
    ;; minimal as possible in exchange for harder use-package debugging sessions
    use-package-expand-minimally t))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;; :xdg-cache and :xdg-state ;;;;
-
 ;;;;;;;;;;;;;;;;;;;
 ;;;; bindings ;;;;;
 
@@ -48,7 +45,7 @@
   :config
   (repeat-mode)
   (setopt repeat-exit-key "C-g"
-	  repeat-exit-timeout 10)
+          repeat-exit-timeout 10)
   ;; `repeat-mode' is great for many things, but `other-window' keeps
   ;; causing me trouble. I keep trying to switch to another window and
   ;; typing a word that begins with o or O. Let's disable repeat-mode
@@ -60,17 +57,17 @@
   ;; not at the echo area. This gives me a clue by updating the cursor color if
   ;; repeat-mode is active.
   (add-function :after repeat-echo-function
-		(let ((default-cursor-color (face-background 'cursor)))
-		  (lambda (map)
-		    "Color the cursor while repeat-map is active"
-		    (let ((cursor-indicator-color (face-foreground 'error))
-			  (cursor-current-color (face-background 'cursor)))
-		      (unless (equal cursor-current-color cursor-indicator-color)
-			(setq default-cursor-color cursor-current-color))
-		      (set-cursor-color (if map
-					    cursor-indicator-color
-					  default-cursor-color)))))
-		'((name . "colorful-cursor-while-repeating"))))
+                (let ((default-cursor-color (face-background 'cursor)))
+                  (lambda (map)
+                    "Color the cursor while repeat-map is active"
+                    (let ((cursor-indicator-color (face-foreground 'error))
+                          (cursor-current-color (face-background 'cursor)))
+                      (unless (equal cursor-current-color cursor-indicator-color)
+                        (setq default-cursor-color cursor-current-color))
+                      (set-cursor-color (if map
+                                            cursor-indicator-color
+                                          default-cursor-color)))))
+                '((name . "colorful-cursor-while-repeating"))))
 
 (use-package prefix
   :no-require
@@ -153,7 +150,7 @@
    ("m" . +mail-prefix-map)
    ("n" . +notes-prefix-map)
    ;; ("C-n" . ) ; set-goal-column
-   ;; ("C-o" . delete-blank-lines) 
+   ;; ("C-o" . delete-blank-lines)
    ("p" . +project-prefix-map)
    ;; "C-p" . mark-page
    ;; "q" ; kbd-macro-query
@@ -171,7 +168,7 @@
    ("w" . +window-prefix-map)
    ;; "C-w" . write-file
    ("x" . +toggle-prefix-map)))
-  
+
 ;; TODO replace with embark
 (use-package which-key)
 
@@ -213,15 +210,15 @@
    ("f" . fontaine-set-preset))
 
   (setopt x-underline-at-descent-line nil
-	  text-scale-remap-header-line t
-	  fontaine-presets '((regular)
-			     (presentation
-			      :default-height 260)
-			     (t
-			      :default-family "Iosevka Comfy"
-			      ;; font height is 1/10pt.
-			      :default-height 150
-			      :variable-family "Iosevka Comfy Motion Duo")))
+          text-scale-remap-header-line t
+          fontaine-presets '((regular)
+                             (presentation
+                              :default-height 260)
+                             (t
+                              :default-family "Iosevka Comfy"
+                              ;; font height is 1/10pt.
+                              :default-height 150
+                              :variable-family "Iosevka Comfy Motion Duo")))
   ;; Themes re-apply face definitions when they are loaded. This is necessary to
   ;; render the theme. For certain faces, such as `bold' and `italic', it means
   ;; that their font family may be reset (depending on the particularities of
@@ -264,12 +261,12 @@
 (use-package modus-themes
   :config
   (setopt modus-themes-common-palette-overrides
-	  `((bg-region bg-sage)
-	    ;; With `modus-themes-preset-overrides-faint' the grays are toned
-	    ;; down, gray backgrounds are removed from some contexts, and almost
-	    ;; all accent colors are desaturated. Is makes the themes less
-	    ;; attention-grabbing.
-	    ,@modus-themes-preset-overrides-faint))
+          `((bg-region bg-sage)
+            ;; With `modus-themes-preset-overrides-faint' the grays are toned
+            ;; down, gray backgrounds are removed from some contexts, and almost
+            ;; all accent colors are desaturated. Is makes the themes less
+            ;; attention-grabbing.
+            ,@modus-themes-preset-overrides-faint))
 
   ;; We use the `enable-theme-functions' hook to ensure that these values are
   ;; updated after we switch themes. This special hook available in Emacs 29+
@@ -301,7 +298,7 @@
   ;; those functions run a hook after they are called. The pulse effect is added
   ;; there (`pulsar-after-function-hook').
   (dolist (func '(beginning-of-buffer
-		  end-of-buffer))
+                  end-of-buffer))
     (add-to-list 'pulsar-pulse-functions func))
   ;; There are convenience functions/commands which pulse the line using a
   ;; specific color: `pulsar-pulse-line-green' is one of them.
@@ -334,7 +331,7 @@
   :no-require
   :config
   (setopt initial-buffer-choice t
-	  initial-major-mode 'lisp-interaction-mode))
+          initial-major-mode 'lisp-interaction-mode))
 
 ;;;;;;;;;;;;;;;
 ;;;; files ;;;;
@@ -343,9 +340,9 @@
 (use-package files
   :config
   (setopt y-or-n-p-use-read-key t
-	  use-short-answers t
-	  confirm-kill-processes nil
-	  confirm-kill-emacs 'yes-or-no-p)
+          use-short-answers t
+          confirm-kill-processes nil
+          confirm-kill-emacs 'yes-or-no-p)
 
   (bind-keys
    :map +file-prefix-map
@@ -364,7 +361,7 @@
   ;; This makes it so that the minibuffer prompt is not accessible with regular
   ;; motions to avoid mistakes.
   (setopt minibuffer-prompt-properties
-	  '(read-only t cursor-intangible t face minibuffer-prompt))
+          '(read-only t cursor-intangible t face minibuffer-prompt))
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
   ;; Make it so prompts where more than one candidate can be provided using
   ;; completion show an indicator about this fact. Each candidate is separated
@@ -372,13 +369,13 @@
   ;; e.g., [`completing-read-multiple': ,] if the separator is a comma.
   (defun crm-indicator (args)
     (cons (format "[`completing-read-multiple': %s]  %s"
-		  (propertize
-		   (replace-regexp-in-string
-		    "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
-		    crm-separator)
-		   'face 'error)
-		  (car args))
-	  (cdr args)))
+                  (propertize
+                   (replace-regexp-in-string
+                    "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                    crm-separator)
+                   'face 'error)
+                  (car args))
+          (cdr args)))
   (advice-add #'completing-read-multiple :filter-args #'crm-indicator))
 
 (use-package mb-depth
@@ -422,7 +419,7 @@
   ;; We can remove it altogether by applying the invisible property. This is
   ;; especially nice with the completion style called `partial-completion'.
   (setopt file-name-shadow-properties
-	  '(face file-name-shadow field shadow invisible t intangible t))
+          '(face file-name-shadow field shadow invisible t intangible t))
   (file-name-shadow-mode 1))
 
 ;;;;;;;;;;;;;;;;;;;;
@@ -432,9 +429,9 @@
 (use-package marginalia
   :config
   (setopt marginalia-max-relative-age 0 ; absolute time
-	  marginalia-align 'right)
+          marginalia-align 'right)
   (bind-keys :map minibuffer-local-map
-	     ("M-]" . marginalia-cycle))
+             ("M-]" . marginalia-cycle))
   (marginalia-mode))
 
 ;;;;;;;;;;;;;;;;;;;
@@ -483,10 +480,10 @@
   ;; We can opt for per-category styles by configuring the user option
   ;; `completion-category-overrides'.
   (setq completion-category-overrides
-	;; In order to narrow our Citar searches not only using citation keys
-	;; (i.e. using authors, titles, etc.), we need a completion style that
-	;; is order independent.
-	'((citar-candidate (styles . (orderless basic))))))
+        ;; In order to narrow our Citar searches not only using citation keys
+        ;; (i.e. using authors, titles, etc.), we need a completion style that
+        ;; is order independent.
+        '((citar-candidate (styles . (orderless basic))))))
 
 ;;;;;;;;;;;;;;;;;
 ;;;; vertico ;;;;
@@ -506,11 +503,11 @@
   (defvar +vertico-multiform-minimal
     '(unobtrusive
       (vertico-flat-format . ( :multiple ""
-			       :single ""
-			       :prompt ""
-			       :separator ""
-			       :ellipsis ""
-			       :no-match "")))
+                               :single ""
+                               :prompt ""
+                               :separator ""
+                               :ellipsis ""
+                               :no-match "")))
     "List of configurations for minimal Vertico multiform.
 The minimal view is intended to be less eager or less revealing
 for general usage.
@@ -529,46 +526,46 @@ automatically.")
     "Sort directories before FILES."
     (setq files (vertico-sort-alpha files))
     (nconc (seq-filter #'+vertico--match-directory files)
-	   (seq-remove #'+vertico--match-directory files)))
+           (seq-remove #'+vertico--match-directory files)))
   (defun +vertico-minimal-next ()
     "Like `vertico-next' but toggle vertical view if needed.
 This is done to accomodate `+vertico-multiform-minimal'."
     (interactive)
     (if vertico-unobtrusive-mode
-	(let ((vertico--index 0))
-	  (vertico-multiform-vertical)
-	  (vertico-next 1))
+        (let ((vertico--index 0))
+          (vertico-multiform-vertical)
+          (vertico-next 1))
       (vertico-next 1)))
   (defun +vertico-minimal-previous ()
     "Like `vertico-previous' but toggle vertical view if needed.
 This is done to accomodate `+vertico-multiform-minimal'."
     (interactive)
     (if vertico-unobtrusive-mode
-	(let ((vertico--index 0))
-	  (vertico-multiform-vertical)
-	  (vertico-previous 1))
+        (let ((vertico--index 0))
+          (vertico-multiform-vertical)
+          (vertico-previous 1))
       (vertico-previous 1)))
   (defun +vertico-minimal-complete ()
     "Expand contents and show remaining candidates, if needed.
 This is dote to accomodate `+vertico-multiform-minimal'."
     (interactive)
     (if (and vertico-unobtrusive-mode
-	     (> vertico--total 1))
-	(progn
-	  (minibuffer-complete)
-	  (vertico-multiform-vertical))
+             (> vertico--total 1))
+        (progn
+          (minibuffer-complete)
+          (vertico-multiform-vertical))
       (vertico-insert)))
 
   (setopt vertico-multiform-categories `(;; Maximal
-					 (embark-keybinding ,@+vertico-multiform-maximal)
-					 (imenu ,@+vertico-multiform-maximal)
-					 ;; Minimal
-					 (file ,@+vertico-multiform-minimal
-					       (vertico-preselect . prompt)
-					       (vertico-sort-function . +vertico-sort-directories-first))
-					 (t ,@+vertico-multiform-minimal))
-	  vertico-cycle t
-	  vertico-count 5)
+                                         (embark-keybinding ,@+vertico-multiform-maximal)
+                                         (imenu ,@+vertico-multiform-maximal)
+                                         ;; Minimal
+                                         (file ,@+vertico-multiform-minimal
+                                               (vertico-preselect . prompt)
+                                               (vertico-sort-function . +vertico-sort-directories-first))
+                                         (t ,@+vertico-multiform-minimal))
+          vertico-cycle t
+          vertico-count 5)
 
   (with-eval-after-load 'rfn-eshadow
     ;; This works with `file-name-shadow-mode' enabled. When you are in
@@ -639,16 +636,16 @@ This is dote to accomodate `+vertico-multiform-minimal'."
   ;; Use `consult-find-args' to specify slow directories to skip, like .git/,
   ;; .cache/, and node-modules.
   (setopt consult-find-args (concat "find . -not ( "
-				    "-path */.git* -prune "
-				    "-or -path */.cache* -prune "
-				    ")"))
+                                    "-path */.git* -prune "
+                                    "-or -path */.cache* -prune "
+                                    ")"))
 
   ;; NOTE document pulsar and consult integraon
   (with-eval-after-load 'pulsar
     (setq consult-after-jump-hook nil)
     (dolist (fn '(pulsar-recenter-center pulsar-reveal-entry))
       (add-hook 'consult-after-jump-hook fn)))
-  
+
   (bind-keys
    :map global-map
    ("M-y" . consult-yank-pop)
@@ -700,9 +697,9 @@ This is dote to accomodate `+vertico-multiform-minimal'."
   (corfu-popupinfo-mode 1)
 
   (setopt corfu-cycle t
-	      corfu-preview-current nil
-	      corfu-min-width 20
-	      corfu-popupinfo-delay '(0.25 . 0.25))
+          corfu-preview-current nil
+          corfu-min-width 20
+          corfu-popupinfo-delay '(0.25 . 0.25))
 
   ;; Sort by input history
   (with-eval-after-load 'savehist
@@ -749,7 +746,7 @@ With optional prefix ARG (\\[universal-argument]) delete the
 buffer's window as well."
     (interactive "P")
     (if (and arg (not (one-window-p)))
-	(kill-buffer-and-window)
+        (kill-buffer-and-window)
       (kill-buffer)))
   (defun +rename-file-and-buffer (name)
     "Apply NAME to current file and rename its buffer."
@@ -757,8 +754,8 @@ buffer's window as well."
      (list (read-file-name "Rename current file: " (buffer-file-name))))
     (let ((file (buffer-file-name)))
       (if (vc-registered file)
-	  (vc-rename-file file name)
-	(rename-file file name))
+          (vc-rename-file file name)
+        (rename-file file name))
       (set-visited-file-name name t t))))
 
 ;;;;;;;;;;;;;;;;;
@@ -799,67 +796,68 @@ buffer's window as well."
 ;; NOTE document popper
 (use-package popper
   :config
-  (popper-mode)
-  (defvar +help-modes-list '(helpful-mode help-mode "^\\*eldoc" apropos-mode)
+  (defvar +help-modes-list '(helpful-mode help-mode "\\*Help\\*" "^\\*eldoc" apropos-mode)
     "List of major modes used in documentation buffers.")
   (defvar +man-modes-list '(Man-mode woman-mode)
     "List of major modes used in Man-type buffers.")
   ;; This does not work at buffer creation since the major mode for REPLs is not
   ;; yet set when `display-buffer' is called, but it is useful afterwards.
   (defvar +repl-modes-list '(matlab-shell-mode
-			     geiser-repl-mode
-			     inferior-python-mode
-			     cider-repl-mode
-			     fennel-repl-mode
-			     jupyter-repl-mode
-			     inferior-ess-julia-mode
-			     eshell-mode
-			     shell-mode
-			     eat-mode
-			     vterm-mode)
+                             geiser-repl-mode
+                             inferior-python-mode
+                             cider-repl-mode
+                             fennel-repl-mode
+                             jupyter-repl-mode
+                             inferior-ess-julia-mode
+                             eshell-mode
+                             shell-mode
+                             eat-mode
+                             vterm-mode)
     "List of major modes used in REPL buffers.")
   (defvar +repl-names-list '("^\\*\\(?:.*?-\\)\\{0,1\\}e*shell[^z-a]*\\(?:\\*\\|<[[:digit:]]+>\\)$"
-			     "\\*.*REPL.*\\*"
-			     "\\*MATLAB\\*"
-			     "\\*Python\\*"
-			     "^\\*jupyter-repl.*?\\(\\*\\|<[[:digit:]]>\\)$"
-			     "\\*Inferior .*\\*$"
-			     "^\\*julia.*\\*$"
-			     "^\\*cider-repl.*\\*$"
-			     "^\\*vterm.*\\*$"
-			     "\\*ielm\\*"
-			     "\\*edebug\\*")
+                             "\\*.*REPL.*\\*"
+                             "\\*MATLAB\\*"
+                             "\\*Python\\*"
+                             "^\\*jupyter-repl.*?\\(\\*\\|<[[:digit:]]>\\)$"
+                             "\\*Inferior .*\\*$"
+                             "^\\*julia.*\\*$"
+                             "^\\*cider-repl.*\\*$"
+                             "^\\*vterm.*\\*$"
+                             "\\*ielm\\*"
+                             "\\*edebug\\*")
     "List of buffer names used in REPL buffers.")
   (defvar +occur-grep-modes-list '(occur-mode
-				   grep-mode
-				   xref--xref-buffer-mode
-				   locate-mode
-				   flymake-diagnostics-buffer-mode
-				   rg-mode)
+                                   grep-mode
+                                   xref--xref-buffer-mode
+                                   locate-mode
+                                   flymake-diagnostics-buffer-mode
+                                   rg-mode)
     "List of major modes used in occur-type buffers.")
   (defvar +message-modes-list '(compilation-mode
-				messages-buffer-mode
-				edebug-eval-mode)
+                                messages-buffer-mode
+                                edebug-eval-mode)
     "List of major modes used in message buffers.")
   (defvar +shell-command-names-list '("\\*Shell Command Output\\*"
-				      "\\*Async Shell Command\\*"
-				      "\\*Detached Shell Command\\*" )
+                                      "\\*Async Shell Command\\*"
+                                      "\\*Detached Shell Command\\*" )
     "List of buffer names used in Shell Command buffers.")
   (setopt popper-reference-buffers (append +help-modes-list
-					   +man-modes-list
-					   +repl-modes-list
-					   +repl-names-list
-					   +occur-grep-modes-list
-					   +message-modes-list
-					   '(("^\\*Warnings\\*$" . hide)
-					     "[Oo]utput\\*$"
-					     "\\*Completions\\*")))
+                                           +man-modes-list
+                                           +repl-modes-list
+                                           +repl-names-list
+                                           +occur-grep-modes-list
+                                           +message-modes-list
+                                           '(("^\\*Warnings\\*$" . hide)
+                                             "[Oo]utput\\*$"
+                                             "\\*Completions\\*")))
+
   ;; Set popper height to 30% of frame height
   (setopt popper-window-height (lambda (win)
-				 (fit-window-to-buffer
-				  win
-				  (floor (frame-height) 3)
-				  (floor (frame-height) 3))))
+                                 (fit-window-to-buffer
+                                  win
+                                  (floor (frame-height) 3)
+                                  (floor (frame-height) 3))))
+  (popper-mode)
   (bind-keys
    :map global-map
    ("C-`" . popper-toggle-latest)
@@ -876,9 +874,9 @@ buffer's window as well."
    ("M-v" . +golden-ratio-scroll-screen-up))
 
   (setq-default scroll-preserve-screen-position t
-		scroll-conservatively 1
-		scroll-margin 0
-		next-screen-context-lines 0)
+                scroll-conservatively 1
+                scroll-margin 0
+                next-screen-context-lines 0)
 
   (defcustom +golden-ratio-scroll-recenter nil
     "Recenter or not after scroll"
@@ -891,40 +889,40 @@ buffer's window as well."
     "Scroll half screen down."
     (interactive)
     (let ((old-marker +golden-ratio-scroll-screen-previous-point)
-	  (scroll-line-count (round (/ (window-text-height)
-				       +golden-ratio-scroll-screen-ratio))))
+          (scroll-line-count (round (/ (window-text-height)
+                                       +golden-ratio-scroll-screen-ratio))))
       (setq +golden-ratio-scroll-screen-previous-point (point-marker))
       (if (and (not (and (equal (current-buffer) (marker-buffer old-marker))
-			 (equal (marker-position old-marker) (point))))
-	       (equal last-command '+golden-ratio-scroll-screen-up))
-	  (goto-char (marker-position old-marker))
-	(forward-visible-line scroll-line-count))
+                         (equal (marker-position old-marker) (point))))
+               (equal last-command '+golden-ratio-scroll-screen-up))
+          (goto-char (marker-position old-marker))
+        (forward-visible-line scroll-line-count))
       (when (and (member major-mode '(dired-mode wdired-mode))
-		 (equal (point-max) (point)))
-	(dired-previous-line 1))
+                 (equal (point-max) (point)))
+        (dired-previous-line 1))
       (when +golden-ratio-scroll-recenter
-	(recenter (+ scroll-line-count (/ (- (window-text-height) scroll-line-count) 2))))))
+        (recenter (+ scroll-line-count (/ (- (window-text-height) scroll-line-count) 2))))))
   (defun +golden-ratio-scroll-screen-up ()
     "Scroll half screen up."
     (interactive)
     (let ((old-marker +golden-ratio-scroll-screen-previous-point)
-	  (scroll-line-count (round (/ (window-text-height)
-				       +golden-ratio-scroll-screen-ratio))))
+          (scroll-line-count (round (/ (window-text-height)
+                                       +golden-ratio-scroll-screen-ratio))))
       (setq +golden-ratio-scroll-screen-previous-point (point-marker))
       (if (and (not (and (equal (current-buffer) (marker-buffer old-marker))
-			 (equal (marker-position old-marker) (point))))
-	       (equal last-command '+golden-ratio-scroll-screen-down))
-	  (goto-char (marker-position old-marker))
-	(forward-visible-line (- 0 scroll-line-count)))
+                         (equal (marker-position old-marker) (point))))
+               (equal last-command '+golden-ratio-scroll-screen-down))
+          (goto-char (marker-position old-marker))
+        (forward-visible-line (- 0 scroll-line-count)))
       (when (and (member major-mode '(dired-mode wdired-mode))
-		 (equal (point-min) (point)))
-	(dired-next-line 2))
+                 (equal (point-min) (point)))
+        (dired-next-line 2))
       (when +golden-ratio-scroll-recenter
-	(recenter (/ (- (window-text-height) scroll-line-count) 2)))))
+        (recenter (/ (- (window-text-height) scroll-line-count) 2)))))
 
   (with-eval-after-load 'pulsar
     (dolist (func '(+golden-ratio-scroll-screen-up
-		    +golden-ratio-scroll-screen-down))
+                    +golden-ratio-scroll-screen-down))
       (add-to-list 'pulsar-pulse-functions func))))
 
 (use-package display-line-numbers
@@ -995,8 +993,8 @@ buffer's window as well."
 (use-package avy
   :config
   (setopt avy-keys '(?n ?r ?t ?s ?h ?a ?e ?i) ; Graphite keyboard layout
-	  avy-timeout-seconds 0.27
-	  avy-single-candidate-jump nil)
+          avy-timeout-seconds 0.27
+          avy-single-candidate-jump nil)
   (bind-keys
    :map global-map
    ("C-j" . avy-goto-char-timer)))
@@ -1006,8 +1004,8 @@ buffer's window as well."
   :config
   (dogears-mode)
   (setopt dogears-idle nil
-	  dogears-hooks '(imenu-after-jump-hook
-			  consult-after-jump-hook))
+          dogears-hooks '(imenu-after-jump-hook
+                          consult-after-jump-hook))
   (bind-keys
    :map goto-map
    ("b" . dogears-back)
@@ -1028,33 +1026,33 @@ buffer's window as well."
   :disabled t
   :config
   (better-jumper-mode +1)
-  
+
   (setopt better-jumper-add-jump-behavior 'replace
-	  better-jumper-context 'buffer)
+          better-jumper-context 'buffer)
 
   (defun +better-jumper--position-is-newest-jump (orig-pos)
     (let* ((jump-struct (better-jumper-get-jumps))
-	   (ring (better-jumper-jump-list-struct-ring jump-struct))
-	   (jumps-vector (cddr ring))
-	   (newest-jump (aref jumps-vector 0))
-	   (filename (nth 0 newest-jump))
-	   (position (nth 1 newest-jump)))
+           (ring (better-jumper-jump-list-struct-ring jump-struct))
+           (jumps-vector (cddr ring))
+           (newest-jump (aref jumps-vector 0))
+           (filename (nth 0 newest-jump))
+           (position (nth 1 newest-jump)))
       (and (string= (buffer-file-name) filename)
-	   (= orig-pos position))))
-  
+           (= orig-pos position))))
+
   (defun +better-jumper-advice (orig-fun &rest args)
     "Advice for ORIG-FUN to call `better-jumper-set-jump' if ORIG-FUN
 moves the point more than one line."
     (let ((orig-pos (point)))
       (apply orig-fun args)
       (when (> (abs (- (line-number-at-pos orig-pos)
-		       (line-number-at-pos (point))))
-	       1)
-	(better-jumper-set-jump orig-pos))))
+                       (line-number-at-pos (point))))
+               1)
+        (better-jumper-set-jump orig-pos))))
 
   (with-eval-after-load 'consult
     (advice-add 'consult-imenu :around #'+better-jumper-advice))
-  
+
   (bind-keys
    :map goto-map
    ("b" . better-jumper-jump-backward)
@@ -1104,7 +1102,7 @@ BOUNDARIES is a cons cell representing buffer positions."
     (unless (consp boundaries)
       (error "`%s' is not a cons cell" boundaries))
     (let ((beg (car boundaries))
-	  (end (cdr boundaries)))
+          (end (cdr boundaries)))
       (goto-char end)
       (newline)
       (insert (buffer-substring-no-properties beg end))))
@@ -1115,7 +1113,7 @@ BOUNDARIES is a cons cell representing buffer positions."
       (push-mark (point) t nil))
     (+duplicate--buffer-substring
      (if (region-active-p)
-	 (cons (region-beginning) (region-end))
+         (cons (region-beginning) (region-end))
        (cons (line-beginning-position) (line-end-position)))))
 
   (defun +join-line-below ()
@@ -1128,7 +1126,7 @@ BOUNDARIES is a cons cell representing buffer positions."
 When the region is active, comment its lines instead."
     (interactive "p")
     (if (use-region-p)
-	(comment-or-uncomment-region (region-beginning) (region-end))
+        (comment-or-uncomment-region (region-beginning) (region-end))
       (comment-line n)))
 
   ;; TODO I would rather replace this with something like dogears.el
@@ -1136,7 +1134,7 @@ When the region is active, comment its lines instead."
   ;; following it up with another C-SPC. It is faster to type C-u
   ;; C-SPC, C-SPC, C-SPC, than C-u C-SPC, C-u C-SPC, C-u C-SPC...
   (setopt set-mark-command-repeat-pop t)
-  
+
   (bind-keys
    :map global-map
    ;; `+save-next-kill' causes the following command, if it kills, to save in
@@ -1184,7 +1182,7 @@ When the region is active, comment its lines instead."
      #'end-of-visual-line
      #'mowie-end-of-code))
   (bind-keys ("C-a" . +beginning-of-line)
-	     ("C-e" . +end-of-line)))
+             ("C-e" . +end-of-line)))
 
 ;; NOTE document move-text
 (use-package move-text
@@ -1193,12 +1191,12 @@ When the region is active, comment its lines instead."
   (defun +indent-region-advice (&rest ignored)
     (let ((deactivate deactivate-mark))
       (if (region-active-p)
-	  (indent-region (region-beginning) (region-end))
-	(indent-region (line-beginning-position) (line-end-position)))
+          (indent-region (region-beginning) (region-end))
+        (indent-region (line-beginning-position) (line-end-position)))
       (setq deactivate-mark deactivate)))
   (advice-add 'move-text-up :after '+indent-region-advice)
   (advice-add 'move-text-down :after '+indent-region-advice)
-  
+
   (bind-keys
    :map global-map
    ("M-<up>" . move-text-up)
@@ -1260,7 +1258,7 @@ When the region is active, comment its lines instead."
    ([remap delete-backward-char] . smart-hungry-delete-backward-char)
    ([remap delete-char] . smart-hungry-delete-forward-char)
    ([remap delete-forward-char] . smart-hungry-delete-forward-char)))
-   
+
 (use-package expand-region
   :config
   ;; The `expand-region' package expands the region from smallest to the largest
@@ -1323,7 +1321,7 @@ When the region is active, comment its lines instead."
 (use-package magit
   :config
   (setopt magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
-  
+
   (bind-keys
    :map +vc-prefix-map
    ("v" . magit-status)))
@@ -1385,7 +1383,7 @@ When the region is active, comment its lines instead."
 (use-package org
   :config
   (setopt org-return-follows-link t
-	  org-startup-folded 'content)
+          org-startup-folded 'content)
   ;; Open Org links in current window. Default is `'find-file-other-window'
   ;;
   ;; HACK: Can I replace this hack with some `display-buffer-alist'
@@ -1436,33 +1434,33 @@ When the region is active, comment its lines instead."
   (defun +biblio--combined-lookup ()
     "Combines `biblio-lookup' and `biblio-doi-insert-bibtex'."
     (let* ((dbs (biblio--named-backends))
-	   (db-list (append dbs '(("DOI" . biblio-doi-backend))))
-	   (db-selected (biblio-completing-read-alist
-			 "Backend: "
-			 db-list)))
+           (db-list (append dbs '(("DOI" . biblio-doi-backend))))
+           (db-selected (biblio-completing-read-alist
+                         "Backend: "
+                         db-list)))
       (if (eq db-selected 'biblio-doi-backend)
-	  (let ((doi (read-string "DOI: ")))
-	    (biblio-doi-insert-bibtex doi))
-	(biblio-lookup db-selected))))
+          (let ((doi (read-string "DOI: ")))
+            (biblio-doi-insert-bibtex doi))
+        (biblio-lookup db-selected))))
   (defun +biblio-lookup ()
     "Insert Biblio search results into the current buffer or selected
 BibTeX file."
     (interactive)
     (if-let ((current-mode major-mode)
-	     +bibliography-files
-	     (bibfiles (length +bibliography-files))
-	     (bibfile (cond ((eq bibfiles 1)
-			     (car +bibliography-files))
-			    ((equal major-mode 'bibtex-mode)
-			     (buffer-file-name))
-			    (t
-			     (completing-read
-			      "Select BibTeX file: " +bibliography-files)))))
-	(progn
-	  (find-file bibfile)
-	  (goto-char (point-max))
-	  (+biblio--combined-lookup)
-	  (save-buffer))
+             +bibliography-files
+             (bibfiles (length +bibliography-files))
+             (bibfile (cond ((eq bibfiles 1)
+                             (car +bibliography-files))
+                            ((equal major-mode 'bibtex-mode)
+                             (buffer-file-name))
+                            (t
+                             (completing-read
+                              "Select BibTeX file: " +bibliography-files)))))
+        (progn
+          (find-file bibfile)
+          (goto-char (point-max))
+          (+biblio--combined-lookup)
+          (save-buffer))
       (message "No BibTeX file(s) defined.")))
 
   (bind-keys
@@ -1505,9 +1503,9 @@ BibTeX file."
   (setopt citar-at-point-function 'embark-act)
   ;; Configure the formatting for the sections in the completing-read UI.
   (setopt citar-templates '((main . "${author editor:30%sn}    ${date year issued:4}    ${title:80}")
-			    (suffix . "${=key= id:15}    ${=type=:15}    ${tags keywords keywords:*}")
-			    (preview . "${author editor} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}.\n")
-			    (note . "#+title: Notes on ${author editor}, ${title}")))
+                            (suffix . "${=key= id:15}    ${=type=:15}    ${tags keywords keywords:*}")
+                            (preview . "${author editor} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}.\n")
+                            (note . "#+title: Notes on ${author editor}, ${title}")))
 
   (setopt
    citar-select-multiple nil
@@ -1543,16 +1541,16 @@ BibTeX file."
   ;; retrieval easier. Denote provides facilities to rename files, regardless of
   ;; file type.
   (setopt denote-directory (expand-file-name "~/OneDrive/zettelkasten")
-	  ;; If you want to have a "controlled vocabulary" of keywords, meaning
-	  ;; that you only use a predefined set of them, then you want
-	  ;; `denote-infer-keywords' set to nil, and `denote-known-keywords' to
-	  ;; have the keywords you need.
-	  denote-infer-keywords t
-	  denote-sort-keywords t
-	  denote-known-keywords '("emacs")
-	  ;; Prompt for title, keywords, and signature in Denote commands that
-	  ;; prompt for user input to construct a Denote file name.
-	  denote-prompts '(title keywords signature))
+          ;; If you want to have a "controlled vocabulary" of keywords, meaning
+          ;; that you only use a predefined set of them, then you want
+          ;; `denote-infer-keywords' set to nil, and `denote-known-keywords' to
+          ;; have the keywords you need.
+          denote-infer-keywords t
+          denote-sort-keywords t
+          denote-known-keywords '("emacs")
+          ;; Prompt for title, keywords, and signature in Denote commands that
+          ;; prompt for user input to construct a Denote file name.
+          denote-prompts '(title keywords signature))
   ;; Highlight Denote file names in Dired buffers.
   ;;
   ;; If you only want the `denote-dired-mode' in select directories, then modify
@@ -1562,7 +1560,7 @@ BibTeX file."
   ;; If you want the generic approach, which is great if you rename files
   ;; Denote-style in lots of different places, use `denote-dired-mode'.
   (setopt denote-dired-directories `(,(expand-file-name "~/OneDrive/zettelkasten"))
-	  denote-dired-directories-include-subdirectories t)
+          denote-dired-directories-include-subdirectories t)
   (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories)
 
   ;; Automatically rename Denote buffers when opening them so that instead of
@@ -1693,25 +1691,25 @@ BibTeX file."
   (defun +org-remark-denote-filename-has-note-p (filename)
     "Find the Denote filename similar to FILENAME but with the 'literature' keyword."
     (let* ((files (denote-directory-files))
-	   (source-title (denote-retrieve-filename-title filename))
-	   (source-signature (denote-retrieve-filename-signature filename))
-	   (source-keywords (denote-retrieve-filename-keywords filename))
-	   (source-keywords (if source-keywords
-				(split-string source-keywords "_")
-			      nil)))
+           (source-title (denote-retrieve-filename-title filename))
+           (source-signature (denote-retrieve-filename-signature filename))
+           (source-keywords (denote-retrieve-filename-keywords filename))
+           (source-keywords (if source-keywords
+                                (split-string source-keywords "_")
+                              nil)))
       (cl-find-if (lambda (file)
-		    (let* ((file-title (denote-retrieve-filename-title file))
-			   (file-signature (denote-retrieve-filename-signature file))
-			   (file-keywords (denote-retrieve-filename-keywords file))
-			   (file-keywords
-			    (if (and source-keywords file-keywords)
-				(split-string file-keywords "_")
-			      nil)))
-		      (and (string= file-title source-title)
-			   (string= file-signature source-signature)
-			   (member "literature" file-keywords)
-			   (seq-set-equal-p source-keywords (remove "literature" file-keywords)))))
-		  files)))
+                    (let* ((file-title (denote-retrieve-filename-title file))
+                           (file-signature (denote-retrieve-filename-signature file))
+                           (file-keywords (denote-retrieve-filename-keywords file))
+                           (file-keywords
+                            (if (and source-keywords file-keywords)
+                                (split-string file-keywords "_")
+                              nil)))
+                      (and (string= file-title source-title)
+                           (string= file-signature source-signature)
+                           (member "literature" file-keywords)
+                           (seq-set-equal-p source-keywords (remove "literature" file-keywords)))))
+                  files)))
   (defun +org-remark-denote-file-name-function ()
     "Return a Denote-compatible file name for the current buffer.
 
@@ -1719,23 +1717,23 @@ When the current buffer is visiting a file, the name of the
 marginal notes file will be \"DATE==SIGNATURE--TITLE__literature.org\"
 in your `denote-directory'."
     (let* ((source-filename (file-name-sans-extension (file-name-nondirectory (org-remark-source-find-file-name))))
-	   (denote-id (denote-retrieve-filename-identifier source-filename))
-	   (denote-signature (denote-retrieve-filename-signature source-filename))
-	   (denote-title (denote-retrieve-filename-title source-filename))
-	   ;; TODO remove "reference" keyword if present
-	   (denote-keywords (denote-retrieve-filename-keywords source-filename)))
+           (denote-id (denote-retrieve-filename-identifier source-filename))
+           (denote-signature (denote-retrieve-filename-signature source-filename))
+           (denote-title (denote-retrieve-filename-title source-filename))
+           ;; TODO remove "reference" keyword if present
+           (denote-keywords (denote-retrieve-filename-keywords source-filename)))
       (if-let ((literature-note (+org-remark-denote-filename-has-note-p source-filename)))
-	  literature-note
-	(file-name-nondirectory
-	 (denote-format-file-name
-	  (denote-directory)
-	  (denote--find-first-unused-id (denote-get-identifier nil))
-	  (if denote-keywords
-	      (append (split-string denote-keywords "_") '("literature"))
-	    nil)
-	  (or denote-title "")
-	  (or denote-file-type ".org")
-	  (or denote-signature ""))))))
+          literature-note
+        (file-name-nondirectory
+         (denote-format-file-name
+          (denote-directory)
+          (denote--find-first-unused-id (denote-get-identifier nil))
+          (if denote-keywords
+              (append (split-string denote-keywords "_") '("literature"))
+            nil)
+          (or denote-title "")
+          (or denote-file-type ".org")
+          (or denote-signature ""))))))
   (setopt org-remark-notes-file-name #'+org-remark-denote-file-name-function)
 
   (bind-keys
