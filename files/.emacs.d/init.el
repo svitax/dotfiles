@@ -942,6 +942,40 @@ buffer's window as well."
   (bind-keys
    :map +toggle-prefix-map
    ("n" . global-display-line-numbers-mode)))
+
+(use-package whitespace
+  :config
+  ;; Emacs has very comprehensive whitespace rendering capabilities. I do not
+  ;; render newline and space characters (see my tab configuration) because they
+  ;; are easy to infer in most cases, but also because `whitespace-mode'
+  ;; highlights each whitespace with a face which can cripple performance in
+  ;; larger files. Since I only render trailing whitespace, empty lines, and tab
+  ;; characters to draw attention to fix these mistakes, this ends up not
+  ;; mattering as much.
+  (setopt whitespace-style '(face tabs tab-mark trailing empty))
+
+  ;; `whitespace-mode' provides the actions feature which allows us to
+  ;; automatically run a series of actions after a buffer is written. I'm
+  ;; interested in the cleanup actions which perform different operations based
+  ;; on the defined whitespace style. For my defined whitespace style, it will
+  ;; remove all empty lines at beginning and/or end of the buffer (`empty'), and
+  ;; all trailing tabs and spaces (`trailing'). Lookup `whitespace-cleanup' for
+  ;; all the available cleanup operations.
+  (setq-default whitespace-action '(cleanup auto-cleanup))
+
+  ;; We can enable whitespace mode globally by calling
+  ;; `global-whitespace-mode'. The downside of this is that whitespace will be
+  ;; rendered inside of every Emacs buffer and this is not really necessary. For
+  ;; example, I don't need whitespace to be rendered in shell, occur, or ibuffer
+  ;; windows. Luckily there's an option to control which modes should enable
+  ;; whitespace mode when `global-whitespace-mode' is enabled. And it's aptly
+  ;; named `whitespace-global-modes'. This option takes a list of major mode
+  ;; symbol names, that when matched, will enable `whitespace-mode'. We can also
+  ;; negate the list, by prefixing it with `not', causing global whitespace mode
+  ;; to be disabled for the listed major mode symbols.
+  (setq-default whitespace-global-modes '(prog-mode text-mode))
+  (global-whitespace-mode))
+
 ;;;;;;;;;;;;;;;;
 ;;;; narrow ;;;;
 
@@ -1170,6 +1204,14 @@ When the region is active, comment its lines instead."
    :map global-map
    ("M-<up>" . move-text-up)
    ("M-<down>" . move-text-down)))
+
+(use-package tab
+  :no-require
+  :config
+  ;; `tab-width' and `indent-tabs-mode' are about the use of tabs. I never want
+  ;; them, as I only use spaces.
+  (setq-default tab-width 4
+                indent-tabs-mode nil))
 
 (use-package elec-pair
   :config
