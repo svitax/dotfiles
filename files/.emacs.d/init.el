@@ -1725,7 +1725,11 @@ BibTeX file."
                       (and (string= file-title source-title)
                            (string= file-signature source-signature)
                            (member "literature" file-keywords)
-                           (seq-set-equal-p source-keywords (remove "literature" file-keywords)))))
+                           (seq-set-equal-p
+                            (seq-remove (lambda (elt) (member elt '("literature" "reference")))
+                                        source-keywords)
+                            (seq-remove (lambda (elt) (member elt '("literature" "reference")))
+                                        file-keywords)))))
                   files)))
   (defun +org-remark-denote-file-name-function ()
     "Return a Denote-compatible file name for the current buffer.
@@ -1733,24 +1737,28 @@ BibTeX file."
 When the current buffer is visiting a file, the name of the
 marginal notes file will be \"DATE==SIGNATURE--TITLE__literature.org\"
 in your `denote-directory'."
-    (let* ((source-filename (file-name-sans-extension (file-name-nondirectory (org-remark-source-find-file-name))))
+    (let* ((source-filename (cond ((eq major-mode 'nov-mode)
+                                   (file-name-nondirectory nov-file-name))
+                                  (t
+                                   (org-remark-source-find-file-name))))
+           ;; (source-filename (file-name-sans-extension (file-name-nondirectory (org-remark-source-find-file-name))))
            (denote-id (denote-retrieve-filename-identifier source-filename))
            (denote-signature (denote-retrieve-filename-signature source-filename))
            (denote-title (denote-retrieve-filename-title source-filename))
-           ;; TODO remove "reference" keyword if present
            (denote-keywords (denote-retrieve-filename-keywords source-filename)))
       (if-let ((literature-note (+org-remark-denote-filename-has-note-p source-filename)))
           literature-note
-        (file-name-nondirectory
-         (denote-format-file-name
-          (denote-directory)
-          (denote--find-first-unused-id (denote-get-identifier nil))
-          (if denote-keywords
-              (append (split-string denote-keywords "_") '("literature"))
-            nil)
-          (or denote-title "")
-          (or denote-file-type ".org")
-          (or denote-signature ""))))))
+        (denote-format-file-name
+         (denote-directory)
+         (denote--find-first-unused-id (denote-get-identifier nil))
+         (if denote-keywords
+             (remove
+              "reference"
+              (append (split-string denote-keywords "_") '("literature")))
+           nil)
+         (or denote-title "")
+         (or denote-file-type ".org")
+         (or denote-signature "")))))
   (setopt org-remark-notes-file-name #'+org-remark-denote-file-name-function)
 
   (bind-keys
