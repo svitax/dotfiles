@@ -796,10 +796,27 @@ buffer's window as well."
 ;; NOTE document popper
 (use-package popper
   :config
-  (defvar +help-modes-list '(helpful-mode help-mode "\\*Help\\*" "^\\*eldoc" apropos-mode)
+  (defvar +help-modes-list '(helpful-mode
+                             help-mode
+                             "\\*Help\\*"
+                             "^\\*eldoc"
+                             apropos-mode)
     "List of major modes used in documentation buffers.")
   (defvar +man-modes-list '(Man-mode woman-mode)
     "List of major modes used in Man-type buffers.")
+  (defvar +message-modes-list '(compilation-mode
+                                messages-buffer-mode
+                                edebug-eval-mode)
+    "List of major modes used in message buffers.")
+  (defvar +notes-names-list '("\\*marginal notes\\*")
+    "List of buffer names used in Org-Remark marginal notes buffers.")
+  (defvar +occur-grep-modes-list '(occur-mode
+                                   grep-mode
+                                   xref--xref-buffer-mode
+                                   locate-mode
+                                   flymake-diagnostics-buffer-mode
+                                   rg-mode)
+    "List of major modes used in occur-type buffers.")
   ;; This does not work at buffer creation since the major mode for REPLs is not
   ;; yet set when `display-buffer' is called, but it is useful afterwards.
   (defvar +repl-modes-list '(matlab-shell-mode
@@ -826,27 +843,19 @@ buffer's window as well."
                              "\\*ielm\\*"
                              "\\*edebug\\*")
     "List of buffer names used in REPL buffers.")
-  (defvar +occur-grep-modes-list '(occur-mode
-                                   grep-mode
-                                   xref--xref-buffer-mode
-                                   locate-mode
-                                   flymake-diagnostics-buffer-mode
-                                   rg-mode)
-    "List of major modes used in occur-type buffers.")
-  (defvar +message-modes-list '(compilation-mode
-                                messages-buffer-mode
-                                edebug-eval-mode)
-    "List of major modes used in message buffers.")
   (defvar +shell-command-names-list '("\\*Shell Command Output\\*"
                                       "\\*Async Shell Command\\*"
                                       "\\*Detached Shell Command\\*" )
     "List of buffer names used in Shell Command buffers.")
+
   (setopt popper-reference-buffers (append +help-modes-list
                                            +man-modes-list
+                                           +message-modes-list
+                                           +notes-names-list
+                                           +occur-grep-modes-list
                                            +repl-modes-list
                                            +repl-names-list
-                                           +occur-grep-modes-list
-                                           +message-modes-list
+                                           +shell-command-names-list
                                            '(("^\\*Warnings\\*$" . hide)
                                              "[Oo]utput\\*$"
                                              "\\*Completions\\*")))
