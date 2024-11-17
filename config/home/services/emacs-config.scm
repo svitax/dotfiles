@@ -38,7 +38,9 @@
 	emacs-denote
 	emacs-consult-denote
 	emacs-citar-denote
-	emacs-org-remark
+	+emacs-org-remark ;; HACK get a commit with the user option
+                      ;; `org-remark-report-no-highlights' until a new release
+                      ;; is tagged
 	emacs-nov-el
 	))
 

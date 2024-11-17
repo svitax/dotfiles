@@ -8,10 +8,11 @@
   #:use-module (guix build-system emacs)
   #:use-module (guix licenses)
   #:export (+emacs-super-save
-	    +emacs-mowie
-	    +emacs-cursory
-	    +emacs-bind
-	    +emacs-better-jumper))
+            +emacs-mowie
+            +emacs-cursory
+            +emacs-bind
+            +emacs-better-jumper
+            +emacs-org-remark))
 
 ;; TODO delete emacs-super-save because its already in guix/emacs-xyz
 (define-public +emacs-super-save
@@ -191,7 +192,7 @@ easily jump back to previous locations.")
 
 (define-public +emacs-biblio-gbooks
   (let ((commit "c7bdaba4dde8fca8b8e923f3c004d050a32c06c2")
-	(revision "0"))
+	    (revision "0"))
     (package
      (name "emacs-biblio-gbooks")
      (version (git-version "1.0.0" revision commit))
@@ -212,4 +213,40 @@ easily jump back to previous locations.")
       "`biblio-openlibrary' provides a backend for `biblio.el', which allows you to easily search and retrieve bibliographic entries using Google's Books API.")
      (license gpl3+))))
 
+;; HACK get a commit with the user option `org-remark-report-no-highlights' until a new release is tagged
+(define-public +emacs-org-remark
+  (let ((commit "e07dbdd2e70db2e6c5543a8de58da12ccf1bc5cb")
+        (revision "0"))
+    (package
+     (name "emacs-org-remark")
+     (version (git-version "1.2.2" revision commit))
+     (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/nobiot/org-remark")
+                    (commit commit)))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "01wqiiifv5x27mg0in475a5pczs7sihj0wzdnrfwrpss1z1wa887"))))
+     (build-system emacs-build-system)
+     (propagated-inputs (list emacs-org))
+     (home-page "https://nobiot.github.io/org-remark/")
+     (synopsis "Highlight & annotate text using Org mode")
+     (description "Org-remark lets you highlight and annotate text files,
+websites, EPUB books and Info documentation using Org mode.
 
+Features:
+
+@itemize
+@item Highlight and annotate any text file.  The highlights and notes are kept
+in an Org file as the plain text database.  This lets you easily manage your
+marginal notes and use the built-in Org facilities on them – e.g. create a
+sparse tree based on the category of the notes
+@item Create your your own highlighter pens with different colors, type (e.g.
+underline, squiggle, etc. optionally with Org’s category for search and filter
+on your highlights and notes)
+@item Have the same highlighting and annotating functionality for websites
+(when browsing with EWW), EPUB books with @code{nov.el}, Info documentation
+@end itemize")
+     (license gpl3+))))

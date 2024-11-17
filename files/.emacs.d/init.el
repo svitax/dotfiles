@@ -1700,6 +1700,10 @@ BibTeX file."
   ;; for each file where we add highlights and annotations, which is often
   ;; impractical.
   (org-remark-global-tracking-mode)
+
+  ;; Don't tell me that a buffer has no highlights. Too noisy.
+  (setopt org-remark-report-no-highlights nil)
+
   ;; Create a Denote-compatible marginal note
   (defun +org-remark-denote-filename-has-note-p (filename)
     "Find the Denote filename similar to FILENAME but with the 'literature' keyword."
