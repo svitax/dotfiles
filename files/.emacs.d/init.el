@@ -682,7 +682,7 @@ This is dote to accomodate `+vertico-multiform-minimal'."
   ;; However, automatic in-buffer text completion distracts me. I don't want
   ;; things eagerly popping in and out of my view. I want manual completion. Pop
   ;; up only when I say so. So completion is triggered with the `TAB' key,
-  ;; producing a popup where the cursor is.
+  ;; producing a popup where the cursor is. See my `tabs' configuration.
   ;;
   ;; On that note, I set `corfu-preview-current' to nil because I don't want the
   ;; selected candidates to insert themselves into my buffer without my
@@ -700,10 +700,9 @@ This is dote to accomodate `+vertico-multiform-minimal'."
   (corfu-popupinfo-mode 1)
 
   (setopt corfu-cycle t
-	  corfu-preview-current nil
-	  corfu-min-width 20
-	  corfu-popupinfo-delay '(0.25 . 0.25)
-	  tab-always-indent 'complete)
+	      corfu-preview-current nil
+	      corfu-min-width 20
+	      corfu-popupinfo-delay '(0.25 . 0.25))
 
   ;; Sort by input history
   (with-eval-after-load 'savehist
@@ -1205,9 +1204,30 @@ When the region is active, comment its lines instead."
    ("M-<up>" . move-text-up)
    ("M-<down>" . move-text-down)))
 
-(use-package tab
+(use-package tabs
   :no-require
   :config
+  ;; `TAB' in Emacs tries to be smart. Instead of inserting tabs, or spaces, it
+  ;; tries to indent the current line to where it should be given the context
+  ;; and depending on the major mode. This works best when we mark a region of
+  ;; text and hit `TAB' there.
+  ;;
+  ;; If we need to forcefully indent, we can use `indent-rigidly' (`C-x\ C-i' by
+  ;; default). This command allows us to shift a region left or right using the
+  ;; arrow keys. A common use-case for me is to paste some text I want to
+  ;; indent, and then do `C-u C-x C-i', which indents by four spaces the
+  ;; implicit region.
+  ;;
+  ;; `tab-always-indent' makes the `TAB' key assume the dual role of indenting
+  ;; text as well as triggering completion at point. (See my `corfu'
+  ;; configuration). When it can perform indentation, it does that, otherwise it
+  ;; starts a completion loop. The `tab-first-completion' determines when not to
+  ;; complete. In my case complete unless the next character is part of a word,
+  ;; parenthesis, or punctuation. Typing `TAB' a second time always results in
+  ;; completion.
+  (setopt tab-always-indent 'complete
+          tab-first-completion 'word-or-paren-or-punct)
+
   ;; `tab-width' and `indent-tabs-mode' are about the use of tabs. I never want
   ;; them, as I only use spaces.
   (setq-default tab-width 4
