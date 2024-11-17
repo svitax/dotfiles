@@ -1164,6 +1164,19 @@ When the region is active, comment its lines instead."
    ;; toggles linewise commenting instead of appending them by default.
    ("M-;" . +comment-dwim)))
 
+(use-package fill-mode
+  :no-require
+  :config
+  ;; `auto-fill-mode' automatically breaks long lines so that they wrap at the
+  ;; `fill-column' length. This way, a paragraph is not a single long line, but
+  ;; several shorter lines with newline characters between them. Often times
+  ;; this is more pleasant to work with instead of having to rely on
+  ;; `visual-line-mode' to visually wrap long lines. Relevant programs strip
+  ;; away the newlines inside a paragraph, but there are some that do not. For
+  ;; those I might rely upon `virtual-auto-fill-mode'.
+  (add-hook 'text-mode-hook #'auto-fill-mode)
+  (setopt fill-column 80))
+
 ;; NOTE document mowie
 (use-package mowie
   :config
