@@ -928,6 +928,20 @@ buffer's window as well."
 		    +golden-ratio-scroll-screen-down))
       (add-to-list 'pulsar-pulse-functions func))))
 
+(use-package display-line-numbers
+  :config
+  ;; I do not like to see line numbers by default and seldom use
+  ;; `display-line-numbers-mode'. They do not help me navigate a buffer, nor are
+  ;; they relevant in most cases. I enable the mode only when I need to compare
+  ;; buffers or get a sense of how far apart two relevant sections are in a
+  ;; file.
+  ;;
+  ;; Use absolute numbers in narrowed buffers.
+  (setq-default display-line-numbers-widen t)
+
+  (bind-keys
+   :map +toggle-prefix-map
+   ("n" . global-display-line-numbers-mode)))
 ;;;;;;;;;;;;;;;;
 ;;;; narrow ;;;;
 
