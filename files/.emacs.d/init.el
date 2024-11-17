@@ -145,7 +145,7 @@
    ;; ("C-j" . ) ; dired
    ("k" . kill-buffer)
    ("C-k" . kmacro-keymap)
-   ("l" . +bib-prefix-map) ; i don't like bib on l
+   ("l" . +bib-prefix-map) ; "lib" mnemonic
    ;; ("C-l" . ) ; downcase-region
    ("m" . +mail-prefix-map)
    ("n" . +notes-prefix-map)
@@ -348,7 +348,7 @@
    :map +file-prefix-map
    ("f" . find-file)
    ;; TODO add mark to xref before navigating to library
-   ("l" . find-library)
+   ("b" . find-library)
    ("m" . man)))
 
 ;; TODO savehist
@@ -1531,7 +1531,7 @@ BibTeX file."
    citar-notes-paths '("~/OneDrive/zettelkasten/"))
   (bind-keys
    :map +file-prefix-map
-   ("b" . citar-open)
+   ("l" . citar-open) ; "lib" mnemonic
    :map +bib-prefix-map
    ("f" . citar-open) ; "find" mnemonic
    :map org-mode-map
