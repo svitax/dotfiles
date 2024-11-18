@@ -21,6 +21,7 @@
 	emacs-consult
 	emacs-corfu
     emacs-cape
+    +emacs-projection
 	emacs-popper
 	emacs-avy
 	+emacs-better-jumper

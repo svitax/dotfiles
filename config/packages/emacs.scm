@@ -274,3 +274,38 @@ run. This can be plugged into various build frameworks such as Make or CMake to
 automatically determine the list of available targets.")
     (license gpl3+)))
 
+(define-public +emacs-projection
+  (let ((commit "50d4f0ec4edfddd24f7c1c540f299a919aa4c151")
+        (revision "0"))
+    (package
+     (name "emacs-projection")
+     (version "0.1")
+     (source
+      (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/mohkale/projection")
+             (commit commit)))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0s0bs395cczxq53axii514kjk32kj1rv3x68l16ni8jcys8bdy1w"))))
+     (build-system emacs-build-system)
+     (arguments
+      (list
+       #:phases
+       #~(modify-phases %standard-phases
+                        (add-after 'unpack 'chdir-src
+                                   ;; src directory is not it root of the source.
+                                   (lambda _
+                                     (chdir "src"))))))
+     (propagated-inputs (list emacs-s emacs-f emacs-compat))
+     (home-page "https://github.com/mohkale/projection")
+     (synopsis "Project type support for Emacs builtin project.el.")
+     (description
+      "This Emacs package provides a Projectile like project management library atop
+Emacs built-in project.el. The end goal is to provide a stable and reliable
+out-of-the-box project management experience for as many project types as
+possible while supporting very targeted support for some project types like
+CMake.")
+     (license gpl3+))))
+
