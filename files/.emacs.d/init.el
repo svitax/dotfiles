@@ -368,6 +368,15 @@
   ;; I am ever modifying my files externally, then I know what I am doing
   (setopt create-lockfiles nil))
 
+(use-package autorevert
+  :config
+  ;; The "auto-revert" facility makes Emacs update the contents of a saved
+  ;; buffer when its underlying file is changed externally. This can happen, for
+  ;; example, when a "git pull" modifies the file we are already displaying in a
+  ;; buffer. Emacs thus automatically reverts the buffer to reflect the new file
+  ;; contents.
+  (global-auto-revert-mode))
+
 ;; TODO savehist
 
 ;;;;;;;;;;;;;;;;;;;;
