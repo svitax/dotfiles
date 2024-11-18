@@ -1398,6 +1398,61 @@ When the region is active, comment its lines instead."
   (setopt xref-show-xrefs-function #'consult-xref
           xref-show-definitions-function #'consult-xref))
 
+(use-package eldoc
+  :config
+  ;; The built-in `eldoc' feature is especially useful in programming
+  ;; modes. While we are in a function call, it produces an indicator in the
+  ;; echo area (where the minibuffer appears upon invocation) that shows the
+  ;; name of the function, the arguments it takes, if any, and highlights the
+  ;; current argument we are positioned at. This way, we do not have to go back
+  ;; to review the signature of the function just to rememeber its arity. Same
+  ;; principle for variables, where `eldoc-mode' puts the first line of the
+  ;; documentation string in the echo area.
+  ;;
+  ;; The `eldoc-documentation-compose' and `eldoc-documentation-compose-eagerly'
+  ;; documentation strategies help compose information from multiple ElDoc
+  ;; sources at the same time. The eager option displays results as they come
+  ;; in; the other collates all the answers and displays them when they're all
+  ;; ready. I like the eager option.
+  (setopt eldoc-documentation-strategy 'eldoc-documentation-compose-eagerly)
+
+  ;; ElDoc resizes the echo area which is intrusive. Let's not do that.
+  (setopt eldoc-echo-area-use-multiline-p nil)
+
+  ;; Skip showing documentation in the echo area and use an `eldoc-doc-buffer'
+  ;; window if it is already displayed.
+  (setopt eldoc-echo-area-prefer-doc-buffer t)
+
+  ;; ElDoc will query functions in `eldoc-documentation-functions' in the order
+  ;; they're in and source documentation from them. Flymake diagnostics are more
+  ;; urgent, so I want to make sure they're first. By default Flymake adds
+  ;; itself to the end.
+  (defun +eldoc-setup-elisp ()
+    "Setup `eldoc-documentation-functions' for `emacs-lisp-mode' buffers."
+    (setq-local eldoc-documentation-functions '(flymake-eldoc-function
+                                                elisp-eldoc-funcall
+                                                elisp-eldoc-var-docstring)))
+  (defun +eldoc-setup-eglot ()
+    "Setup `eldoc-documentation-functions' for `eglot-managed-mode' buffers."
+    (setq-local eldoc-documentation-functions '(flymake-eldoc-function
+                                                eglot-signature-eldoc-function
+                                                eglot-hover-eldoc-function)))
+  (add-hook 'emacs-lisp-mode-hook #'+eldoc-setup-elisp)
+  (add-hook 'eglot-managed-mode-hook #'+eldoc-setup-eglot)
+
+  ;; ElDoc detects movement and uses `eldoc-idle-delay' to determine when to ask
+  ;; its backend documentation functions for information. To improve
+  ;; performance, it doesn't trigger on every command; instead, it maintains a
+  ;; list of common interactive commands. If you use things like Paredit or
+  ;; Combobulate then it won't display if interact with one of those
+  ;; commands. Luckily there's the `eldoc-add-command-completion' command.
+  (eldoc-add-command-completions "paredit-")
+  (eldoc-add-command-completions "combobulate-")
+
+  (bind-keys
+   :map help-map
+   ("." . eldoc-doc-buffer)))
+
 ;;;;;;;;;;;;
 ;;;; vc ;;;;
 
