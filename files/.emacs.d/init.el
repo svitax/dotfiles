@@ -1652,6 +1652,8 @@ When the region is active, comment its lines instead."
   (setopt magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
 
   (bind-keys
+   :map +project-prefix-map
+   ("v" . magit-project-status)
    :map +vc-prefix-map
    ("v" . magit-status)))
 
