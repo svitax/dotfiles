@@ -652,10 +652,7 @@ This is dote to accomodate `+vertico-multiform-minimal'."
   ;; activate preview with the key `M-.' for certain commands and sources.
   (consult-customize
    consult-bookmark consult-info consult-recent-file consult-buffer
-   consult-denote-buffer-source ;; consult-denote-silo-source
    :preview-key "M-."
-   consult-denote-subdirectory-source
-   :hidden nil
    consult-theme
    :preview-key (list :debounce 0.3 "M-."))
 
@@ -1936,6 +1933,15 @@ BibTeX file."
   ;; by providing a preview of the file-to-be-linked/opened and by adding more
   ;; sources to the `consult-buffer' command.
   (consult-denote-mode 1)
+
+  ;; Use `consult-customize' to hide `consult-denote-subdirectory-source' and
+  ;; disable auto preview of `consult-denote-buffer-source'.
+  (consult-customize
+   consult-denote-buffer-source
+   :preview-key "M-."
+   consult-denote-subdirectory-source
+   :hidden nil)
+
   (bind-keys
    :map +notes-prefix-map
    ("f" . consult-denote-find)
