@@ -654,6 +654,8 @@ This is dote to accomodate `+vertico-multiform-minimal'."
    consult-bookmark consult-info consult-recent-file consult-buffer
    consult-denote-buffer-source ;; consult-denote-silo-source
    :preview-key "M-."
+   consult-denote-subdirectory-source
+   :hidden nil
    consult-theme
    :preview-key (list :debounce 0.3 "M-."))
 
