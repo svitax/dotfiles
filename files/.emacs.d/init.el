@@ -360,6 +360,14 @@
   (setopt backup-inhibited t
           make-backup-files nil))
 
+(use-package lockfiles
+  :no-require
+  :config
+  ;; By default, Emacs tries to lock down files so that they are not modified by
+  ;; other programs (i.e. .#some-file.el). I do not need this feature because if
+  ;; I am ever modifying my files externally, then I know what I am doing
+  (setopt create-lockfiles nil))
+
 ;; TODO savehist
 
 ;;;;;;;;;;;;;;;;;;;;
