@@ -1032,7 +1032,7 @@ buffer's window as well."
           avy-single-candidate-jump nil)
   (bind-keys
    :map global-map
-   ("C-j" . avy-goto-char-timer)))
+   ("M-j" . avy-goto-char-timer)))
 
 (use-package dogears
   :load-path "plugins/dogears/"
@@ -1193,7 +1193,7 @@ When the region is active, comment its lines instead."
    ("C-M-o" . +open-line-above)
 
    ;; Join the current line with the line below it similar to Vim's J command.
-   ("M-j" . +join-line-below)
+   ("C-j" . +join-line-below)
 
    ;; The `+comment-dwim' command is like the built-in `comment-dwim', but
    ;; toggles linewise commenting instead of appending them by default.
