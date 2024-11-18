@@ -647,14 +647,12 @@ This is dote to accomodate `+vertico-multiform-minimal'."
   ;; feature when we are trying to find something and do not quite remember all
   ;; the search terms to narrow down to it simply by typing at the minibuffer
   ;; prompt.  Unfortunately, the eager previewing can be disorienting when
-  ;; moving quickly between candidates. Because of that I prefer to activate
-  ;; preview with a key (`M-.') for certain sources.
+  ;; moving quickly between candidates. The `consult-customize' macro allows us
+  ;; to configure the the preview on a per-command basis. Here I set it to
+  ;; activate preview with the key `M-.' for certain commands and sources.
   (consult-customize
-   consult-bookmark consult--source-buffer consult-recent-file
-   consult--source-recent-file consult--source-project-recent-file
-   consult--source-bookmark consult--source-project-buffer
-   consult-denote-buffer-source consult-denote-subdirectory-source
-   consult-denote-silo-source consult-info
+   consult-bookmark consult-info consult-recent-file consult-buffer
+   consult-denote-buffer-source ;; consult-denote-silo-source
    :preview-key "M-."
    consult-theme
    :preview-key (list :debounce 0.3 "M-."))
