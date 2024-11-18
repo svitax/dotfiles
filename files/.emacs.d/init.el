@@ -1384,6 +1384,20 @@ When the region is active, comment its lines instead."
    ("," . compile)
    ("." . recompile)))
 
+;;;;;;;;;;;;;;
+;;;; prog ;;;;
+
+(use-package xref
+  :config
+  ;; `xref' provides infrastructure to jump to and from a definition. For
+  ;; example, with point over a function, call `xref-find-definitions' will jump
+  ;; to the file where the function is defined or provide an option to pick one
+  ;; among multiple definitions, where applicable.
+  ;;
+  ;; Use Consult to select xref locations with preview.
+  (setopt xref-show-xrefs-function #'consult-xref
+          xref-show-definitions-function #'consult-xref))
+
 ;;;;;;;;;;;;
 ;;;; vc ;;;;
 
