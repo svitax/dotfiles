@@ -659,6 +659,10 @@ This is dote to accomodate `+vertico-multiform-minimal'."
    consult-theme
    :preview-key (list :debounce 0.3 "M-."))
 
+  ;; Always work from the current directory (use `project-*' commands or `cd' to
+  ;; switch directories).
+  (setopt consult-project-function nil)
+
   ;; Use `consult-find-args' to specify slow directories to skip, like .git/,
   ;; .cache/, and node-modules.
   (setopt consult-find-args (concat "find . -not ( "
@@ -792,19 +796,65 @@ together."
 ;;;;;;;;;;;;;;;;;
 ;;;; project ;;;;
 
-;; NOTE document project
 (use-package project
   :config
+  ;; In Emacs parlance, a "project" is a collection of files and/or directories
+  ;; that share the same root. The root of a project is identified by a special
+  ;; file or directory, with `.git/' being one of the defaults as it is a
+  ;; version control system supported by the built-in `vc.el'.
+  ;;
+  ;; We can specify more project roots as a list of strings in the user option
+  ;; `project-vc-extra-root-markers'. I work exclusively with Git repositories,
+  ;; so I add there a `.project' file in case I ever need to register a project
+  ;; without it being controlled by `git'. In that case, the `.project' file is
+  ;; just and empty file in a directory that I want to treat as the root of this
+  ;; project.
+  (setopt project-vc-extra-root-markers '(".project"))
+
+  ;; The common way to switch to a project is to type `C-x p p', which calls the
+  ;; command `project-switch-project'. It lists all registered projects and also
+  ;; includes a `... (choose a dir)' option. By choosing a new directory, we
+  ;; register it in our project list if it has a recognizable root. Once we
+  ;; select a project, we are presented with a list of common actions to start
+  ;; working on the project. These are defined in the user option
+  ;; `project-switch-commands' and are activated by an assigned key.
+  (setopt project-switch-commands '((project-switch-to-buffer "Buffer" ?b)
+                                    (project-dired "Dired" ?d)
+                                    (project-eshell "Eshell" ?e)
+                                    (project-find-file "File" ?f)
+                                    (+project-consult-grep "Grep" ?g)
+                                    (magit-project-status "VC" ?v)
+                                    (project-async-shell-command "Async Command" ?&)
+                                    (project-shell-command "Command" ?!)))
+
+  ;; While inside a project, we have many commands that operate on the project
+  ;; level. For example, `project-find-file' searches for a file across the
+  ;; project, while `project-switch-to-buffer' switches to a buffer that is
+  ;; specific to the project.
+  ;;
+  ;; If any of the `project.el' commands is called from outside a project, it
+  ;; first prompts for a project and then carries out its action. For example,
+  ;; `project-find-file' will ask for a project to use, then switch to it, then
+  ;; prompt for a file inside of the specified project.
+
+  (defun +project-consult-grep (&optional dir initial)
+    "Search with `grep' for files in DIR with INITIAL input with
+`consult-project-function' set to the default project function."
+    (interactive)
+    (let ((consult-project-function 'consult--default-project-function))
+      (consult-grep dir initial)))
+
   (bind-keys
    :map +project-prefix-map
    ("b" . project-switch-to-buffer)
    ("d" . project-dired)
    ("e" . project-eshell)
    ("f" . project-find-file)
-   ;; ("g" . +project-consult-grep)
+   ("g" . +project-consult-grep)
    ("k" . project-kill-buffers)
    ("p" . project-switch-project)
    ("r" . project-query-replace-regexp)
+   ("&" . project-async-shell-command)
    ("!" . project-shell-command)))
 
 ;;;;;;;;;;;;;;;;;
