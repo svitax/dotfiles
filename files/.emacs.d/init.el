@@ -1519,6 +1519,23 @@ When the region is active, comment its lines instead."
    ("," . compile)
    ("." . recompile)))
 
+(use-package compile-multi
+  :config
+  ;; `compile-multi' is a multi-target interface to `compile'. It allows you to
+  ;; configure and interactively select compilation targets based on arbitrary
+  ;; project types, build frameworks, or test tools.
+  ;;
+  ;; In simplified terms, `compile-multi' provides a framework for associating
+  ;; actions with triggers. A trigger is any predicate that applies to the
+  ;; current file, project, or directory. An action is a shell command or
+  ;; interactive function or anything that can be invoked when the associated
+  ;; trigger is set. For example, we can write a function that parses out all
+  ;; the targets from a Makefile and generates actions for them. This allows us
+  ;; to construct rich command interfaces.
+  (bind-keys
+   :map ctl-x-map
+   ("/" . compile-multi)))
+
 ;;;;;;;;;;;;;;
 ;;;; prog ;;;;
 
