@@ -351,6 +351,15 @@
    ("b" . find-library)
    ("m" . man)))
 
+(use-package backup
+  :no-require
+  :config
+  ;; By default, Emacs tries to keep backups (i.e. some-file.el~). I do not need
+  ;; this feature because all the files I care about are either under version
+  ;; control or backed up to a flash drive.
+  (setopt backup-inhibited t
+          make-backup-files nil))
+
 ;; TODO savehist
 
 ;;;;;;;;;;;;;;;;;;;;
