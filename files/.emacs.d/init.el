@@ -1420,6 +1420,33 @@ When the region is active, comment its lines instead."
    ("<" . mc/skip-to-previous-like-this)))
 
 ;;;;;;;;;;;;;;;;;
+;;;; linting ;;;;
+
+(use-package flymake
+  :config
+  ;; The built-in `flymake' feature defines an interface for viewing the output
+  ;; of linter programs. A "linter" parses a file and reports possible
+  ;; notes/warnings/errors in it. With `flymake' we get these diagnostics in the
+  ;; form of a standalone buffer as well as inline highlights (typically
+  ;; underlines combined with fringe indicators) for the portion of text in
+  ;; question. The linter report is displayed with the command
+  ;; `flymake-show-buffer-diagnostics', or `flymake-show-project-diagnostics'.
+  ;; Highlights are shown in the context of the file.
+  ;;
+  ;; The built-in `eglot' feature uses `flymake' internally to handle the LSP
+  ;; linter output.
+  ;;
+  ;; I see no need to constantly check the buffer for changes in order to update
+  ;; the linting report, so I set `flymake-no-changes-timeout' to nil. The other
+  ;; essential user options for me are `flymake-start-on-save-buffer' and
+  ;; `flymake-start-on-flymake-mode' as they make the linter update its report
+  ;; when the buffer is saved and when `flymake-mode' is started,
+  ;; respectively. Otherwise, we have to run it manually, which is cumbersome.
+  (setopt flymake-no-changes-timeout nil
+          flymake-start-on-save-buffer t
+          flymake-start-on-flymake-mode t))
+
+;;;;;;;;;;;;;;;;;
 ;;;; compile ;;;;
 
 ;; NOTE document compile
