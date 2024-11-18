@@ -790,6 +790,24 @@ together."
     (cape-wrap-super #'cape-dabbrev #'cape-dict #'cape-keyword)))
 
 ;;;;;;;;;;;;;;;;;
+;;;; project ;;;;
+
+;; NOTE document project
+(use-package project
+  :config
+  (bind-keys
+   :map +project-prefix-map
+   ("b" . project-switch-to-buffer)
+   ("d" . project-dired)
+   ("e" . project-eshell)
+   ("f" . project-find-file)
+   ;; ("g" . +project-consult-grep)
+   ("k" . project-kill-buffers)
+   ("p" . project-switch-project)
+   ("r" . project-query-replace-regexp)
+   ("!" . project-shell-command)))
+
+;;;;;;;;;;;;;;;;;
 ;;;; buffers ;;;;
 
 ;; NOTE document buffer
