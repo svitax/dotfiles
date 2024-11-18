@@ -1361,6 +1361,29 @@ When the region is active, comment its lines instead."
    (">" . mc/skip-to-next-like-this)
    ("<" . mc/skip-to-previous-like-this)))
 
+;;;;;;;;;;;;;;;;;
+;;;; compile ;;;;
+
+;; NOTE document compile
+(use-package compile
+  :config
+  ;; NOTE `compilation-filter-hook' is a set of filters to be applied to the
+  ;; output of our compiler.
+
+  ;; Automatically scroll build output
+  (setopt compilation-scroll-output t)
+  ;; Kill compilation process before starting another.
+  (setopt compilation-always-kill t)
+  ;; Translate ANSI escape sequences into faces
+  (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
+
+  (bind-keys
+   :map +project-prefix-map
+   ("," . project-compile)
+   :map ctl-x-map
+   ("," . compile)
+   ("." . recompile)))
+
 ;;;;;;;;;;;;
 ;;;; vc ;;;;
 
