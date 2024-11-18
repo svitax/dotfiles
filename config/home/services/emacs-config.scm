@@ -15,6 +15,8 @@
 	emacs-modus-themes ; @4.5.0
 	emacs-pulsar
 	+emacs-cursory ; @1.1.0
+    emacs-envrc
+    emacs-inheritenv
 	emacs-marginalia
 	emacs-orderless
 	emacs-vertico

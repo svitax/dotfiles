@@ -333,6 +333,29 @@
   (setopt initial-buffer-choice t
           initial-major-mode 'lisp-interaction-mode))
 
+;;;;;;;;;;;;;;;;
+;;;; direnv ;;;;
+
+;; NOTE document envrc
+(use-package envrc
+  :config
+  (setopt envrc-show-summary-in-minibuffer nil)
+  (envrc-global-mode))
+
+(use-package inheritenv
+  :config
+  ;; `envrc' sets environment variables in Emacs buffer-locally. This allows
+  ;; users to have different buffer-local paths for executables in different
+  ;; projects. However, when Emacs libraries run background processes on behalf
+  ;; of a user, they often run processes in temporary buffers that do not
+  ;; inherit the calling buffer's environment. This results in executables not
+  ;; being found, or the wrong versions of executables being picked up.
+  ;;
+  ;; `inheritenv' provides the macro `inheritenv-add-advice' which wraps any
+  ;; command with an advice function so in inherits buffer-local variables. This
+  ;; is useful for when we discover problems we can't patch upstream.
+  (inheritenv-add-advice 'jupyter-run-repl))
+
 ;;;;;;;;;;;;;;;
 ;;;; files ;;;;
 
@@ -966,6 +989,7 @@ buffer's window as well."
   ;; This does not work at buffer creation since the major mode for REPLs is not
   ;; yet set when `display-buffer' is called, but it is useful afterwards.
   (defvar +repl-modes-list '(matlab-shell-mode
+                             comint-mode
                              geiser-repl-mode
                              inferior-python-mode
                              cider-repl-mode

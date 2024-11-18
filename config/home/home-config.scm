@@ -15,13 +15,11 @@
 ;; TODO font-iosevka 2.1.0
 (home-environment
  (packages (list git
-                 gnu-make
                  font-iosevka
                  librewolf
                  ;; NOTE make a home-onedrive-service-type
                  ;; or use owncloud/nextcloud
                  +onedrive
-
                  ))
  (services (list
             (service home-emacs-config-service-type)
