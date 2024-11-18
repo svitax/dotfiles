@@ -1684,7 +1684,7 @@ BibTeX file."
           ;; that you only use a predefined set of them, then you want
           ;; `denote-infer-keywords' set to nil, and `denote-known-keywords' to
           ;; have the keywords you need.
-          denote-infer-keywords t
+          denote-infer-keywords nil
           denote-sort-keywords t
           denote-known-keywords '("emacs")
           ;; Prompt for title, keywords, and signature in Denote commands that
