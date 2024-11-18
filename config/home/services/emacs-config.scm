@@ -20,6 +20,7 @@
 	emacs-vertico
 	emacs-consult
 	emacs-corfu
+    emacs-cape
 	emacs-popper
 	emacs-avy
 	+emacs-better-jumper

@@ -749,6 +749,46 @@ This is dote to accomodate `+vertico-multiform-minimal'."
    ("TAB" . corfu-complete)
    ("RET" . +corfu-quit-and-newline)))
 
+;;;;;;;;;;;;;;
+;;;; cape ;;;;
+
+(use-package cape
+  :config
+  ;; Cape provides completion-at-point extensions. That is, it provides
+  ;; `completion-at-point' functions which you can add to the
+  ;; `completion-at-point-functions' list, which makes the backends available
+  ;; for completion.
+  ;;
+  ;; Notable capfs are `cape-line' for completion of a line from the current
+  ;; buffer, `cape-history' for history completion in shell or Comint modes,
+  ;; `cape-file' for completion of file names, and `cape-elisp-symbol' +
+  ;; `cape-elisp-block' for completion of Elisp symbols anywhere.
+  ;;
+  ;; Add to the global default value of `completion-at-point-functions' which is
+  ;; used by `completion-at-point'. The order of the functions matters, as the
+  ;; first capf returning a result wins and the later capfs may not get a chance
+  ;; to run. One must distinguish the buffer-local and the global value of the
+  ;; `completion-at-point-functions' variable. The buffer-local value of the
+  ;; list takes precedence, but if the buffer-local list contains the symbol `t'
+  ;; at the end, it means that the functions specified in the global list should
+  ;; be executed afterwards. The special meaning of the value `t' is a feature
+  ;; of the `run-hooks' function, see the section "Running Hooks" it the Elisp
+  ;; manual for further information.
+  (add-hook 'completion-at-point-functions #'cape-file)
+
+  ;; In order to merge capfs you can try the functions `cape-capf-super'. It is
+  ;; only necessary if you want to combine multiple capfs, such that the
+  ;; candidates from multiple sources appear together in the completion list at
+  ;; the same time. `cape-capf-super' is not needed of multiple capfs should be
+  ;; tried one after the other, for example you can use `cape-file' together
+  ;; with programming capfs by adding `cape-file' to the
+  ;; `completion-at-point-functions' list. File completion will then be
+  ;; available in comments and string literals, but not in normal code.
+  (defun +cape-dabbrev-dict-keyword ()
+    "Merges the dabbrev, dict, and keyword cape capfs to display candidates
+together."
+    (cape-wrap-super #'cape-dabbrev #'cape-dict #'cape-keyword)))
+
 ;;;;;;;;;;;;;;;;;
 ;;;; buffers ;;;;
 
