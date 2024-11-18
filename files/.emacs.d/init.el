@@ -1551,6 +1551,14 @@ When the region is active, comment its lines instead."
    :map ctl-x-map
    ("/" . compile-multi)))
 
+(use-package consult-compile-multi
+  :config
+  ;; `consult-compile-multi' is an extension for `compile-multi' that runs the
+  ;; interactive selection of targets through `consult' instead of
+  ;; `completing-read', which enhances it with some useful consult features such
+  ;; as narrowing.
+  (consult-compile-multi-mode))
+
 (use-package projection-multi
   :config
   ;; `projection' has an optional extension package called `projection-multi' to

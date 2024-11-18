@@ -274,6 +274,38 @@ run. This can be plugged into various build frameworks such as Make or CMake to
 automatically determine the list of available targets.")
     (license gpl3+)))
 
+(define-public +emacs-consult-compile-multi
+  (package
+   (name "emacs-consult-compile-multi")
+   (version "0.6")
+   (source
+    (origin
+     (method git-fetch)
+     (uri (git-reference
+           (url "https://github.com/mohkale/compile-multi")
+           (commit version)))
+     (file-name (git-file-name name version))
+     (sha256
+      (base32 "0myyl5h62c9qn22piinh605pl6sj4jy8vik69w31zpmvskvvcjfh"))))
+   (build-system emacs-build-system)
+   (arguments
+    (list
+     #:phases
+     #~(modify-phases %standard-phases
+                      (add-after 'unpack 'chdir-elisp
+                                 (lambda _
+                                   (chdir
+                                    "extensions/consult-compile-multi"))))))
+   (propagated-inputs (list emacs-consult +emacs-compile-multi))
+   (home-page "https://github.com/mohkale/compile-multi")
+   (synopsis "A multi-target interface for M-x compile.")
+   (description
+    "This package exposes facilities for generating a collection of compilation
+commands for the current buffer or project and interactively select one to
+run. This can be plugged into various build frameworks such as Make or CMake to
+automatically determine the list of available targets.")
+   (license gpl3+)))
+
 (define-public +emacs-projection
   (let ((commit "50d4f0ec4edfddd24f7c1c540f299a919aa4c151")
         (revision "0"))

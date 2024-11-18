@@ -31,6 +31,7 @@
 	emacs-expand-region
 	+emacs-multiple-cursors ; @1.4.0 | commit c870c18
     +emacs-compile-multi
+    +emacs-consult-compile-multi
     +emacs-projection-multi
 	emacs-magit
 	emacs-git-gutter
