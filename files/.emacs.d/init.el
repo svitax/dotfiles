@@ -1551,6 +1551,24 @@ When the region is active, comment its lines instead."
    :map ctl-x-map
    ("/" . compile-multi)))
 
+(use-package projection-multi
+  :config
+  ;; `projection' has an optional extension package called `projection-multi' to
+  ;; integrate `compile-multi' into the current project type. It can extract
+  ;; available compilation targets from Makefiles, CMake configuration, etc. and
+  ;; lets you execute them easily. By default, `projection-multi-compile'
+  ;; determines all project types matching the current project and then resolves
+  ;; compilation targets based on them. For example, a project that would match
+  ;; CMake and tox would let you select both tox and CMake build
+  ;; targets.
+  ;;
+  ;; Currently automatic target generation functions are available for the
+  ;; following project types: projection (simply presents available projection
+  ;; commands for the matching project types), CMake, Make, Poetry Poe, and Tox.
+  (bind-keys
+   :map ctl-x-map
+   ("/" . projection-multi-compile)))
+
 ;;;;;;;;;;;;;;
 ;;;; prog ;;;;
 
