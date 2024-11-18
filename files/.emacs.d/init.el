@@ -653,12 +653,12 @@ This is dote to accomodate `+vertico-multiform-minimal'."
    consult-bookmark consult--source-buffer consult-recent-file
    consult--source-recent-file consult--source-project-recent-file
    consult--source-bookmark consult--source-project-buffer
-   ;; consult-denote-buffer-source consult-denote-subdirectory-source
-   ;; consult-denote-silo-source consult-info
+   consult-denote-buffer-source consult-denote-subdirectory-source
+   consult-denote-silo-source consult-info
    :preview-key "M-."
    consult-theme
    :preview-key (list :debounce 0.3 "M-."))
-  ;;
+
   ;; Use `consult-find-args' to specify slow directories to skip, like .git/,
   ;; .cache/, and node-modules.
   (setopt consult-find-args (concat "find . -not ( "
