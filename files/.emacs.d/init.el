@@ -903,6 +903,8 @@ together."
   :no-require
   :config
   (bind-keys
+   :map ctl-x-map
+   ("k" . +kill-current-buffer)
    :map +buffer-prefix-map
    ("c" . clone-indirect-buffer-other-window)
    ("g" . revert-buffer-quick)
@@ -920,6 +922,7 @@ buffer's window as well."
     (if (and arg (not (one-window-p)))
         (kill-buffer-and-window)
       (kill-buffer)))
+
   (defun +rename-file-and-buffer (name)
     "Apply NAME to current file and rename its buffer."
     (interactive
