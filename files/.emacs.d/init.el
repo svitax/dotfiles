@@ -181,6 +181,39 @@
    :map +guix-prefix-map
    ("g" . guix)))
 
+;;;;;;;;;;;;;;
+;;;; core ;;;;
+
+(use-package core
+  :no-require
+  ;; No alarms by default
+  (setq ring-bell-function 'ignore))
+
+(use-package scroll-bar
+  :config
+  ;; No scrollbar by default.
+  (scroll-bar-mode -1))
+
+(use-package menu-bar
+  :config
+  ;; No menu-bar by default.
+  (menu-bar-mode -1))
+
+(use-package tool-bar
+  :config
+  ;; No tool-bar by default.
+  (tool-bar-mode -1))
+
+(use-package frame
+  :config
+  (setopt frame-title-format '("%b")))
+
+(use-package scratch
+  :no-require
+  :config
+  (setopt initial-buffer-choice t
+          initial-major-mode 'lisp-interaction-mode))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; native-compilation ;;;;
 
@@ -319,19 +352,6 @@
 
 ;;;;;;;;;;;;;;;;;;
 ;;;; modeline ;;;;
-
-;;;;;;;;;;;;;;;;
-;;;; frames ;;;;
-
-(use-package frame
-  :config
-  (setopt frame-title-format '("%b")))
-
-(use-package scratch
-  :no-require
-  :config
-  (setopt initial-buffer-choice t
-          initial-major-mode 'lisp-interaction-mode))
 
 ;;;;;;;;;;;;;;;;
 ;;;; direnv ;;;;
