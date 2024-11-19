@@ -844,6 +844,7 @@ together."
                                     (project-find-file "File" ?f)
                                     (+project-consult-grep "Grep" ?g)
                                     (magit-project-status "VC" ?v)
+                                    (project-compile "Compile" ?,)
                                     (project-async-shell-command "Async Command" ?&)
                                     (project-shell-command "Command" ?!)))
 
@@ -874,6 +875,7 @@ together."
    ("k" . project-kill-buffers)
    ("p" . project-switch-project)
    ("r" . project-query-replace-regexp)
+   ("," . project-compile)
    ("&" . project-async-shell-command)
    ("!" . project-shell-command)))
 
@@ -1536,10 +1538,8 @@ When the region is active, comment its lines instead."
   (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
 
   (bind-keys
-   :map +project-prefix-map
-   ("," . project-compile)
    :map ctl-x-map
-   ("," . compile)
+   ("," . project-compile)
    ("." . recompile)))
 
 (use-package compile-multi
