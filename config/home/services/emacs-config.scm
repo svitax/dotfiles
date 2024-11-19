@@ -29,7 +29,6 @@
 	+emacs-better-jumper
 	+emacs-mowie ; @0.1.1
 	emacs-move-text
-	emacs-smart-hungry-delete
 	emacs-expand-region
 	+emacs-multiple-cursors ; @1.4.0 | commit c870c18
     +emacs-compile-multi

@@ -1436,20 +1436,6 @@ When the region is active, comment its lines instead."
   ;; `delete-selection-mode' we get it.
   (delete-selection-mode +1))
 
-;; NOTE document smart-hungry-delete
-;; NOTE possibly create +smart-hungry-delete-forward/backward-char
-;; with electric-pair-mode and delsel integration
-(use-package smart-hungry-delete
-  :disabled t
-  :config
-  (smart-hungry-delete-add-default-hooks)
-  (bind-keys
-   :map global-map
-   ([remap backward-delete-char-untabify] . smart-hungry-delete-backward-char)
-   ([remap delete-backward-char] . smart-hungry-delete-backward-char)
-   ([remap delete-char] . smart-hungry-delete-forward-char)
-   ([remap delete-forward-char] . smart-hungry-delete-forward-char)))
-
 (use-package expand-region
   :config
   ;; The `expand-region' package expands the region from smallest to the largest
