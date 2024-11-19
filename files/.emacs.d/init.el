@@ -878,6 +878,7 @@ together."
    ("!" . project-shell-command)))
 
 (use-package projection
+  :disabled t
   :config
   ;; Projection adds project type support for Emacs' built-in `project.el' and
   ;; other valuable features. You can use the provided collection of project
@@ -1542,6 +1543,7 @@ When the region is active, comment its lines instead."
    ("." . recompile)))
 
 (use-package compile-multi
+  :disabled t
   :config
   ;; `compile-multi' is a multi-target interface to `compile'. It allows you to
   ;; configure and interactively select compilation targets based on arbitrary
@@ -1559,6 +1561,7 @@ When the region is active, comment its lines instead."
    ("/" . compile-multi)))
 
 (use-package consult-compile-multi
+  :disabled t
   :config
   ;; `consult-compile-multi' is an extension for `compile-multi' that runs the
   ;; interactive selection of targets through `consult' instead of
@@ -1567,6 +1570,7 @@ When the region is active, comment its lines instead."
   (consult-compile-multi-mode))
 
 (use-package projection-multi
+  :disabled t
   :config
   ;; `projection' has an optional extension package called `projection-multi' to
   ;; integrate `compile-multi' into the current project type. It can extract
