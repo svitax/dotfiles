@@ -1750,7 +1750,12 @@ When the region is active, comment its lines instead."
   (with-eval-after-load 'pulsar
     (dolist (hook '(org-follow-link-hook))
       (add-hook hook #'pulsar-recenter-middle)
-      (add-hook hook #'pulsar-reveal-entry))))
+      (add-hook hook #'pulsar-reveal-entry)))
+
+  ;; TODO document org-mode-map bindings because i can't use it until org-mode is loaded
+  (bind-keys
+   :map org-mode-map
+   ("C-j" . +join-line-below)))
 
 ;; (use-package org-gtd)
 
