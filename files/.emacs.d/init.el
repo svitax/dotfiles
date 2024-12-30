@@ -77,6 +77,10 @@
   ;; series of keys to get the desired command. Keymaps are organised
   ;; thematically and rely on strong mnemonics, such as `b' for buffers, `w' for
   ;; windows, and so on.
+  (defvar-keymap +prefix-map
+    :doc "Prefix keymap"
+    :prefix '+prefix-map
+    "h" help-map)
   (defvar-keymap +bib-prefix-map
     :doc "Prefix keymap for bibliography."
     :prefix '+bib-prefix-map)
@@ -98,6 +102,9 @@
   (defvar-keymap +mail-prefix-map
     :doc "Prefix keymap for mail."
     :prefix '+mail-prefix-map)
+  (defvar-keymap +narrow-prefix-map
+    :doc "Prefix keymap for narrowing."
+    :prefix '+narrow-prefix-map)
   (defvar-keymap +notes-prefix-map
     :doc "Prefix keymap for notes commands."
     :prefix '+notes-prefix-map)
@@ -129,45 +136,41 @@
     )
 
   (bind-keys
+   ;; :map +prefix-map
    :map ctl-x-map
-   ;; ("C-a" . )
-   ("b" . +buffer-prefix-map)
-   ("C-b" . ibuffer) ; list-buffers
-   ;; ("c" . org-capture)
-   ("d" . dired-jump)
-   ("C-d" . dired)
-   ("e" . +eval-prefix-map)
-   ("f" . +file-prefix-map)
+   ; ("a" . )
+   ("b" . consult-buffer) ("C-b" . ibuffer)  ; list-buffers
+   ("c" . org-capture) ("C-c" . save-buffers)
+   ("d" . dired-jump) ("C-d" . dired) ; list-directory
+   ("e" . +eval-prefix-map) ("C-e" . eval-last-sexp)
+   ("f" . find-file) ("C-f" . find-file)
    ("g" . +guix-prefix-map)
-   ("h" . mark-whole-buffer)
-   ;; ("i" . ) ; insert-file
+   ;; ("h" . )
+   ;; ("i" . )
    ("j" . +dap-prefix-map) ; i don't like dap/debug on j
-   ;; ("C-j" . ) ; dired
-   ("k" . kill-buffer)
-   ("C-k" . kmacro-keymap)
+   ("k" . kill-buffer) ("C-k" . kmacro-keymap)
    ("l" . +bib-prefix-map) ; "lib" mnemonic
-   ;; ("C-l" . ) ; downcase-region
    ("m" . +mail-prefix-map)
    ("n" . +notes-prefix-map)
-   ;; ("C-n" . ) ; set-goal-column
-   ;; ("C-o" . delete-blank-lines)
-   ("p" . +project-prefix-map)
-   ;; "C-p" . mark-page
-   ;; "q" ; kbd-macro-query
-   ;; "C-q" . read-only-mode
-   ("r" . +registers-prefix-map)
-   ;; "C-r" . find-file-read-only
-   ;; "s" ; save-some-buffers
-   ;; ("C-s" . save-buffers)
-   ("t" . +tab-prefix-map)
-   ;; "C-t" . transpose-lines
+   ("p" . +project-prefix-map) ("C-p" . mark-page)
+   ("q" . kbd-macro-query) ("C-q" . read-only-mode)
+   ("r" . +registers-prefix-map) ("C-r" . find-file-read-only)
+   ;; ("s" . )
+   ("C-s" . save-buffer) ; save-some-buffers
+   ("t" . +tab-prefix-map) ("C-t" . transpose-lines)
    ;; "u" undo? undo-prefix?
-   ;; ("C-u" . upcase-region) ; don't need
-   ("v" . +vc-prefix-map)
-   ;; "C-v" . find-alternate-file
-   ("w" . +window-prefix-map)
-   ;; "C-w" . write-file
-   ("x" . +toggle-prefix-map)))
+   ("v" . +vc-prefix-map) ("C-v" . find-alternate-file)
+   ("w" . +window-prefix-map) ("C-w" . write-file)
+   ("x" . +toggle-prefix-map) ("C-x" . exchange-point-and-mark)
+   ;; ("y" . )
+   ;; ("z" . ) ; +narrow-map or +notes-map ("zettelkasten" mnemonic)
+   ("TAB" . indent-rigidly))
+
+  (bind-keys
+   :map +eval-prefix-map
+   ("e" . eval-last-sexp) ("C-e" . eval-last-sexp)
+   ("x" . eval-defun)
+   (":" . eval-expression)))
 
 ;; TODO replace with embark
 (use-package which-key)
@@ -1185,7 +1188,7 @@ buffer's window as well."
   :no-require
   :config
   (bind-keys
-   :map +buffer-prefix-map
+   :map +narrow-prefix-map
    ("d" . narrow-to-defun)
    ;; ("g" . goto-line-relative) ; if narrowed, make "M-g g" do goto-line-relative instead
    ("n" . narrow-to-region)
