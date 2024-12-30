@@ -1037,9 +1037,9 @@ buffer's window as well."
   (popper-mode)
   (bind-keys
    :map global-map
-   ("C-`" . popper-toggle-latest)
-   ("M-`" . popper-cycle)
-   ("C-M-`" . popper-toggle-type)))
+   ("C-'" . popper-toggle-latest)
+   ("M-'" . popper-cycle)
+   ("C-M-'" . popper-toggle-type)))
 
 ;; NOTE document golden-ratio-scroll
 (use-package golden-ratio-scroll
