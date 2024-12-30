@@ -1177,6 +1177,7 @@ buffer's window as well."
    ("M-j" . avy-goto-char-timer)))
 
 (use-package dogears
+  :disabled t
   :load-path "plugins/dogears/"
   :config
   (dogears-mode)
