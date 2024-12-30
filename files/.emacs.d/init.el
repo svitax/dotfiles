@@ -1257,6 +1257,19 @@ moves the point more than one line."
     (next-line)
     (indent-according-to-mode))
 
+  (defun +mark-line ()
+    "Put point at beginning of this line, mark at end.
+
+If region is active, extend selection downward by line. If
+`visual-line-mode' is on, consider line as visual line."
+    (interactive)
+    (if (region-active-p)
+        (forward-line 1)
+      (progn
+        (push-mark (line-beginning-position) t t)
+        (end-of-line)
+        (forward-line 1))))
+
   (defun +keyboard-quit-dwim ()
     "Do-What-I-Mean for a general `keyboard-quit'.
 The generic `keyboard-quit' does not do the expected thing when
@@ -1325,6 +1338,10 @@ When the region is active, comment its lines instead."
    ;; `+duplicate-dwim' will duplicate the region if active, otherwise the
    ;; current line.
    ("C-M-y" . +duplicate-dwim)
+
+   ;; `+mark-line' will mark the current line, or if region is active it will
+   ;; move forward a line.
+   ("C-M-SPC" . +mark-line) ; overrides mark-sexp
 
    ;; The default `delete-char' doesn't respect the values of
    ;; `delete-active-region'. Make it so `C-d' deletes the region if active.
@@ -1448,8 +1465,7 @@ When the region is active, comment its lines instead."
    :map global-map
    ("M-h" . er/expand-region) ; overrides mark-paragraph
    ("C-M-h" . er/contract-region) ; overrides mark-defun
-   ("C-M-SPC" . er/expand-region) ; overrides mark-sexp
-   ("C-M-S-SPC" . er/contract-region))
+   )
 
   (setopt expand-region-fast-keys-enabled nil))
 
