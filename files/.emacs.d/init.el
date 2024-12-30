@@ -71,6 +71,7 @@
   (put 'other-window 'repeat-map nil)
   ;; `dired-jump' doesn't need a repeat map either.
   (put 'dired-jump 'repeat-map nil)
+  (put 'undo 'repeat-map nil)
   ;; I always forget I'm in repeat-mode because I'm usually looking at point and
   ;; not at the echo area. This gives me a clue by updating the cursor color if
   ;; repeat-mode is active.
