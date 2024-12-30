@@ -1392,6 +1392,17 @@ When the region is active, comment its lines instead."
   (bind-keys ("C-a" . +beginning-of-line)
              ("C-e" . +end-of-line)))
 
+;; NOTE document paragraphs
+(use-package paragraphs
+  :no-require
+  :config
+  (with-eval-after-load 'pulsar
+    (dolist (func '(forward-paragraph backward-paragraph))
+      (add-to-list 'pulsar-pulse-functions func)))
+
+  (bind-keys ("M-n" . forward-paragraph)
+             ("M-p" . backward-paragraph)))
+
 ;; NOTE document move-text
 (use-package move-text
   :config
