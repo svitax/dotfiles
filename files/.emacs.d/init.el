@@ -2,19 +2,37 @@
 
 ;;; Commentary:
 
-;; This is where my Emacs config starts.
+;; init is where my Emacs config starts.
 
 ;;; Code:
 
-;;;;;;;;;;;;;;;;;
-;;;; startup ;;;;
+;;;;;;;;;;;;;;;;;;;;
+;;;; early-init ;;;;
 
-;; NOTE document startup
-(use-package startup
+(use-package early-init
   :no-require
   :init
   (setopt inhibit-startup-screen t
-          inhibit-startup-echo-area-message user-login-name))
+          inhibit-startup-echo-area-message user-login-name
+          ring-bell-function 'ignore
+          frame-title-format '("%b")
+          initial-buffer-choice t
+          initial-major-mode 'lisp-interaction-mode)
+
+  ;; The default setting for reporting native compilation errors is set to a
+  ;; verbose value which is confusing: it produces warnings for compilation
+  ;; issues that only the developer of the given package needs to deal
+  ;; with. These include innocuous facts like docstrings being wider than a
+  ;; certain character count. To make things even worse, the buffer that shows
+  ;; these warnings uses the stop sign character, resulting in a long list of
+  ;; lines with red spots everywhere, as if we have totally broken Emacs.
+  (when (native-comp-available-p)
+    (setq native-comp-async-report-warnings-errors 'silent)
+    (setq native-compile-prune-cache t))
+
+  (scroll-bar-mode -1)
+  (menu-bar-mode -1)
+  (tool-bar-mode -1))
 
 ;;;;;;;;;;;;;;
 ;;;; lisp ;;;;
@@ -183,56 +201,6 @@
   (bind-keys
    :map +guix-prefix-map
    ("g" . guix)))
-
-;;;;;;;;;;;;;;
-;;;; core ;;;;
-
-(use-package core
-  :no-require
-  ;; No alarms by default
-  (setq ring-bell-function 'ignore))
-
-(use-package scroll-bar
-  :config
-  ;; No scrollbar by default.
-  (scroll-bar-mode -1))
-
-(use-package menu-bar
-  :config
-  ;; No menu-bar by default.
-  (menu-bar-mode -1))
-
-(use-package tool-bar
-  :config
-  ;; No tool-bar by default.
-  (tool-bar-mode -1))
-
-(use-package frame
-  :config
-  (setopt frame-title-format '("%b")))
-
-(use-package scratch
-  :no-require
-  :config
-  (setopt initial-buffer-choice t
-          initial-major-mode 'lisp-interaction-mode))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;; native-compilation ;;;;
-
-(use-package native-comp
-  :no-require
-  :config
-  ;; The default setting for reporting native compilation errors is set to a
-  ;; verbose value which is confusing: it produces warnings for compilation
-  ;; issues that only the developer of the given package needs to deal
-  ;; with. These include innocuous facts like docstrings being wider than a
-  ;; certain character count. To make things even worse, the buffer that shows
-  ;; these warnings uses the stop sign character, resulting in a long list of
-  ;; lines with red spots everywhere, as if we have totally broken Emacs.
-  (when (native-comp-available-p)
-    (setq native-comp-async-report-warnings-errors 'silent)
-    (setq native-compile-prune-cache t)))
 
 ;;;;;;;;;;;;;;;
 ;;;; faces ;;;;
