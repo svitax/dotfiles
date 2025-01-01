@@ -1912,7 +1912,7 @@ BibTeX file."
   ;; videos. Naming files in a consistent way makes their filtering and
   ;; retrieval easier. Denote provides facilities to rename files, regardless of
   ;; file type.
-  (setopt denote-directory (expand-file-name "~/OneDrive/zettelkasten")
+  (setopt denote-directory (expand-file-name "~/OneDrive/zettelkasten/")
           ;; If you want to have a "controlled vocabulary" of keywords, meaning
           ;; that you only use a predefined set of them, then you want
           ;; `denote-infer-keywords' set to nil, and `denote-known-keywords' to
@@ -1985,9 +1985,17 @@ BibTeX file."
    consult-denote-subdirectory-source
    :hidden t)
 
+  ;; `consult-denote-find' only starts showing matches once
+  ;; `consult-async-min-input' characters have been inserted. I want to see the
+  ;; file names without having to type anything.
+  (defun +denote-find-file ()
+    (interactive)
+    (let ((default-directory denote-directory))
+      (call-interactively #'find-file)))
+
   (bind-keys
    :map +notes-prefix-map
-   ("f" . consult-denote-find)
+   ("f" . +denote-find-file)
    ("g" . consult-denote-grep)
    :map +file-prefix-map
    ("n" . consult-denote-find)
