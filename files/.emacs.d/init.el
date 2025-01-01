@@ -1983,7 +1983,7 @@ BibTeX file."
    consult-denote-buffer-source
    :preview-key "M-."
    consult-denote-subdirectory-source
-   :hidden nil)
+   :hidden t)
 
   (bind-keys
    :map +notes-prefix-map
