@@ -1434,6 +1434,8 @@ When the region is active, comment its lines instead."
 
   (bind-keys
    :map global-map
+   ("M-P" . move-text-up)
+   ("M-N" . move-text-down)
    ("M-<up>" . move-text-up)
    ("M-<down>" . move-text-down)))
 
