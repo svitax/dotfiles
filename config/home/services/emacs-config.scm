@@ -34,6 +34,8 @@
 	emacs-expand-region
 	+emacs-multiple-cursors ; @1.4.0 | commit c870c18
     tree-sitter
+    tree-sitter-go
+    tree-sitter-gomod
     ;; +emacs-compile-multi
     ;; +emacs-consult-compile-multi
     ;; +emacs-projection-multi

@@ -1788,6 +1788,14 @@ When the region is active, comment its lines instead."
    ("x" . eval-defun)
    (":" . eval-expression)))
 
+;;;;;;;;
+;; go ;;
+
+(use-package go-ts-mode
+  :init
+  (add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))
+  (add-to-list 'auto-mode-alist '("/go\\.mod\\'" . go-mod-ts-mode)))
+
 ;;;;;;;;;;;;;
 ;;;; org ;;;;
 
