@@ -687,18 +687,15 @@ This is dote to accomodate `+vertico-multiform-minimal'."
    ("M-y" . consult-yank-pop)
    :map goto-map
    ("g" . consult-goto-line)
-   ("i")
+   ("i" . consult-imenu)
+   ("l" . consult-line)
+   ("m" . consult-mark)
+   ("s" . consult-outline)
    :map search-map
    ("b" . consult-buffer)
    ("f" . consult-find) ; fd
    ("g" . consult-grep) ; rg
    ("h" . consult-history)
-   ("i" . consult-imenu)
-   ("l" . consult-line)
-   ("m" . consult-mark)
-   ("s" . consult-outline)
-   :map +buffer-prefix-map
-   ("b" . consult-buffer)
    :map consult-narrow-map
    ;; Available filters are displayed with the `consult-narrow-help' command at
    ;; the prompt
