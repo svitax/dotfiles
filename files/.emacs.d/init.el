@@ -1563,6 +1563,17 @@ When the region is active, comment its lines instead."
           flymake-start-on-flymake-mode t))
 
 ;;;;;;;;;;;;;;;;;
+;; tree-sitter ;;
+
+(use-package treesit
+  :config
+  ;; Emacs uses the dlopen function in libdl to load tree-sitter grammar
+  ;; libraries (`libtree-sitter-*-.so'). Guix does not put these files in Emacs'
+  ;; default search path, so we use `treesit-extra-load-path' to tell Emacs
+  ;; where to look for them.
+  (setopt treesit-extra-load-path '("~/.guix-home/profile/lib/tree-sitter")))
+
+;;;;;;;;;;;;;;;;;
 ;;;; compile ;;;;
 
 ;; NOTE document compile

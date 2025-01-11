@@ -5,6 +5,7 @@
   #:use-module (gnu packages python)
   #:use-module (gnu packages emacs)
   #:use-module (gnu packages emacs-xyz)
+  #:use-module (gnu packages tree-sitter)
   #:export (home-emacs-config-service-type))
 
 (define (home-emacs-config-profile-service config)
@@ -32,6 +33,7 @@
 	emacs-move-text
 	emacs-expand-region
 	+emacs-multiple-cursors ; @1.4.0 | commit c870c18
+    tree-sitter
     ;; +emacs-compile-multi
     ;; +emacs-consult-compile-multi
     ;; +emacs-projection-multi
