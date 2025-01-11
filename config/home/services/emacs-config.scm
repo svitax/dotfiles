@@ -2,6 +2,7 @@
   #:use-module (config packages emacs)
   #:use-module (gnu home)
   #:use-module (gnu home services)
+  #:use-module (gnu packages python)
   #:use-module (gnu packages emacs)
   #:use-module (gnu packages emacs-xyz)
   #:export (home-emacs-config-service-type))
@@ -50,6 +51,8 @@
     emacs-pdf-tools
     emacs-saveplace-pdf-view
 	emacs-nov-el
+    +emacs-leetcode
+    python
 	))
 
 (define home-emacs-config-service-type
