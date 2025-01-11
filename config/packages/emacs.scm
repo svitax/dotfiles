@@ -375,3 +375,35 @@ out-of-the-box project management experience for as many project types as
 possible while supporting very targeted support for some project types like
 CMake.")
      (license gpl3+))))
+
+(define-public +emacs-leetcode
+  (let ((commit "bf259182a18a44c49ccc5449d1353ec4009a9480")
+        (revision "0"))
+    (package
+     (name "emacs-leetcode")
+     (version "0.1.27")
+     (source
+      (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/kaiwk/leetcode.el")
+             (commit commit)))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "095cmlizfmpbygn9x6yavjnlkczfycay3ijfxqd64idagvwkx0dp"))))
+     (build-system emacs-build-system)
+     (propagated-inputs
+      (list emacs-s emacs-aio emacs-log4e))
+     (home-page "https://github.com/kaiwk/leetcode.el")
+     (synopsis "Solve and submit LeetCode problems from within Emacs.")
+     (description
+      "This package provides an Emacs interface to LeetCode allowing users to log in
+and solve problems of their choosing using Emacs.")
+     (license gpl3+))))
+
+;; TODO the emacs-aio package in guix includes elfeed and skewer-mode as an
+;; input. idk who or why they did that, but i should write my own package
+;; definition fixing that
+;;
+;; it's probably from aio-contrib.el. maybe that should be its own separate
+;; package?
