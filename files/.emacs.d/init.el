@@ -1365,8 +1365,8 @@ When the region is active, comment its lines instead."
    ("C-d" . delete-forward-char)
 
    ;; Open new lines similar to Vim's o and O commands.
-   ("C-o" . +open-line-below)
-   ("C-M-o" . +open-line-above)
+   ("C-<return>" . +open-line-below)
+   ("C-M-<return>" . +open-line-above)
 
    ;; Join the current line with the line below it similar to Vim's J command.
    ("M-j" . +join-line-below)
