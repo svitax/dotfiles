@@ -170,7 +170,7 @@
    ("k" . kill-buffer) ("C-k" . kmacro-keymap)
    ("l" . +bib-prefix-map) ; "lib" mnemonic
    ("m" . +mail-prefix-map)
-   ("n" . +notes-prefix-map)
+   ;; ("n" . +narrow-prefix-map)
    ("p" . +project-prefix-map) ("C-p" . mark-page)
    ("q" . kbd-macro-query) ("C-q" . read-only-mode)
    ("r" . +registers-prefix-map) ("C-r" . find-file-read-only)
@@ -182,7 +182,6 @@
    ("w" . +window-prefix-map) ("C-w" . write-file)
    ("x" . +toggle-prefix-map) ("C-x" . exchange-point-and-mark)
    ;; ("y" . )
-   ;; ("z" . ) ; +narrow-map or +notes-map ("zettelkasten" mnemonic)
    ("TAB" . indent-rigidly))
 
   (bind-keys
@@ -190,6 +189,7 @@
    ("e" . eval-last-sexp) ("C-e" . eval-last-sexp)
    ("x" . eval-defun)
    (":" . eval-expression)))
+   ("z" . +notes-prefix-map) ; "zettelkasten" mnemonic
 
 ;; TODO replace with embark
 (use-package which-key)
@@ -1971,26 +1971,26 @@ BibTeX file."
 
   (bind-keys
    :map +notes-prefix-map
-   ("n" . denote)
-   ("N" . denote-type)
+   ("z" . denote)
+   ("Z" . denote-type)
    ("o" . denote-sort-dired) ; "order" mnemonic
    ;; Note that `denote-rename-file' can work from any context, not just Dired
    ;; buffers. That is why we bind it globally.
    ("r" . denote-rename-file)
    :map text-mode-map
-   ("C-c n b" . denote-backlinks)
-   ("C-c n i" . denote-link) ; "insert" mnemonic
-   ("C-c n I" . denote-add-links)
-   ("C-c n r" . denote-rename-file)
-   ("C-c n R" . denote-rename-file-using-front-matter)
+   ("C-c z b" . denote-backlinks)
+   ("C-c z i" . denote-link) ; "insert" mnemonic
+   ("C-c z I" . denote-add-links)
+   ("C-c z r" . denote-rename-file)
+   ("C-c z R" . denote-rename-file-using-front-matter)
    :map org-mode-map
-   ("C-c n d b" . denote-org-extras-dblock-insert-backlinks)
-   ("C-c n d l" . denote-org-extras-dblock-insert-links)
+   ("C-c z d b" . denote-org-extras-dblock-insert-backlinks)
+   ("C-c z d l" . denote-org-extras-dblock-insert-links)
    :map dired-mode-map
-   ("C-c n i" . denote-dired-link-marked-notes)
-   ("C-c n r" . denote-dired-rename-marked-files)
-   ("C-c n R" . denote-dired-rename-marked-files-using-front-matter)
-   ("C-c n t" . denote-dired-rename-marked-files-with-keywords)))
+   ("C-c z i" . denote-dired-link-marked-notes)
+   ("C-c z r" . denote-dired-rename-marked-files)
+   ("C-c z R" . denote-dired-rename-marked-files-using-front-matter)
+   ("C-c z t" . denote-dired-rename-marked-files-with-keywords)))
 
 (use-package consult-denote
   :config
