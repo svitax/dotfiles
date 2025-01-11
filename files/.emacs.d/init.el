@@ -1168,13 +1168,35 @@ buffer's window as well."
 ;;;; navigation ;;;;
 
 (use-package avy
+  ;; The `avy' package lets you select a location on the screen to move the cursor
+  ;; to. It does so by producing an overlay with characters that need to be typed
+  ;; to specify the location. By default, the overlay covers the candidate, though
+  ;; I change the `avy-style' to have it appear as a prefix instead.
+  ;;
+  ;; There are several commands on offer which narrow down the candidates. My
+  ;; favorite is `avy-goto-char-timer' (closely followed by `avy-goto-char-2' and
+  ;; `avy-goto-word-1'). It prompts for a character and then has a time window
+  ;; lasting `avy-timeout-seconds' during which it can read more characters. Once
+  ;; Avy receives the input, it overlays every word that contains those characters
+  ;; in succession. By default if there is a single match, it jumps directly to
+  ;; it.
+  ;;
+  ;; Avy has the ability to act on the candidate rather than simply jump to
+  ;; it. Karthik Chikmagalur has a comprehensive essay on the matter, which I
+  ;; consider essential reading for anyone wanting to make best use of this
+  ;; package: https://karthinks.com/software/avy-can-do-anything/ (2021-10-21). I
+  ;; still am not sure whether I need all that power though, as in my workflow I
+  ;; jump to a point and then invoke `embark-act'.
   :config
-  (setopt avy-keys '(?n ?r ?t ?s ?h ?a ?e ?i) ; Graphite keyboard layout
+  (setopt avy-keys '(?n ?r ?t ?s ?h ?a ?e ?i ?g ?y) ; Graphite keyboard layout
           avy-timeout-seconds 0.27
-          avy-single-candidate-jump nil)
+          avy-single-candidate-jump t ; nil if i want to make use of avy actions
+          avy-all-windows t ; all windows
+          avy-all-windows-alt nil ; only the current window with C-u
+          )
   (bind-keys
    :map global-map
-   ("M-j" . avy-goto-char-timer)))
+   ("C-," . avy-goto-char-timer)))
 
 (use-package dogears
   :disabled t
@@ -1353,7 +1375,8 @@ When the region is active, comment its lines instead."
    ("C-M-o" . +open-line-above)
 
    ;; Join the current line with the line below it similar to Vim's J command.
-   ("C-j" . +join-line-below)
+   ("M-j" . +join-line-below)
+   ;; TODO C-u M-j -> delete-indentation
 
    ;; The `+comment-dwim' command is like the built-in `comment-dwim', but
    ;; toggles linewise commenting instead of appending them by default.
