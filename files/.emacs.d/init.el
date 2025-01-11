@@ -2139,6 +2139,18 @@ BibTeX file."
                             (seq-remove (lambda (elt) (member elt '("literature" "reference")))
                                         file-keywords)))))
                   files)))
+
+  ;; BUG in org-remark-nov
+  ;;
+  ;; if i am scrolling through an epub's pages, this function keeps creating new
+  ;; reference note buffer with a new timestamp every time, unless it finds an
+  ;; already existing reference note.
+  ;;
+  ;; 1. it shouldn't be creating a buffer automatically just when opening the
+  ;; epub
+  ;;
+  ;; 2. maybe +org-remark-filename-has-note-p should also check for relevant
+  ;; buffers, and only then check for files
   (defun +org-remark-denote-file-name-function ()
     "Return a Denote-compatible file name for the current buffer.
 
@@ -2167,7 +2179,7 @@ in your `denote-directory'."
          (or denote-title "")
          (or denote-file-type ".org")
          (or denote-signature "")))))
-  (setopt org-remark-notes-file-name #'+org-remark-denote-file-name-function)
+  ;; (setopt org-remark-notes-file-name #'+org-remark-denote-file-name-function)
 
   (bind-keys
    :map +notes-prefix-map
