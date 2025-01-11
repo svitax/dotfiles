@@ -159,7 +159,7 @@
    :map ctl-x-map
    ; ("a" . )
    ("b" . consult-buffer) ("C-b" . ibuffer)  ; list-buffers
-   ("c" . org-capture) ("C-c" . save-buffers)
+   ("c" . org-capture) ("C-c" . save-buffers-kill-emacs)
    ("d" . dired-jump) ("C-d" . dired) ; list-directory
    ("e" . +eval-prefix-map) ("C-e" . eval-last-sexp)
    ("f" . find-file) ("C-f" . find-file)
