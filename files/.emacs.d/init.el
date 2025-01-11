@@ -2172,8 +2172,91 @@ in your `denote-directory'."
 ;;;;;;;;;;;;;
 ;;;; pdf ;;;;
 
-;; (use-package pdf-tools)
-;; (use-package saveplace-pdf-view)
+(use-package pdf-tools
+  ;; The `pdf-tools' package builds on top of the external libraries `poppler'
+  ;; and `imagemagick' (if Emacs is compiled with support for it) to deliver a
+  ;; series of minor modes for reading and interacting with PDF files from
+  ;; inside of Emacs. As it depends on those external files, it requires extra
+  ;; steps to make is work properly and varies depending on your operating
+  ;; system. The value proposition of `pdf-tools' is that renders PDFs much
+  ;; better than the built-in DocView.
+  ;;
+  ;; All you need to start reading PDFs is to activate `pdf-view-mode' when you
+  ;; open an appropriate PDF file. Once inside the resulting buffer, do C-h m
+  ;; (`describe-mode') to learn about the key bindings and the commands they
+  ;; call.
+  :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
+  :magic ("%PDF" . pdf-view-mode)
+  :config
+  ;; There are a number of extra minor modes that users may find helpful:
+  ;; `pdf-annot-minor-mode' which provides annotation capabilities,
+  ;; `pdf-sync-minor-mode' which syncs the PDF with its corresponding TeX file
+  ;; when you are running some setup that compiles the latter to the former,
+  ;; `pdf-isearch-minor-mode' which allows you to easily search through the file
+  ;; with isearch, and `pdf-occur-global-minor-mode' which allows you to produce
+  ;; a buffer of locations with matching queries using occur.
+  ;;
+  ;; Another helpful integration is with Emacs' outline-mode and imenu by means
+  ;; of `pdf-outline-minor-mode'. Simply hit "o" while viewing a PDF to produce
+  ;; an outline of the document and then, optionally, `imenu' to navigate it
+  ;; using minibuffer completion.
+  (add-hook 'pdf-view-mode-hook #'pdf-tools-enable-minor-modes)
+
+  ;; Most PDF files use a white background for their page, making it impossible
+  ;; to discern the file's boundaries in the buffer while using the
+  ;; `modus-operandi' theme. To introduce a distinction between the buffer's
+  ;; backdrop and the PDF page's background, the former must be rendered as some
+  ;; shade of gray. Ideally, `pdf-tools' would provide a face that the themes
+  ;; could support directly, though this does not seem to be the case for the
+  ;; time being. We must thus employ the face remapping technique to change the
+  ;; buffer-local value of the "default" face.
+  (defun +pdf-tools-backdrop (&rest _)
+    (modus-themes-with-colors
+      (face-remap-add-relative
+       'default
+       `(:background ,bg-dim))))
+
+  ;; The idea is to assign that function to a hook that gets called when
+  ;; `pdf-tools' renders the document: `pdf-tools-enabled-hook'. This is enough
+  ;; when you only use one theme. However, it has the downside of setting the
+  ;; background color value only at render time. In other words, the face
+  ;; remapping function does not get evaluated anew whenever the theme changes,
+  ;; such as invoking M-x modus-themes-toggle.
+  ;;
+  ;; To have our face remapping adapt gracefully while switching between the
+  ;; Modus themes, we need to also account for the current theme and control the
+  ;; activation of `pdf-view-midnight-minor-mode'. To which end we arrive at
+  ;; something like the following:
+  (defun +pdf-tools-midnight-mode-toggle (&rest _)
+    (when (derived-mode-p 'pdf-view-mode)
+      (if (eq (car custom-enabled-themes) 'modus-vivendi)
+          (pdf-view-midnight-minor-mode 1)
+        (pdf-view-midnight-minor-mode -1))
+      (+pdf-tools-backdrop)))
+
+  (defun +pdf-tools-themes-toggle (&rest _)
+    (mapc
+     (lambda (buf)
+       (with-current-buffer buf
+         (+pdf-tools-midnight-mode-toggle)))
+     (buffer-list)))
+
+  (add-hook 'pdf-tools-enabled-hook #'+pdf-tools-midnight-mode-toggle)
+  (add-hook 'enable-theme-functions #'+pdf-tools-themes-toggle)
+
+  ;; With those in place, PDFs have a distinct backdrop for their page, while
+  ;; buffers with major-mode as `pdf-view-mode' automatically switches to dark
+  ;; mode when `modus-themes-toggle' is called.
+
+  (setopt pdf-view-display-size 'fit-height
+          pdf-view-use-dedicated-register nil
+          pdf-outline-imenu-use-flat-menus t
+          large-file-warning-threshold nil))
+
+;; This package extends the built-in `save-place-mode' by adding support for PDF
+;; buffers under PDFView or DocView mode. Revisiting PDF files will restore the
+;; saved place (i.e. the current page and zoom.)
+(use-package saveplace-pdf-view)
 
 ;;;;;;;;;;;;;;
 ;;;; epub ;;;;

@@ -47,6 +47,8 @@
 	+emacs-org-remark ;; HACK get a commit with the user option
                       ;; `org-remark-report-no-highlights' until a new release
                       ;; is tagged
+    emacs-pdf-tools
+    emacs-saveplace-pdf-view
 	emacs-nov-el
 	))
 
