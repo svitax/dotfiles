@@ -182,14 +182,8 @@
    ("w" . +window-prefix-map) ("C-w" . write-file)
    ("x" . +toggle-prefix-map) ("C-x" . exchange-point-and-mark)
    ;; ("y" . )
-   ("TAB" . indent-rigidly))
-
-  (bind-keys
-   :map +eval-prefix-map
-   ("e" . eval-last-sexp) ("C-e" . eval-last-sexp)
-   ("x" . eval-defun)
-   (":" . eval-expression)))
    ("z" . +notes-prefix-map) ; "zettelkasten" mnemonic
+   ("TAB" . indent-rigidly)))
 
 ;; TODO replace with embark
 (use-package which-key)
@@ -1765,6 +1759,21 @@ When the region is active, comment its lines instead."
   (define-fringe-bitmap 'git-gutter-fr:added [#b11111000] nil nil '(center repeated))
   (define-fringe-bitmap 'git-gutter-fr:modified [#b11111000] nil nil '(center repeated))
   (define-fringe-bitmap 'git-gutter-fr:deleted [#b11111000] nil nil '(center repeated)))
+
+;;;;;;;;;;;;;;;
+;;;; elisp ;;;;
+
+;; NOTE should eval-prefix be in C-c instead so these can be mode-specific?
+;; scheme, common lisp, jupyter?
+(use-package elisp
+  :no-require
+  :config
+  (bind-keys
+   :map +eval-prefix-map
+   ("b" . eval-buffer)
+   ("e" . eval-last-sexp) ("C-e" . eval-last-sexp)
+   ("x" . eval-defun)
+   (":" . eval-expression)))
 
 ;;;;;;;;;;;;;
 ;;;; org ;;;;
