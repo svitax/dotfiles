@@ -175,7 +175,7 @@
    ("c" . org-capture) ("C-c" . save-buffers-kill-emacs)
    ("d" . dired-jump) ("C-d" . dired) ; list-directory
    ("e" . +eval-prefix-map) ("C-e" . eval-last-sexp)
-   ("f" . find-file) ("C-f" . find-file)
+   ("f" . project-find-file) ("C-f" . find-file)
    ("g" . +guix-prefix-map)
    ;; ("h" . )
    ;; ("i" . )
