@@ -2905,11 +2905,227 @@ See also `org-save-all-org-buffers'."
   :after notmuch)
 
 (use-package org-agenda
+  :init
+  (add-to-list 'org-modules 'org-habit t)
   :config
+  ;; With the Org agenda, we can visualize the tasks we have collected in our
+  ;; Org files or, more specifically, in the list of files specified in the user
+  ;; option `org-agenda-files'. In my workflow, only the files in the
+  ;; `org-directory' can feed into the agenda. Though Org provides to add/remove
+  ;; the current file on demand: `org-remove-file', and
+  ;; `org-agenda-file-to-front'. If I ever need to write a task that is specific
+  ;; to a certain file or buffer, then I use Org's linking mechanism to point to
+  ;; the relevant context, but otherwise store my task in the usual place.
+
+  ;; By default, Org provides many so called "views" for the agenda. One of them
+  ;; is the daily/weekly agenda. Others show only the headings with "TODO"
+  ;; keywords, or some other kind of search criteria. I personally never use
+  ;; those views. I have my own custom agenda view, which consolidates in a
+  ;; single buffer the following blocks of data, in this order:
+
+  ;; Important tasks without a date
+  ;; When I add a top priority to something, but there is no inherent deadline
+  ;; to it.
+  ;;
+  ;; Pending scheduled tasks
+  ;; Tasks with a 'SCHEDULED' date may sometimes not be done when they ought
+  ;; to. So they need to be closer to the top for me to do them as soon as I
+  ;; can.
+  ;;
+  ;; Today's agenda
+  ;; What I am actually working on. Because I only assign a timestamp to tasks
+  ;; that are indeed time-sensitive, this always reflects the commitments I have
+  ;; for the day.
+  ;;
+  ;; Next three days
+  ;; Like the above, but for the near future.
+  ;;
+  ;; Upcoming deadlines (+14d)
+  ;; These are the deadlines I need to be aware of for the next 14 days after
+  ;; the next three days above.
+  ;;
+  ;; Inbox
+  ;; All items in my inbox so I'm reminded to process any remaining items at the
+  ;; end of the day.
+  ;;
+  ;; Completed today
+  ;; Tasks I've finished today. Useful for reflecting on my accomplishments at
+  ;; the end of the day or for archiving.
+
+  (setopt org-agenda-files '("20250110T181524--inbox.org"
+                             "20250111T062159--agenda.org"
+                             "20250112T073531--projects.org")
+          ;; Basic agenda setup
+          org-agenda-show-outline-path nil
+          org-agenda-window-setup 'current-window
+          ;; General agenda view options
+          org-agenda-hide-tags-regexp "."
+          org-agenda-prefix-format '((agenda . " %i %-12:c%?-12t% s")
+                                     (todo   . " %i %-12:c")
+                                     (tags   . " %i %-12:c")
+                                     (search . " %i %-12:c"))
+          org-agenda-sorting-strategy '((agenda habit-down time-up priority-down category-keep)
+                                        (todo priority-down category-keep)
+                                        (tags priority-down category-keep)
+                                        (search category-keep))
+          org-agenda-remove-times-when-in-prefix nil
+          ;; Agenda marks
+          org-agenda-bulk-mark-char "#"
+          ;; Agenda follow mode
+          org-agenda-follow-indirect t
+          ;; Agenda items with deadline and scheduled timestamps
+          org-deadline-warning-days 0
+          org-agenda-skip-scheduled-if-deadline-is-shown t
+          org-agenda-skip-timestamp-if-deadline-is-shown t
+          org-agenda-skip-deadline-prewarning-if-scheduled 1
+          org-agenda-search-headline-for-time nil
+          org-scheduled-past-days 365
+          org-deadline-past-days 365
+          ;; Time grid
+          org-agenda-time-leading-zero t
+          org-agenda-current-time-string (concat "Now " (make-string 70 ?.))
+          org-agenda-time-grid '((daily today require-timed)
+                                 ( 0500 0600 0700 0800 0900 1000
+                                   1100 1200 1300 1400 1500 1600
+                                   1700 1800 1900 2000 2100 2200)
+                                 "" "")
+          ;; Agenda global to-do list
+          ;; Agenda tagged items
+          ;; Agenda entry
+          ;; Agenda logging and clocking
+          ;; Agenda column view
+          )
+
+  ;; Agenda habits
+  (require 'org-habit)
+  (setopt org-habit-graph-column 50
+          org-habit-preceding-days 9
+          ;; Set to t if I always want to show the habit graph, even if there
+          ;; are no habit for today.
+          org-habit-show-all-today nil)
+
+  (defun +org-agenda-include-priority-no-timestamp ()
+    "Return nil if heading has a priority but no timestamp.
+Otherwise, return the buffer position from where the search should
+continue, per `org-agenda-skip-function'."
+    (let ((point (point)))
+      (if (and (eq (nth 3 (org-heading-components)) ?A)
+               (not (org-get-deadline-time point))
+               (not (org-get-scheduled-time point)))
+          nil
+        (line-beginning-position 2))))
+
+  (defun +org--get-entry-end (&optional subtree)
+    "Get the position of the end of entry at point, or SUBTREE, if not nil."
+    (if subtree (save-excursion (org-end-of-subtree t) (point))
+      (org-entry-end-position)))
+
+  (defun +org-agenda-skip-if-habit (&optional subtree)
+    "Skip an agenda entry (or SUBTREE, if not nil) if it is a habit."
+    (let ((end (+org--get-entry-end subtree)))
+      (if (org-is-habit-p)
+          end
+        nil)))
+  (defun +org-agenda-skip-if-not-habit (&optional subtree)
+    "Skip an agenda entry (or SUBTREE, if not nil) if it is not a habit."
+    (let ((end (+org--get-entry-end subtree)))
+      (if (not (org-is-habit-p))
+          end
+        nil)))
+
+  (setopt org-agenda-custom-commands
+          '(("A" "Daily agenda and top priority tasks"
+             ((tags-todo "*"
+                         ((org-agenda-overriding-header "Important tasks without a date\n")
+                          (org-agenda-skip-function #'+org-agenda-include-priority-no-timestamp)
+                          (org-agenda-block-separator nil)))
+              (agenda "" ((org-agenda-overriding-header "\nPending scheduled tasks")
+                          (org-agenda-time-grid nil)
+                          (org-agenda-start-on-weekday nil)
+                          (org-agenda-span 1)
+                          (org-agenda-show-all-dates nil)
+                          (org-scheduled-past-days 365)
+                          ;; Excludes today's scheduled items
+                          (org-scheduled-delay-days 1)
+                          (org-agenda-block-separator nil)
+                          (org-agenda-entry-types '(:scheduled))
+                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                          (org-agenda-skip-function '+org-agenda-skip-if-habit)
+                          (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+                          (org-agenda-format-date "")))
+              (agenda "" ((org-agenda-overriding-header "\nToday's agenda\n")
+                          (org-agenda-span 1)
+                          (org-deadline-warning-days 0)
+                          (org-agenda-block-separator nil)
+                          (org-scheduled-past-days 0)
+                          (org-agenda-skip-function '+org-agenda-skip-if-habit)
+                          ;; We don't need the `org-agenda-date-today'
+                          ;; highlight because that only has a practical
+                          ;; utility in multi-day views.
+                          (org-agenda-day-face-function (lambda (date)
+                                                          'org-agenda-date))
+                          (org-agenda-format-date "%A %-e %B %Y")))
+              (agenda "" ((org-agenda-overriding-header "\nNext three days\n")
+                          (org-agenda-start-on-weekday nil)
+                          (org-agenda-start-day nil)
+                          (org-agenda-start-day "+1d")
+                          (org-agenda-span 3)
+                          (org-deadline-warning-days 0)
+                          (org-agenda-block-separator nil)
+                          (org-agenda-skip-function '(org-agenda-skip-entry-if
+                                                      'todo 'done))))
+              (agenda "" ((org-agenda-overriding-header "\nUpcoming deadlines (+14d)\n")
+                          (org-agenda-time-grid nil)
+                          (org-agenda-start-on-weekday nil)
+                          ;; We don't want to replicate the previous section's
+                          ;; three days, so we start counting from the day
+                          ;; after.
+                          (org-agenda-start-day "+4d")
+                          (org-agenda-span 14)
+                          (org-agenda-show-all-dates nil)
+                          (org-deadline-warning-days 0)
+                          (org-agenda-block-separator nil)
+                          (org-agenda-entry-types '(:deadline))
+                          (org-agenda-skip-function '(org-agenda-skip-entry-if
+                                                      'todo 'done))))
+              (tags-todo "inbox"
+                         ((org-agenda-overriding-header "\nInbox\n")
+                          (org-agenda-prefix-format "  %?-12t% s")
+                          (org-agenda-block-separator nil)))
+              (agenda "" ((org-agenda-overriding-header "\nHabits")
+                          (org-agenda-time-grid nil)
+                          (org-agenda-start-on-weekday nil)
+                          (org-agenda-span 1)
+                          (org-agenda-show-all-dates nil)
+                          (org-scheduled-past-days 365)
+                          ;; Excludes today's scheduled items
+                          ;; (org-scheduled-delay-days 1)
+                          (org-agenda-block-separator nil)
+                          (org-agenda-entry-types '(:scheduled))
+                          (org-agenda-skip-function '+org-agenda-skip-if-not-habit)
+                          (org-agenda-day-face-function (lambda (date)
+                                                          'org-agenda-date))
+                          (org-agenda-format-date "")))
+              (tags "CLOSED>=\"<today>\""
+                    ((org-agenda-overriding-header "\nCompleted today\n")
+                     (org-agenda-block-separator nil))))
+             ((org-agenda-fontify-priorities nil)
+              (org-agenda-prefix-format "  %t %s")
+              (org-agenda-dim-blocked-tasks nil)))))
+
+  ;; TODO (setopt org-agenda-format-date #'+org-agenda-format-date-aligned) (from prot)
+
+  (defun +org-agenda-custom ()
+    "Call Org agenda with my custom daily agenda configuration."
+    (interactive)
+    (org-agenda nil "A"))
+
   (bind-keys
    :map ctl-x-map
    ;; NOTE replaced abbrev maps, find somewhere to relocate them later
-   ("a" . org-agenda)))
+   ("a" . +org-agenda-custom)
+   ("C-a" . org-agenda)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;;;; bibliography ;;;;
