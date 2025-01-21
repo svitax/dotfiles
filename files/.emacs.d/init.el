@@ -2750,8 +2750,122 @@ See also `org-save-all-org-buffers'."
    ("M-," . org-edit-src-exit) ; see M-. above
    ))
 
+(use-package org-capture
+  :config
+  ;; The `org-capture' command allows us to quickly store data in some
+  ;; structured way. This is done with the help of a templating system where we
+  ;; can, for example, record the date the entry was recorded, prompt for user
+  ;; input, automatically use the email's subject as the title of the task, and
+  ;; the like. The documentation string of `org-capture-templates' covers the
+  ;; technicalities.
 
-;; (use-package org-gtd)
+  ;; As for my workflow, here is an overview:
+  ;;
+  ;; When I want to quickly capture any data or idea, I add it to the
+  ;; 'zettelkasten/inbox.org' file. My goal is to have a non-disruptive
+  ;; process. That is, type a key sequence to enter "capture mode", type some
+  ;; text, and then just forget about it. I do not want to have to think where I
+  ;; should store this text nor about any related information such as tags or
+  ;; dates, at least not yet. Not everything goes into the inbox. This is just a
+  ;; fallback for those cases where I need more information to decide on the
+  ;; appropriate action.
+
+  ;; I periodically review those headings to decide if I want to do something
+  ;; with them or not. If I do not want them, I delete them. Otherwise, I file
+  ;; them under another heading in the 'zettelkasten/projects.org' using the
+  ;; `org-refile' command.
+
+  ;; Tasks that have an inherent time component such as appointmets are given a
+  ;; 'SCHEDULED' or 'DEADLINE' timestamp (set those on demand with the commands
+  ;; `org-schedule' and `org-deadline', respectively). These are the only tasks
+  ;; I want to see on my daily agenda. I often know in advance what this item is
+  ;; about and when they will occur, so I can directly store them in a dedicated
+  ;; 'zettelkasten/agenda.org' file for all my scheduled events and
+  ;; meetings. The difference between 'SCHEDULED' and 'DEADLINE' is that the
+  ;; former has no strict start or end time and so is flexible, while the latter
+  ;; is more rigit. For example, "visit the vet today" does not have a strict
+  ;; time associated with it because the doctor often deals with emergency
+  ;; situations and thus their agenda is fluid. While a meeting like "work on
+  ;; Emacs with PERSON" has to start at the agreed upon time.
+
+  ;; I do not arbitrarily assign timestamps to tasks. If something does not have
+  ;; a scheduled date or a deadline, then it does not belong in the agenda.
+  ;; Otherwise, those arbitrarily defined "events" accumulate in the agenda and
+  ;; crowd out the actual time-sensitive tasks. As a result, the cognitive load
+  ;; is heavier and things will not be done. So when I want to do something at
+  ;; some point, but have no specific plan for it, I add it to the
+  ;; 'zettelkasten/projects.org' "Wishlist" heading. When I have free time, I
+  ;; review my wishlist and pick something to work on from there depending on my
+  ;; available time and moode. This keeps my workflow both focused and
+  ;; stress-free.
+  (setopt org-capture-templates
+          `(("i" "Inbox" entry (file "20250110T181524--inbox.org")
+             ,(concat "* TODO %?\n"
+                      ":PROPERTIES:\n"
+                      ":CAPTURED: %U\n"
+                      ":END:\n\n"
+                      "%i"))
+            ;; See the `ol-notmuch' section for available template extensions.
+            ;; ("@" "Inbox [e-mail]" entry (file "20250110T181524--inbox.org")
+            ;;  ,(concat "* TODO Process %:subject :@mail:\n"
+            ;;           ":PROPERTIES:\n"
+            ;;           ":CAPTURED: %U\n"
+            ;;           ":END:\n\n"
+            ;;           "%a\n%i%?")
+            ;;  :empty-lines-after 1)
+            ("m" "Meeting" entry (file+headline "20250111T062159--agenda.org"
+                                                "Future")
+             ,(concat "* %? :meeting:\n"
+                      "DEADLINE: %t\n"
+                      ":PROPERTIES:\n"
+                      ":CAPTURED: %U\n"
+                      ":END:\n\n"
+                      "%i"))
+            ("n" "Meeting note" entry (file "20250110T181524--inbox.org")
+             ,(concat "* Note (%a)\n"
+                      ":PROPERTIES:\n"
+                      ":CAPTURED: %U\n"
+                      ":END:\n\n"
+                      "%i%?"))
+            ))
+
+  ;; (setopt org-capture-templates-contexts
+  ;;         '(("@" ((in-mode . "notmuch-search-mode")
+  ;;                 (in-mode . "notmuch-show-mode")
+  ;;                 (in-mode . "notmuch-tree-mode")))))
+
+  ;; Last thing is a small hook to tell org-capture to use the full window
+  ;; instead of splitting the current window.
+  ;; TODO: configure display-buffer-alist to do this instead
+  (add-hook 'org-capture-mode-hook 'delete-other-windows)
+
+  (defun +org-capture-inbox ()
+    (interactive)
+    (call-interactively 'org-store-link)
+    (org-capture nil "i"))
+
+  ;; I want to directly capture Notmuch links - for example, to add e-mail
+  ;; messages to your to-do list. For that, the function
+  ;; `+org-notmuch-store-and-capture' captures the message-at-point (or query),
+  ;; then calls org-mode's capture functionality.
+  ;; (defun +org-notmuch-store-and-capture ()
+  ;;   "Store a link to the current message or query and capture it with Org."
+  ;;   (interactive)
+  ;;   (call-interactively 'org-store-link)
+  ;;   (org-capture nil "@"))
+
+  (bind-keys
+   :map ctl-x-map
+   ("c" . org-capture)
+   ("i" . +org-capture-inbox)
+   ;; :map notmuch-search-mode-map
+   ;; ("@" . +org-notmuch-store-and-capture)
+   ;; :map notmuch-show-mode-map
+   ;; ("@" . +org-notmuch-store-and-capture)
+   ;; :map notmuch-tree-mode-map
+   ;; ("@" . +org-notmuch-store-and-capture)
+   ))
+
 
 (use-package org-agenda
   :config
