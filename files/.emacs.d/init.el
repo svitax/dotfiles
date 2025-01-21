@@ -2560,7 +2560,11 @@ When the region is active, comment its lines instead."
 (use-package go-ts-mode
   :init
   (add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))
-  (add-to-list 'auto-mode-alist '("/go\\.mod\\'" . go-mod-ts-mode)))
+  (add-to-list 'auto-mode-alist '("/go\\.mod\\'" . go-mod-ts-mode))
+  ;; TODO find a way to add onto eglot-workspace-configuration
+  (setq-default eglot-workspace-configuration
+                '((:gopls . (:ui.completion.usePlaceholders t
+                              :hoverKind "FullDocumentation")))))
 
 ;;;;;;;;;;;;;
 ;;;; org ;;;;
