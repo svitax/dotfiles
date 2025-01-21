@@ -1169,6 +1169,396 @@ together."
   ;; types.
   (global-projection-hook-mode))
 
+;;;;;;;;;;;;;;;
+;;;; dired ;;;;
+
+(use-package dired
+  :config
+  ;; Dired is probably my favorite Emacs tool. It exemplifies how I see Emacs as
+  ;; a whole: a layer of interactivity on top of Unix. The `dired' interface
+  ;; wraps -- and puts synergy -- to standard commands like 'ls', 'cp', 'mv',
+  ;; 'rm', 'mkdir', 'chmod', and related. All while granting access to many
+  ;; other conveniences, such as (i) marking files to operate on (individually,
+  ;; with a regexp, etc.), (ii) bulk renaming files by making the buffer
+  ;; writeable and editing it like a regular file, (iii) showing only files you
+  ;; want, (iv) listing the contents of any subdirectory, such as to benefit
+  ;; from the bulk-renaming capability, (v) running a keyboard macro that edits
+  ;; file contents while using Dired to navigate the file listing, (vi) open
+  ;; files in an external application, and more.
+  ;;
+  ;; Dired lets us work with our files in a way that still feels close to the
+  ;; command-line, yet has more powerful interactive features than even fully
+  ;; fledged, graphical file managers.
+
+  ;; I add two settings which make all copy, rename/move, and delete operations
+  ;; more intuitive. I always want to perform those actions in a recursive
+  ;; manner, as this is the intent I have when I am targeting directories.
+  ;;
+  ;; The `delete-by-moving-to-trash' is a deviation from the behaviour of the
+  ;; 'rm' program, as it sends the file into the virtual trash folder. Depending
+  ;; on the system, files in the trash are either removed automatically after a
+  ;; few days, or we still have to permanently delete them manually. I prefer
+  ;; this extra layes of safety. Plus, we have the `trashed' package to navigate
+  ;; the trash folder in a Dired-like way.
+  (setopt dired-recursive-copies 'always
+          dired-recursive-deletes 'always
+          delete-by-moving-to-trash t)
+
+  ;; As I already explained, Dired is a layes of interactivity on top of
+  ;; standard Unix tools. We can see this in how Dired produces the file listing
+  ;; and how we can affect it. The 'ls' program accepts an '-l' flag for a
+  ;; "long", detailed list of files. This is what Dired uses. But we can pass
+  ;; more flags by setting the value of `dired-listing-switches'. Do 'M-x man'
+  ;; and then search for the 'ls' manpage to learn about what I have here. In
+  ;; short:
+  ;;
+  ;; '-A'
+  ;; Show hidden files ("dotfiles"), such as '.bashrc', but omit the implied '.'
+  ;; and '..' targets. The latter two refer to the present and parent directory,
+  ;; respectively.
+  ;;
+  ;; '-G'
+  ;; Do not show the group name in the long listing. Only show the owner of the
+  ;; file.
+  ;;
+  ;; '-F'
+  ;; Differentiate regular from special files by appending a character to
+  ;; them. The '*' is for executables, the '/' is for directories, the '|' is
+  ;; for a named pipe, the '=' is for a socket, the '@' and the '>' are for
+  ;; stuff I have never seen.
+  ;;
+  ;; '-h'
+  ;; Make file sizes easier to read, such as '555k' instead of '568024'.
+  ;;
+  ;; '-l'
+  ;; Produce a long, detailed listing. Dired requires this.
+  ;;
+  ;; '-v'
+  ;; Sort files by version numbers, such that 'file1', 'file2', and 'file10'
+  ;; appear in this order instead of 1, 10, 2. The latter is called
+  ;; "lexicographic" and I have not found a single case where it is useful to me.
+  ;;
+  ;; '--group-directories-first'
+  ;; Does what it says to place all directoris before files in the listing. I
+  ;; prefer this over a strict sorting that does not differentiate between files
+  ;; and directories.
+  ;;
+  ;; '--time-style=long-iso'
+  ;; Uses the international standart for time representation in the file
+  ;; listing. So we have something like '2023-12-30 06:38' to show the last
+  ;; modified time.
+  (setopt dired-listing-switches
+          "-AGFhlv --group-directories-first --time-style=long-iso")
+
+  ;; I often have two Dired buffers open side-by-side and want to move files
+  ;; between them. By setting `dired-dwim-target' to a 't' value, we get the
+  ;; other buffer as the default target of the current rename or copy
+  ;; operation. This is exactly what I want.
+  ;;
+  ;; If there are more than two windows showing Dired buffers, the default
+  ;; target is the previously visited window.
+  ;;
+  ;; Note that this only affects how quickly we can access the default value, as
+  ;; we can always type 'M-p' (`previous-history-element') and 'M-n'
+  ;; (`next-history-element') to cycle the minibuffer history.
+  (setopt dired-dwim-target t)
+
+  ;; From inside a Dired buffer, we can type '!' (`dired-do-shell-command') or
+  ;; '&' (`dired-do-async-shell-command') to run an arbitrary command with the
+  ;; given file (or marked files) as an argument. These commands will produce a
+  ;; minibuffer prompt, which expects us to type in the name of the command.
+  ;; Emacs already tries to guess some relevant defaults, though we can make it
+  ;; do what we want by configuring the `dired-guess-shell-alist-user' user
+  ;; option.
+  ;;
+  ;; This variable takes an alist value: a list of lists. Each element (each
+  ;; list) has the first item in the list as a regular expression to match file
+  ;; names. We normally want to have file type extensions here, though we can
+  ;; also target the full name of a file. The remaining entries in the list are
+  ;; strings that specify the name of the external program to use. We can have
+  ;; as many as we want and cycle between them using the familiar 'M-p' and
+  ;; 'M-n' keys inside the minibuffer.
+  ;;
+  ;; On Linux, the generic "open with default app" call is `xdg-open', so we
+  ;; always want that as a fallback.
+  ;;
+  ;; Note that in Emacs 30, we have the command `dired-do-open', which is the
+  ;; equivalent of typing '&' and then specifying the `xdg-open' command.
+  (setopt dired-guess-shell-alist-user
+          '(("\\.\\(png\\|jpe?g\\|tiff\\)" "feh" "xdg-open")
+            ("\\.\\(mp[34]\\|m4a\\|ogg\\|flac\\|webm\\|mkv\\)" "mpv" "xdg-open")
+            (".*" "xdg-open")))
+
+  ;; These are some minor tweaks that I do not really care about. The only one
+  ;; which is really nice in my opinion is the hook that involves the
+  ;; `dired-hide-details-mode'. This is the command that hides the noisy output
+  ;; of the 'ls -l' flag, leaving only the file names in the list. We can toggle
+  ;; this effect at any time with the '(' key, by default.
+  (setopt dired-auto-revert-buffer #'dired-directory-changed-p
+          dired-free-space nil
+          dired-kill-when-opening-new-dired-buffer t)
+
+  (add-hook 'dired-mode-hook #'dired-hide-details-mode)
+  (add-hook 'dired-mode-hook #'hl-line-mode)
+
+  ;; Dired is excellent out-of-the-box. I provide a few minor commands that make
+  ;; it more convenient for me to perform common actions. Chief among them is
+  ;; `+dired-limit-regexp' (bound to 'C-c C-l'), which is an easier way to do
+  ;; this in standard dired
+  ;;
+  ;; - Type '% m' (`dired-mark-files-regexp') to mark files you want to keep
+  ;; seeing. Provide a regular expression or simply a common word.
+  ;;
+  ;; - Toggle the mark so that you now cover everything you do not want to see.
+  ;;
+  ;; - Invoke `dired-do-kill-lines' (bound to 'k' by default) to remove the
+  ;; marked files from the view until the buffer is generated again with
+  ;; `revert-buffer' (bound to 'g' by default).
+  ;;
+  ;; All this is file, but with `+dired-limit-regexp' I simply provide the
+  ;; regexp I want to see.
+
+  (defvar +dired--limit-hist '()
+    "Minibuffer history for `+dired-limit-regexp'.")
+
+  (defun +dired-limit-regexp (regexp omit)
+    "Limit Dired to keep files matching REGEXP.
+
+With optional OMIT argument as a prefix (\\[universal-argument]), exclude files
+matching REGEXP.
+
+Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
+    (interactive
+     (list
+      (read-regexp
+       (concat "Files "
+               (when current-prefix-arg
+                 (propertize "NOT " 'face 'warning))
+               "matching PATTERN: ")
+       nil '+dired--limit-hist)
+      current-prefix-arg))
+    (dired-mark-files-regexp regexp)
+    (unless omit (dired-toggle-marks))
+    (dired-do-kill-lines)
+    (add-to-history '+dired--limit-hist regexp))
+
+  ;; Another common use-case for me is to create a flat listing of all files
+  ;; that match a regular expression, found recursively from the current
+  ;; directory. I do this with `+dired-search-flat-list'.
+  (defvar +dired-regexp-history nil
+    "Minibuffer history of `+dired-regexp-prompt'.")
+
+  (defun +dired-regexp-prompt ()
+    (let ((default (car +dired-regexp-history)))
+      (read-regexp
+       (format-prompt "Files matching REGEXP" default)
+       default '+dired-regexp-history)))
+
+  (defun +dired--get-files (regexp)
+    "Return files matching REGEXP, recursively from `default-directory'."
+    (directory-files-recursively default-directory regexp nil))
+
+  (defun +dired-search-flat-list (regexp)
+    "Return a Dired buffer for files matching REGEXP.
+Perform the search recursively from the current directory."
+    (interactive (list (+dired-regexp-prompt)))
+    (if-let* ((files (+dired--get-files regexp))
+              (relative-paths (mapcar #'file-relative-name files)))
+        (dired (cons (format "*flat-dired for `%s'*" regexp) relative-paths))
+      (error "No files matching `%s'" regexp)))
+
+  ;; The other commands have situational uses. For example, the
+  ;; `+dired-grep-marked-files' is something I have only used a few times where
+  ;; `consult-grep' would have produced too many results in a given directory.
+  (defvar +dired--find-grep-hist '()
+    "Minibuffer history for `+dired-grep-marked-files'.")
+
+  ;; M-s g is `consult-grep'
+  (defun +dired-grep-marked-files (regexp &optional arg)
+    "Run `find' with `grep' for REGEXP on marked files.
+When no files are marked or when just a single one is marked,
+search the entire directory instead.
+
+With optional prefix ARG target a single marked file.
+
+We assume that there is no point in marking a single file and
+running find+grep on its contents.  Visit it and call `occur' or
+run grep directly on it without the whole find part."
+    (interactive
+     (list
+      (read-string "grep for PATTERN (marked files OR current directory): " nil '+dired--find-grep-hist)
+      current-prefix-arg)
+     dired-mode)
+    (when-let* ((marks (dired-get-marked-files 'no-dir))
+                (files (mapconcat #'identity marks " "))
+                (args (if (or arg (length> marks 1))
+                          ;; Thanks to Sean Whitton for pointing out an
+                          ;; earlier superfluity of mine: we do not need
+                          ;; to call grep through find when we already
+                          ;; know the files we want to search in.  Check
+                          ;; Sean's dotfiles:
+                          ;; <https://git.spwhitton.name/dotfiles>.
+                          ;;
+                          ;; Any other errors or omissions are my own.
+                          (format "grep -nH --color=auto %s %s" (shell-quote-argument regexp) files)
+                        (concat
+                         "find . -not " (shell-quote-argument "(")
+                         " -wholename " (shell-quote-argument "*/.git*")
+                         " -prune " (shell-quote-argument ")")
+                         " -type f"
+                         " -exec grep -nHE --color=auto " regexp " "
+                         (shell-quote-argument "{}")
+                         " " (shell-quote-argument ";") " "))))
+      (compilation-start
+       args
+       'grep-mode
+       (lambda (mode) (format "*dired-find-%s for '%s'*" mode regexp))
+       t)))
+
+  ;; Jump to next and previous subdirectories headings.
+  (defvar +dired--directory-header-regexp "^ +\\(.+\\):\n"
+    "Pattern to match Dired directory headings.")
+
+  (defun +dired-subdirectory-next (&optional arg)
+    "Move to next or optional ARGth Dired subdirectory heading.
+For more on such headings, read `dired-maybe-insert-subdir'."
+     (interactive "p")
+     (let ((pos (point))
+           (subdir +dired--directory-header-regexp))
+       (goto-char (line-end-position))
+       (if (re-search-forward subdir nil t (or arg nil))
+           (progn
+             (goto-char (match-beginning 1))
+             (goto-char (line-beginning-position)))
+         (goto-char pos))))
+
+  (defun +dired-subdirectory-previous (&optional arg)
+    "Move to previous or optional ARGth Dired subdirectory heading.
+For more on such headings, read `dired-maybe-insert-subdir'."
+    (interactive "p")
+    (let ((pos (point))
+          (subdir +dired--directory-header-regexp))
+      (goto-char (line-beginning-position))
+      (if (re-search-backward subdir nil t (or arg nil))
+          (goto-char (line-beginning-position))
+        (goto-char pos))))
+
+  ;; Insert subdirectory heading for all marked subdirectories.
+  (defun +dired-remove-inserted-subdirs ()
+    "Remove all inserted Dired subdirectories."
+    (interactive)
+    (goto-char (point-max))
+    (while (and (+dired-subdirectory-previous)
+                (not (equal (dired-current-directory)
+                            (expand-file-name default-directory))))
+      (dired-kill-subdir)))
+
+  (defun +dired--dir-list (list)
+    "Filter out non-directory file paths in LIST."
+    (cl-remove-if-not
+     (lambda (dir)
+       (file-directory-p dir))
+     list))
+
+  (defun +dired--insert-dir (dir &optional flags)
+    "Insert DIR using optional FLAGS."
+    (dired-maybe-insert-subdir (expand-file-name dir) (or flags nil)))
+
+  (defun +dired-insert-subdir (&optional arg)
+    "Generic command to insert subdirectories in Dired buffers.
+
+When items are marked, insert those which are subsirectories of
+the current directory.  Ignore regular files.
+
+If no marks are active and point is on a subdirectory line,
+insert it directly.
+
+If no marks are active and point is not on a subdirectory line,
+prompt for a subdirectory using completion.
+
+With optional ARG as a single prefix (`\\[universal-argument]')
+argument, prompt for command line flags to pass to the underlying
+ls program.
+
+With optional ARG as a double prefix argument, remove all
+inserted subdirectories."
+    (interactive "p")
+    (let* ((name (dired-get-marked-files))
+           (flags (when (eq arg 4)
+                    (read-string "Flags for `ls' listing: "
+                                 (or dired-subdir-switches dired-actual-switches)))))
+      (cond  ; NOTE 2021-07-20: `length>', `length=' are from Emacs28
+       ((eq arg 16)
+        (+dired-remove-inserted-subdirs))
+       ((and (length> name 1) (+dired--dir-list name))
+        (mapc (lambda (file)
+                (when (file-directory-p file)
+                  (+dired--insert-dir file flags)))
+              name))
+       ((and (length= name 1) (file-directory-p (car name)))
+        (+dired--insert-dir (car name) flags))
+       (t
+        (let ((selection (read-directory-name "Insert directory: ")))
+          (+dired--insert-dir selection flags)))))) ; override `dired-maybe-insert-subdir'
+
+  ;; Jump to subdirectory headings with Imenu.
+  (defun +dired--imenu-prev-index-position ()
+    "Find the previous file in the buffer."
+    (let ((subdir +dired--directory-header-regexp))
+      (re-search-backward subdir nil t)))
+
+  (defun +dired--imenu-extract-index-name ()
+    "Return the name of the file at point."
+    (file-relative-name
+     (buffer-substring-no-properties (+ (line-beginning-position) 2)
+                                     (1- (line-end-position)))))
+
+  (defun +dired-setup-imenu ()
+    "Configure Imenu for the current Dired buffer.
+Add this to `dired-mode-hook'."
+    (set (make-local-variable 'imenu-prev-index-position-function)
+         '+dired--imenu-prev-index-position)
+    (set (make-local-variable 'imenu-extract-index-name-function)
+         '+dired--imenu-extract-index-name))
+
+  (add-hook 'dired-mode-hook #'+dired-setup-imenu)
+
+  (bind-keys
+   :map dired-mode-map
+   ("i" . +dired-insert-subdir) ; override `dired-maybe-insert-subdir'
+   ("/" . +dired-limit-regexp)
+   ("C-c C-l" . +dired-limit-regexp)
+   ("C-c C-s" . +dired-search-flat-list)
+   ("M-n" . +dired-subdirectory-next)
+   ("M-p" . +dired-subdirectory-previous)
+   ("C-c C-n" . +dired-subdirectory-next)
+   ("C-c C-p" . +dired-subdirectory-previous)
+   ("M-s M-g" . +dired-grep-marked-files)))
+
+(use-package dired-aux
+  :after dired
+  :config
+  ;; `dired-aux' is a built-in library that provides useful extras for
+  ;; Dired. The highlights from what I have here are:
+  ;;
+  ;; The user option `dired-create-destination-dirs' and
+  ;; `dired-create-destination-dirs-on-trailing-dirsep', which offer to create
+  ;; the specified directory path if it is missing.
+  ;;
+  ;; The key binding for `dired-do-open', which opens the file or directory
+  ;; externally.
+  (setopt dired-isearch-filenames 'dwim
+          dired-create-destination-dirs 'ask
+          dired-create-destination-dirs-on-trailing-dirsep t
+          dired-vc-rename-file t
+          dired-do-revert-buffer (lambda (dir) (not (file-remote-p dir))))
+
+  (bind-keys
+   :map dired-mode-map
+   ("a" . dired-create-empty-file)
+   ;; ("C-<return>" . dired-do-open) ; Emacs 30
+   ("M-s f" . nil)))
+
 ;;;;;;;;;;;;;;;;;
 ;;;; buffers ;;;;
 
