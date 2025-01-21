@@ -899,7 +899,11 @@ This is dote to accomodate `+vertico-multiform-minimal'."
    :map vertico-map
    ("TAB" . +vertico-minimal-complete)
    ("DEL" . vertico-directory-delete-char)
-   ("M-DEL" . vertico-directory-delete-word)
+   ("M-<backspace>" . vertico-directory-delete-word)
+   ;; TODO should i disable C-DEL in Emacs so i train myself to use M-DEL to
+   ;; delete words? or should i use C-w to delete words, reserving C-DEL for
+   ;; vertico-directory-up?
+   ("C-<backspace>" . vertico-directory-up)
    :map vertico-multiform-map
    ("C-n" . +vertico-minimal-next)
    ("C-p" . +vertico-minimal-previous)
