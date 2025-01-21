@@ -474,6 +474,70 @@ writeable."
 
   (evil-mode 1))
 
+;; TODO I don't think I need devil if I can make home-row mods work.
+(use-package devil
+  :disabled t
+  :config
+  (global-devil-mode)
+
+  (setq devil-prompt "%t")
+
+  ;; (evil-define-key '(normal visual motion basic) global-map
+  ;;   (kbd ",") #'devil)
+
+  ;; (setq devil-repeatable-keys nil)
+
+  ;; (defvar scroll-repeat-map
+  ;;   (let ((map (make-sparse-keymap)))
+  ;;     (define-key map (kbd "d") #'+golden-ratio-scroll-screen-down)
+  ;;     (define-key map (kbd "u") #'+golden-ratio-scroll-screen-up)
+  ;;     map))
+  ;; (dolist (cmd '(+golden-ratio-scroll-screen-down
+  ;;                +golden-ratio-scroll-screen-up))
+  ;;   (put cmd 'repeat-map 'scroll-repeat-map))
+
+  ;; (defvar movement-repeat-map
+  ;;  (let ((map (make-sparse-keymap)))
+  ;;    (define-key map (kbd "n") #'next-line)
+  ;;    (define-key map (kbd "p") #'previous-line)
+  ;;    (define-key map (kbd "f") #'forward-char)
+  ;;    (define-key map (kbd "b") #'backward-char)
+  ;;    ;; (define-key map (kbd "a") #'beginning-of-line)
+  ;;    ;; (define-key map (kbd "e") #'end-of-line)
+  ;;    map))
+  ;; (dolist (cmd '(previous-line
+  ;;                next-line
+  ;;                backward-char
+  ;;                forward-char
+  ;;                beginning-of-line
+  ;;                end-of-line))
+  ;;   (put cmd 'repeat-map 'movement-repeat-map))
+
+  ;; (defvar meta-movement-repeat-map
+  ;;  (let ((map (make-sparse-keymap)))
+  ;;    (define-key map (kbd "f") #'forward-word)
+  ;;    (define-key map (kbd "b") #'backward-word)
+  ;;    (define-key map (kbd "a") #'backward-sentence)
+  ;;    map))
+  ;; (dolist (cmd '(forward-word
+  ;;                backward-word))
+  ;;   (put cmd 'repeat-map 'meta-movement-repeat-map))
+
+  ;; (defvar delete-repeat-map
+  ;;  (let ((map (make-sparse-keymap)))
+  ;;     (define-key map (kbd "d") #'delete-forward-char)
+  ;;     map))
+  ;; (dolist (cmd '(delete-forward-char))
+  ;;   (put cmd 'repeat-map 'delete-repeat-map))
+
+  ;; (defvar meta-delete-repeat-map
+  ;;  (let ((map (make-sparse-keymap)))
+  ;;     (define-key map (kbd "d") #'kill-word)
+  ;;     map))
+  ;; (dolist (cmd '(kill-word))
+  ;;   (put cmd 'repeat-map 'meta-delete-repeat-map))
+  )
+
 ;;;;;;;;;;;;;;
 ;;;; guix ;;;;
 
