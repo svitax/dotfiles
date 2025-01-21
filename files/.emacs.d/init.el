@@ -2138,7 +2138,6 @@ When the region is active, comment its lines instead."
     (interactive "^")
     (mowie
      #'mowie-beginning-of-code
-     #'mowie-beginning-of-comment
      #'beginning-of-line
      #'beginning-of-visual-line))
   (defun +end-of-line ()
