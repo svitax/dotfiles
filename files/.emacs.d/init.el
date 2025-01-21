@@ -2866,6 +2866,43 @@ See also `org-save-all-org-buffers'."
    ;; ("@" . +org-notmuch-store-and-capture)
    ))
 
+(use-package ol-notmuch
+  :disabled t
+  ;; It can be useful to include links to e-mail messages or search queries in
+  ;; your Org files. `ol-notmuch' supports this. In simple terms, this package
+  ;; provides glue code between Notmuch and Org capture that allows me to create
+  ;; links that point to e-mails. When I follow the link, it opens in a fully
+  ;; fledged Notmuch buffer. This is how I build up my agenda of appointments.
+  ;; It highlights the power of Emacs' interconnectedness, as I go from my
+  ;; e-mail to the agenda, to editing, file management, and related.
+
+  ;; You can use the normal Org mechanisms to store links: `org-store-link'
+  ;; stores a link to a particular message when you are in `notmuch-show-mode'
+  ;; or `notmuch-tree-mode'. When you are in `notmuch-search-mode', it stores a
+  ;; link to the query. Note that queries are performed at the time the link is
+  ;; opened, so the result may be different from when the link was stored.
+
+  ;; You can insert this link later with `org-insert-link'. From org-mode, you
+  ;; can go to the query or message the link points to with either
+  ;; `org-agenda-open-link' in agenda buffers, or `org-open-at-point' elsewhere
+  ;; - both typically bound to 'C-c C-o'.
+
+  ;; You can add some specific capture-template for this. In your capture
+  ;; templates, the following notmuch-specific template expansion values are
+  ;; available:
+  ;;
+  ;; %:date, %:date-timestamp (TODO), %:date-timestamp-inactive (TODO)
+  ;; %:from, %:fromname (TODO), %:fromaddress (TODO)
+  ;; %:to, %:toname (TODO), %:toaddress (TODO)
+  ;; %:maildir (TODO)
+  ;; %:message-id
+  ;; %:path (TODO)
+  ;; %:subject
+
+  ;; Remember, if you define your own link types, any property you store with
+  ;; `org-link-store-props' can be accessed in capture templates in a similar
+  ;; way.
+  :after notmuch)
 
 (use-package org-agenda
   :config
