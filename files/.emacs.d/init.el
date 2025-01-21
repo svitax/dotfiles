@@ -2483,27 +2483,273 @@ When the region is active, comment its lines instead."
 ;;;;;;;;;;;;;
 ;;;; org ;;;;
 
-;; NOTE document org
 (use-package org
+  ;; Org, also known as "Org mode", is one of the potentially most useful
+  ;; feature sets available to every Emacs user. At its core, Org is a
+  ;; lightweigt markup language: you can have headings and paragraphs, mark a
+  ;; portion of text  with emphasis, produce bullet lists, include code blocks,
+  ;; and the like. Though what really sets Org apart from other markup languages
+  ;; is the rich corpus of Emacs Lisp written around it to do all sorts of tasks
+  ;; with this otherwise plain text format.
+  ;;
+  ;; With Org you can write technical documents, maintain a simple of highly
+  ;; sophisticated system for task management, organise your life using the
+  ;; agenda, write tables that can evaluate formulas to have spreadsheet
+  ;; functionality, have embedded LaTeX, evaluate code blocks in a wide range of
+  ;; programming languages and reuse their results for literate programming,
+  ;; include the contents of other files into a singular file, use one file to
+  ;; generate other files/directories with all their contents, and export the
+  ;; Org document to a variety of formats like .pdf and .odt. Furthermore, Org
+  ;; can be used as a lightweight, plain text database, as each heading can have
+  ;; its own metadata. This has practical applications in most of the
+  ;; aforementioned.
+  ;;
+  ;; In short, if something can be done with plain text, Org probably does it
+  ;; already or has all the elements for piecing it together.
+  :init
+  (setopt org-directory (expand-file-name "~/OneDrive/zettelkasten/"))
+  ;; Must be evaluated before Org is loaded, otherwise we have to use the Custom
+  ;; UI. No thanks!
+  (setopt org-export-backends '(html texinfo md))
   :config
-  (setopt org-return-follows-link t
-          org-startup-folded 'content)
+  ;; This being Emacs, everything is customisable and Org is a good example of
+  ;; this. There are a lot of user options for us to tweak things to our liking.
+  (setopt org-ellipsis "⤵"
+          org-startup-folded 'content
+          org-M-RET-may-split-line '((default . nil))
+          org-cycle-separator-lines 0
+          org-loop-over-headlines-in-active-region 'start-level
+          org-insert-heading-respect-content t
+          org-fontify-quote-and-verse-blocks t)
+
+  ;; One of the many use-cases for Org is to maintain a plain text to-do list. A
+  ;; heading that starts with a to-do keyword, such as "TODO", is treated as a
+  ;; task and its state is considered not completed.
+
+  ;; We can switch between the task states with shift and the left or right
+  ;; arrow keys. Or we can select a keyword directly with 'C-c C-t', which calls
+  ;; `org-todo' by default. I personally prefer the latter approach, as it is
+  ;; more precise
+
+  ;; By default, the `org-todo-keywords' are 'TODO' and 'DONE'. We can write
+  ;; more keywords if we wish to implement a descriptive workflow. For example,
+  ;; we can have a 'HOLD' keyword for something that is to be done but is not
+  ;; actionable yet. We can have a 'NEXT' keyword for something that is to be
+  ;; completed right after we finish the currently active task, and so on. While
+  ;; the number of keywords is not limited, the binary model is the same: we
+  ;; have words that represent the incomplete state and those that count as the
+  ;; completion of the task. For instance, both 'CANCEL' and 'DONE' mean that a
+  ;; task is not actionable anymore and we move on to other things. As such, the
+  ;; extra keywords are a way for the user to make tasks more descriptive and
+  ;; easy to find. In the value of `org-todo-keywords', we use the bar character
+  ;; to separate the incomplete state to the left from the completed one to the
+  ;; right. Learn about the !, @, and more by reading the relevant section of
+  ;; the Org manual. Evaluate: (info "(org) Tracking TODO state changes")
+  ;;
+  ;; One of the agenda's headline features is the ability to produce a view that
+  ;; lists headings with the given keyword. So having the right terms can make
+  ;; search and retrieval of data more easy. On the flip-side, too many keywords
+  ;; add cognitive load and require more explicit search terms to yield the
+  ;; desired results. I used to work with a more descriptive set of keywords,
+  ;; but ultimately decided to keep things simple.
+  (setopt org-todo-keywords '((sequence "TODO(t)" "WAIT(w@/!)" "|" "CANCEL(c@)"
+                                        "DONE(d!)"))
+          org-use-fast-todo-selection 'expert
+          org-fontify-done-headline nil
+          org-fontify-todo-headline nil
+          org-fontify-whole-heading-line nil
+          org-enforce-todo-dependencies t
+          org-enforce-todo-checkbox-dependencies t)
+
+  ;; Org can keep a record of state changes, such as when we set an entry marked
+  ;; with the 'TODO' keyword as 'DONE' or when we reschedule an appointment.
+  ;; This data is stored in 'LOGBOOK' drawer right below the heading. I choose
+  ;; to opt into this feature beacuse it is sometimes useful to capture mistakes
+  ;; or figure out intent in the absence of further clarification (though I do
+  ;; tend to write why something happened).
+  (setopt org-log-done 'time
+          org-log-into-drawer t
+          org-log-note-clock-out nil
+          org-log-redeadline 'time
+          org-log-reschedule 'time)
+
+  ;; The refile mechanism is how we can reparent a heading, by moving it from
+  ;; one place to another. We do this with the command `org-refile', bound to
+  ;; 'C-c C-w' by default. A common workflow where refiling is essential is to
+  ;; have an "inbox" file or heading, where unprocessed information is stored
+  ;; at, and periodically process its contents to move the data where it
+  ;; belongs. Though it can also work file without any such inbox, in those
+  ;; cases where a heading should be stored someplace else. The
+  ;; `org-refile-targets' specifies the files that are available when we try to
+  ;; refile the current heading. With how I set it up, all the agenda files'
+  ;; headings up to level 2 plus the "Notes" and "Tasks" headings in a separate
+  ;; "projects.org" file are included as possible entries.
+  (setopt org-refile-targets '(("20250112T073531--projects.org" :regexp
+                                . "\\(?:\\(?:Note\\|Task\\)s\\)")
+                               ("20250120T090205--archive.org" :level . 0)
+                               (org-agenda-files :maxlevel . 2))
+
+          ;; Show full path of file when refiling.
+          org-refile-use-outline-path 'file
+          ;; Refile in a single step, but the list becomes more cluttered.
+          org-outline-path-complete-in-steps nil
+          ;; Allow creation of new nodes on refile by adding "/new node name"
+          org-refile-allow-creating-parent-nodes 'confirm
+          org-refile-use-cache nil)
+
+  ;; After refiling, you will have to manually save your opened Org files. This
+  ;; is inconvenient. Fortunately we can create a function to do that for us and
+  ;; add it after the `org-refile' action.
+  (defun +org-save-org-agenda-files ()
+    "Save `org-agenda-files' without user confirmation.
+See also `org-save-all-org-buffers'."
+    (interactive)
+    (let* ((agenda-files (append (mapcar 'file-truename
+                                         (file-expand-wildcards
+                                          (concat org-directory "*.org")))
+                                 '("20250120T090205--archive.org"))))
+      (message "Saving org-agenda-files buffers...")
+      (save-some-buffers t (lambda ()
+                             (when (member (buffer-file-name) agenda-files)
+                               t)))
+      (message "Saving org-agenda-files buffers... done")))
+
+  (advice-add 'org-refile :after
+              (lambda (&rest _)
+                (+org-save-org-agenda-files)))
+
+  ;; Each Org heading can have one or more tags associated with it, while all
+  ;; headings inherit any potential #+filetags. We can add tags to a heading
+  ;; when the cursor is over it by typing the ever flexible 'C-c C-c'. Though
+  ;; the more specific `org-set-tags-command' also gets the job done, plus it
+  ;; does not require that the cursor is positioned on the heading text.
+  ;;
+  ;; Tagging is useful for searching and retrieving the data we store. The Org
+  ;; agenda, in particural, provides commands to filter tasks by tag.
+  ;;
+  ;; The user option `org-tag-alist' lets us specify tags we always want to use,
+  ;; though we can write tags per file as well by using the #+tags keyword. I do
+  ;; the latter as a global list of tags is not useful in my case.
+  ;;
+  ;; Note that in the settings below I disable the auto-alignment that Org does
+  ;; where it shifts tags to the right of the heading. I do not like it.
+  (setopt org-tag-alist nil
+          org-auto-align-tags nil
+          org-tags-column 0)
+
+  ;; One of the nice things about Org is its flexible linking mechanism. It can
+  ;; produce links to a variety of file types or buffers and even navigate to a
+  ;; section therein.
+  ;;
+  ;; At its simplest form, we have the "file" link type, which points to a file
+  ;; system path, with an optional extension for a match inside the file, as
+  ;; documented in the manual. (info "(org) Search Options")
+  ;;
+  ;; Links to buffers are also common and valuable. For example, we can have a
+  ;; link to a page produced by the `man' command, which gives us quick access
+  ;; to the documentation of some program. When Org follows that link, it opens
+  ;; the buffer in the appropriate major mode. For me, the most common scenario
+  ;; is a link to an email, which I typically associate with a task that shows
+  ;; up in my agenda.
+  ;;
+  ;; Org supports lots of link types out-of-the-box, though more can be added by
+  ;; packages. Denote does this: it defines a "denote" link type which behaves
+  ;; the same way as the "file" type except that it uses the identifier of the
+  ;; file instead of its full path (so even if the file is renamed, the link
+  ;; will work for as long as the identifier remains the same).
+  ;;
+  ;; Links can be generated automatically as part of as `org-capture'
+  ;; template. The command `org-store-link' produces one manually, storing it to
+  ;; a special data structure from which it can be retrieved later for insertion
+  ;; with the command `org-insert-link'. The latter command can also create new
+  ;; links, simply by receiving data that is different from what was already
+  ;; stored.
+  (setopt org-return-follows-link t)
+
+  ;; Org can combine prose with code, by placing the latter inside a block that
+  ;; is delimited by '#+BEGIN_SRC' and '#+END_SRC' lines.
+  ;;
+  ;; Code blocks can use the syntax highlighting ("fontification" in Emacs
+  ;; parlance) of a given major mode. They can also have optional parameters
+  ;; passed to their header, which expand the capabilities of the block.
+  ;;
+  ;; More generally, Org is capable of evaluating code blocks and passing their
+  ;; return value to other code blocks. It is thus possible to write a fully
+  ;; fledged program as an Org document. This paradigm is known as "literate
+  ;; programming".
+  ;;
+  ;; Org can evaluate code blocks in many languages. This is known as "Org
+  ;; Babel" and the files which implement support for a given language are
+  ;; typically named `ob-LANG.el' where 'LANG' is the name of the language.
+  ;;
+  ;; I seldom work with Org Babel (or literate programming for that matter), so
+  ;; I do not load the requisite code for any particular language
+  ;; automatically. Note that Emacs Lisp is loaded by default.
+
+  ;; To evaluate a code block, we type Org's omnipotetnt 'C-c C-c'. The results
+  ;; will be producet below the code block. There is an optional parameter that
+  ;; controls how - or even if - the results are displayed.
+
+  ;; There are many other types of blocks apart from 'SRC'. Those do different
+  ;; things, such as:
+  ;;
+  ;; #+BEGIN_QUOTE
+  ;; Treat the contents as a block quote or equivalent.
+  ;;
+  ;; #+BEGIN_VERSE
+  ;; Do not reflow any line breaks (for poetry and such).
+  ;;
+  ;; #+BEGIN_EXPORT
+  ;; Evaluate the code for the given export target (like html or latex),
+  ;; optionally replacing it with its results or keeping both of them.
+  (setopt org-confirm-babel-evaluate nil
+          org-src-window-setup 'current-window
+          org-src-preserve-indentation t
+          org-edit-src-content-indentation 0)
+
+  ;; Org is a capable authoring tool in no small part because it can be
+  ;; converted to other file formats. A typical example is to write a technical
+  ;; document in Org and then export it to a PDF. Another use-case is to export
+  ;; an Info manual (texinfo format) and an HTML web page.
+  ;;
+  ;; The default set of export targets is specified in the value of the user
+  ;; option `org-export-backends'. It is one of those rare cases where it has to
+  ;; be evaluated before the package is loaded (which is why I configure it in
+  ;; the :init section of this use-package block). Other than that, we can load
+  ;; an export backend by loading the corresponding `ox-FORMAT.el' file.
+  ;; (setopt org-export-headline-levels 8
+  ;;         org-html-htmlize-output-type nil
+  ;;         org-html-head-include-default-style nil)
+
   ;; Open Org links in current window. Default is `'find-file-other-window'
   ;;
   ;; HACK: Can I replace this hack with some `display-buffer-alist'
   ;; configuration?
   (setf (cdr (assoc 'file org-link-frame-setup)) 'find-file)
 
-  ;; Recenter and pulse the current line, and display the hidden contents of Org and Outline headings.
+  ;; Recenter and pulse the current line, and display the hidden contents of Org
+  ;; and Outline headings.
   (with-eval-after-load 'pulsar
-    (dolist (hook '(org-follow-link-hook))
+    (dolist (hook '(org-follow-link-hook org-agenda-after-show-hook))
       (add-hook hook #'pulsar-recenter-middle)
       (add-hook hook #'pulsar-reveal-entry)))
 
-  ;; TODO document org-mode-map bindings because i can't use it until org-mode is loaded
   (bind-keys
+   ;; I don't like that Org binds one zillion keys, so if I want one for
+   ;; something more important, I disable it from here.
    :map org-mode-map
-   ("C-j" . +join-line-below)))
+   ("C-'" . nil)
+   ("C-," . nil)
+   ("C-<return>" . nil)
+   ("C-M-<return>" . nil)
+   ("C-c M-l" . org-insert-last-stored-link)
+   ("C-c C-M-l" . org-toggle-link-display)
+   ("M-." . org-edit-special) ; mnemonic is global M-. that goes to source
+                                        ; (alias for C-c ')
+   :map org-src-mode-map
+   ("M-," . org-edit-src-exit) ; see M-. above
+   ))
+
 
 ;; (use-package org-gtd)
 
