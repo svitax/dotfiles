@@ -2238,7 +2238,13 @@ When the region is active, comment its lines instead."
   ;; respectively. Otherwise, we have to run it manually, which is cumbersome.
   (setopt flymake-no-changes-timeout nil
           flymake-start-on-save-buffer t
-          flymake-start-on-flymake-mode t))
+          flymake-start-on-flymake-mode t)
+
+  (bind-keys
+   :map flymake-mode-map
+   ("M-g M-n" . flymake-goto-next-error)
+   ("M-g M-p" . flymake-goto-prev-error)))
+
 
 ;;;;;;;;;;;;;;;;;
 ;; tree-sitter ;;
