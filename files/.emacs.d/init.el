@@ -1151,6 +1151,25 @@ This is dote to accomodate `+vertico-multiform-minimal'."
 together."
     (cape-wrap-super #'cape-dabbrev #'cape-dict #'cape-keyword)))
 
+;;;;;;;;;;;;;;;;;;
+;;;; snippets ;;;;
+
+(use-package tempel
+  ;; This is yet another nimble package from Daniel Mendler. It lets us define a
+  ;; template which we can insert at any point and fill in the empty fields with
+  ;; whatever values we want.
+  :config
+  (bind-keys
+   :map tempel-map
+   ("M-n" . tempel-next)
+   ("M-p" . tempel-previous)))
+
+;; TODO document tempel-collection
+(use-package tempel-collection)
+
+;; TODO document eglot-tempel
+(use-package eglot-tempel)
+
 ;;;;;;;;;;;;;;;;;
 ;;;; project ;;;;
 

@@ -36,6 +36,9 @@
     tree-sitter
     tree-sitter-go
     tree-sitter-gomod
+    emacs-tempel
+    emacs-tempel-collection
+    +emacs-eglot-tempel
     ;; +emacs-compile-multi
     ;; +emacs-consult-compile-multi
     ;; +emacs-projection-multi

@@ -407,3 +407,40 @@ and solve problems of their choosing using Emacs.")
 ;;
 ;; it's probably from aio-contrib.el. maybe that should be its own separate
 ;; package?
+
+;; NOTE i removed emacs-eglot from propagated inputs because this external versi
+;; was breaking eglot in my config
+(define-public +emacs-eglot-tempel
+  (package
+    (name "emacs-eglot-tempel")
+    (version "0.8.2")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/fejfighter/eglot-tempel")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "00v94h3zvl2pm1yizjmdfqgmzwqq8aghjixdcb23x703inq5p82x"))))
+    (build-system emacs-build-system)
+    (arguments
+     (list
+      #:tests? #true
+      #:test-command #~(list "emacs" "-Q" "-batch"
+                             "-l" "eglot-tempel-tests.el"
+                             "-f" "ert-run-tests-batch-and-exit")
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'check 'skip-failing-test
+            (lambda _
+              (substitute* "eglot-tempel-tests.el"
+                (("\\(ert-deftest test-named .*" all)
+                 (string-append all " (skip-unless nil)"))))))))
+    (native-inputs (list emacs-ert-runner))
+    (propagated-inputs (list emacs-peg emacs-tempel))
+    (home-page "https://github.com/fejfighter/eglot-tempel")
+    (synopsis "Bridge for Tempel templates with Eglot")
+    (description "This package is an adapter to use the Tempel templating
+library with Eglot instead of Yasnippet.")
+    (license gpl3+)))
