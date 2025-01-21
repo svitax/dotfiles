@@ -30,6 +30,19 @@
     (setq native-comp-async-report-warnings-errors 'silent)
     (setq native-compile-prune-cache t))
 
+  ;; I like starting with a scratch buffer. I know that a lot of users specify a
+  ;; dashboard or an Org agenda view, but I prefer to keep things generic in
+  ;; this regard.
+  (setopt initial-buffer-choice t
+          initial-major-mode 'lisp-interaction-mode
+          initial-scratch-message
+          (format ";; This is `%s'. Use `%s' to evaluate and print results.\n\n"
+                  'lisp-interaction-mode
+                  (propertize
+                   (substitute-command-keys
+                    "\\<lisp-interaction-mode-map>\\[eval-print-last-sexp]")
+                   'face 'help-key-binding)))
+
   (scroll-bar-mode -1)
   (menu-bar-mode -1)
   (tool-bar-mode -1))
