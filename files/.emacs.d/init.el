@@ -950,16 +950,18 @@ the minibuffer to show the remaining candidates and select the
 first one. Else do `vertico-extit'."
     (interactive)
     (cond
-     ((and vertico-unobtrusive-mode minibuffer-default)
+     ((= vertico--total 1)
+      (minibuffer-complete)
       (vertico-exit))
-     ((and vertico-unobtrusive-mode (string= (car vertico--input) ""))
+     ((and vertico-unobtrusive-mode
+           (or (string-empty-p (car vertico--input))
+               minibuffer-default
+               (eq vertico-preselect 'directory)
+               (eq vertico-preselect 'prompt)))
       (vertico-exit-input))
      ((and vertico-unobtrusive-mode (> vertico--total 1))
       (minibuffer-complete)
       (+vertico-minimal-next))
-     (vertico-unobtrusive-mode
-      (minibuffer-complete)
-      (vertico-exit))
      (t
       (vertico-exit))))
 
