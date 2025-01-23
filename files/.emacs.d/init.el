@@ -949,6 +949,7 @@ This is dote to accomodate `+vertico-multiform-minimal'."
                                                (vertico-preselect . prompt)
                                                (vertico-sort-function . +vertico-sort-directories-first))
                                          (t ,@+vertico-multiform-minimal))
+          vertico-multiform-commands `(("consult-\\(.*\\)?\\(find\\|grep\\|ripgrep\\)" ,@+vertico-multiform-maximal))
           vertico-cycle t
           vertico-count 5)
 
