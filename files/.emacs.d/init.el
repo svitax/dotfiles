@@ -960,7 +960,7 @@ first one. Else do `vertico-extit'."
                (eq vertico-preselect 'prompt)))
       (vertico-exit-input))
      ((and vertico-unobtrusive-mode (> vertico--total 1))
-      (minibuffer-complete)
+      (minibuffer-complete-and-exit)
       (+vertico-minimal-next))
      (t
       (vertico-exit))))
