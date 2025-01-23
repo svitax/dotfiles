@@ -943,6 +943,26 @@ This is dote to accomodate `+vertico-multiform-minimal'."
           (+vertico-minimal-next))
       (vertico-insert)))
 
+  (defun +vertico-minimal-exit ()
+    "Exit with the candidate if `+vertico-multiform-minimal'.
+If there are more candidates that match the given input, expand
+the minibuffer to show the remaining candidates and select the
+first one. Else do `vertico-extit'."
+    (interactive)
+    (cond
+     ((and vertico-unobtrusive-mode minibuffer-default)
+      (vertico-exit))
+     ((and vertico-unobtrusive-mode (string= (car vertico--input) ""))
+      (vertico-exit-input))
+     ((and vertico-unobtrusive-mode (> vertico--total 1))
+      (minibuffer-complete)
+      (+vertico-minimal-next))
+     (vertico-unobtrusive-mode
+      (minibuffer-complete)
+      (vertico-exit))
+     (t
+      (vertico-exit))))
+
   (setopt vertico-multiform-categories `(;; Maximal
                                          (embark-keybinding ,@+vertico-multiform-maximal)
                                          (imenu ,@+vertico-multiform-maximal)
@@ -975,7 +995,9 @@ This is dote to accomodate `+vertico-multiform-minimal'."
    ("C-p" . +vertico-minimal-previous)
    ("<down>" . +vertico-minimal-next)
    ("<up>" . +vertico-minimal-previous)
-   ("C-l" . vertico-multiform-vertical)))
+   ("C-l" . vertico-multiform-vertical)
+   ("RET" . +vertico-minimal-exit)
+   ("<return>" . +vertico-minimal-exit)))
 
 ;;;;;;;;;;;;;;;;;
 ;;;; consult ;;;;
