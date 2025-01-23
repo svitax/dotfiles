@@ -3255,6 +3255,15 @@ continue, per `org-agenda-skip-function'."
    :map +toggle-prefix-map
    ("t" . org-tidy-toggle)))
 
+;; TODO document org-srs
+(use-package org-srs
+  :config
+  (bind-keys
+   :map org-mode-map
+   ("C-c 1" . org-srs-review-rate-easy)
+   ("C-c 1" . org-srs-review-rate-good)
+   ("C-c 1" . org-srs-review-rate-hard)
+   ("C-c 1" . org-srs-review-rate-again)))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;;;; bibliography ;;;;

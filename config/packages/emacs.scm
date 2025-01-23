@@ -467,3 +467,46 @@ library with Eglot instead of Yasnippet.")
      (description "This package provides an Emacs minor mode to automatically
 tidy org-mode property drawers")
      (license (list gpl3+)))))
+
+(define-public +emacs-fsrs
+  (let ((commit "824717b8507dda42f3953fbbd6b2a1283f0a6831")
+        (revision "0"))
+    (package
+     (name "emacs-fsrs")
+     (version (git-version "1.0" revision commit))
+     (source
+      (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/open-spaced-repetition/lisp-fsrs")
+             (commit commit)))
+       (sha256
+        (base32 "1pv7gvfch6yrr8czbsf0x2px72gvcyry6xmikwxkmw97jrc4bghk"))
+       (file-name (git-file-name name version))))
+     (build-system emacs-build-system)
+     (home-page "https://github.com/open-spaced-repetition/lisp-fsrs")
+     (synopsis "")
+     (description "")
+     (license (list expat)))))
+
+(define-public +emacs-org-srs
+  (let ((commit "634bd312053dafeecb753fe2f7c93d628438d019")
+        (revision "0"))
+    (package
+     (name "emacs-org-srs")
+     (version (git-version "1.0" revision commit))
+     (source
+      (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/bohonghuang/org-srs")
+             (commit commit)))
+       (sha256
+        (base32 "1z20r878ryx22md8wgzk8j4p64gb98a62sp0zsq3pa9aphd22c83"))
+       (file-name (git-file-name name version))))
+     (propagated-inputs (list emacs-org +emacs-fsrs))
+     (build-system emacs-build-system)
+     (home-page "https://github.com/bohonghuang/org-srs")
+     (synopsis "")
+     (description "")
+     (license (list gpl3+)))))
