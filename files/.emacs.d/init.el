@@ -2678,7 +2678,7 @@ When the region is active, comment its lines instead."
           org-use-fast-todo-selection 'expert
           org-fontify-done-headline nil
           org-fontify-todo-headline nil
-          org-fontify-whole-heading-line nil
+          org-fontify-whole-heading-line t ; fontify `org-tidy' inline symbol
           org-enforce-todo-dependencies t
           org-enforce-todo-checkbox-dependencies t)
 
@@ -3246,6 +3246,14 @@ continue, per `org-agenda-skip-function'."
    ;; NOTE replaced abbrev maps, find somewhere to relocate them later
    ("a" . +org-agenda-custom)
    ("C-a" . org-agenda)))
+
+;; TODO document org-tidy
+(use-package org-tidy
+  :config
+  (add-hook 'org-mode-hook #'org-tidy-mode)
+  (bind-keys
+   :map +toggle-prefix-map
+   ("t" . org-tidy-toggle)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;

@@ -45,6 +45,7 @@
 	emacs-magit
 	emacs-git-gutter
 	emacs-git-gutter-fringe
+    +emacs-org-tidy
 	emacs-biblio
 	+emacs-biblio-openlibrary
 	+emacs-biblio-gbooks
