@@ -12,10 +12,17 @@
 (use-package early-init
   :no-require
   :init
-  (setopt inhibit-startup-screen t
-          inhibit-startup-echo-area-message user-login-name
-          ring-bell-function 'ignore
+  ;; These are some general settings for frames and the basics of the
+  ;; toolkit. In short, I want to keep things minimal. Notice the
+  ;; `frame-resize-pixelwise' and `frame-inhibit-implied-resize': by default
+  ;; Emacs will resize the frame if you adjust the font size, which I never want.
+  (setopt frame-resize-pixelwise t
+          frame-inhibit-implied-resize t
           frame-title-format '("%b")
+          ring-bell-function 'ignore
+          use-file-dialog nil
+          inhibit-startup-screen t
+          inhibit-startup-echo-area-message user-login-name
           initial-buffer-choice t
           initial-major-mode 'lisp-interaction-mode)
 
@@ -43,6 +50,7 @@
                     "\\<lisp-interaction-mode-map>\\[eval-print-last-sexp]")
                    'face 'help-key-binding)))
 
+  ;; I do not use these graphical elements by default.
   (scroll-bar-mode -1)
   (menu-bar-mode -1)
   (tool-bar-mode -1))
