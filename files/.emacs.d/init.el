@@ -919,7 +919,7 @@ automatically.")
 This is done to accomodate `+vertico-multiform-minimal'."
     (interactive)
     (if vertico-unobtrusive-mode
-        (let ((vertico--index 0))
+        (progn
           (vertico-multiform-vertical)
           (vertico-next 1))
       (vertico-next 1)))
@@ -940,7 +940,7 @@ This is dote to accomodate `+vertico-multiform-minimal'."
              (> vertico--total 1))
         (progn
           (minibuffer-complete)
-          (vertico-multiform-vertical))
+          (+vertico-minimal-next))
       (vertico-insert)))
 
   (setopt vertico-multiform-categories `(;; Maximal
