@@ -3828,4 +3828,10 @@ from local browser. It also cleans LeetCode cookies in `url-cookie-file'."
 
   ;; (load-library (expand-file-name "secrets.el.gpg" user-emacs-directory)
   ;; (setopt leetcode-session-cookie my/leetcode-session-cookie)
-  )
+
+  (bind-keys
+   :map leetcode-solution-mode-map
+   ("C-c C-c" . leetcode-submit)
+   ("C-c C-k" . leetcode-quit)
+   ("C-c C-r" . leetcode-restore-layout)
+   ("C-c C-t" . leetcode-try)))
