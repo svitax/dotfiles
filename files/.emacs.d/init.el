@@ -892,7 +892,8 @@ writeable."
                                :prompt ""
                                :separator ""
                                :ellipsis ""
-                               :no-match "")))
+                               :no-match ""))
+      (vertico-preselect . prompt))
     "List of configurations for minimal Vertico multiform.
 The minimal view is intended to be less eager or less revealing
 for general usage.
@@ -902,7 +903,8 @@ command or use the commands `+vertico-minimal-next' and
 `+vertico-minimal-previous', which toggle the vertical view
 automatically.")
   (defvar +vertico-multiform-maximal
-    '((vertico-count . 10))
+    '((vertico-count . 10)
+      (vertico-preselect . directory))
     "List of configurations for maximal Vertico multiform.")
   (defun +vertico--match-directory (str)
     "Match directory delimeter in STR."
@@ -946,7 +948,6 @@ This is dote to accomodate `+vertico-multiform-minimal'."
                                          (imenu ,@+vertico-multiform-maximal)
                                          ;; Minimal
                                          (file ,@+vertico-multiform-minimal
-                                               (vertico-preselect . prompt)
                                                (vertico-sort-function . +vertico-sort-directories-first))
                                          (t ,@+vertico-multiform-minimal))
           vertico-multiform-commands `(("consult-\\(.*\\)?\\(find\\|grep\\|ripgrep\\)" ,@+vertico-multiform-maximal))
