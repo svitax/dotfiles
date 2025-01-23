@@ -954,8 +954,8 @@ first one. Else do `vertico-extit'."
       (minibuffer-complete)
       (vertico-exit))
      ((and vertico-unobtrusive-mode
-           (or (string-empty-p (car vertico--input))
-               minibuffer-default
+           (string-empty-p (minibuffer-contents))
+           (or minibuffer-default
                (eq vertico-preselect 'directory)
                (eq vertico-preselect 'prompt)))
       (vertico-exit-input))
