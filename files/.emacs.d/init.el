@@ -3261,9 +3261,9 @@ continue, per `org-agenda-skip-function'."
   (bind-keys
    :map org-mode-map
    ("C-c 1" . org-srs-review-rate-easy)
-   ("C-c 1" . org-srs-review-rate-good)
-   ("C-c 1" . org-srs-review-rate-hard)
-   ("C-c 1" . org-srs-review-rate-again)))
+   ("C-c 2" . org-srs-review-rate-good)
+   ("C-c 3" . org-srs-review-rate-hard)
+   ("C-c 4" . org-srs-review-rate-again)))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;;;; bibliography ;;;;
