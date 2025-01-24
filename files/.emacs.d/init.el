@@ -3638,13 +3638,15 @@ in your `denote-directory'."
   (setopt org-remark-notes-file-name #'+org-remark-denote-file-name-function)
 
   (bind-keys
-   :map +notes-prefix-map
-   ("m" . org-remark-mark)
-   ("M" . org-remark-mark-line)
-   ("d" . org-remark-remove)
-   ("D" . org-remark-delete)
-   ("v" . org-remark-view)
-   ("V" . org-remark-open)))
+   :map org-remark-mode-map
+   ("C-c m d" . org-remark-delete)
+   ("C-c m l" . org-remark-mark-line)
+   ("C-c m m" . org-remark-mark)
+   ("C-c m n" . org-remark-view-next)
+   ("C-c m o" . org-remark-open)
+   ("C-c m p" . org-remark-view-prev)
+   ("C-c m r" . org-remark-remove)
+   ("C-c m v" . org-remark-view)))
 
 ;;;;;;;;;;;;;
 ;;;; pdf ;;;;
