@@ -3252,6 +3252,7 @@ continue, per `org-agenda-skip-function'."
 
 ;; TODO document org-tidy
 (use-package org-tidy
+  :disabled t
   :config
   (add-hook 'org-mode-hook #'org-tidy-mode)
   (bind-keys
