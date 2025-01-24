@@ -2593,10 +2593,12 @@ When the region is active, comment its lines instead."
 ;;;;;;;;
 ;; go ;;
 
+;; TODO document go-ts-mode
 (use-package go-ts-mode
   :init
   (add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))
   (add-to-list 'auto-mode-alist '("/go\\.mod\\'" . go-mod-ts-mode))
+  (setopt go-ts-mode-indent-offset 4)
   ;; TODO find a way to add onto eglot-workspace-configuration
   (setq-default eglot-workspace-configuration
                 '((:gopls . (:ui.completion.usePlaceholders t
