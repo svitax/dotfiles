@@ -696,7 +696,7 @@ writeable."
   ;; being found, or the wrong versions of executables being picked up.
   ;;
   ;; `inheritenv' provides the macro `inheritenv-add-advice' which wraps any
-  ;; command with an advice function so in inherits buffer-local variables. This
+  ;; command with an advice function so it inherits buffer-local variables. This
   ;; is useful for when we discover problems we can't patch upstream.
   (inheritenv-add-advice 'jupyter-run-repl))
 
