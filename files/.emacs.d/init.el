@@ -709,7 +709,8 @@ writeable."
   (setopt y-or-n-p-use-read-key t
           use-short-answers t
           confirm-kill-processes nil
-          confirm-kill-emacs 'yes-or-no-p)
+          confirm-kill-emacs 'yes-or-no-p
+          large-file-warning-threshold nil)
 
   (bind-keys
    :map +file-prefix-map
