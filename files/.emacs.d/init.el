@@ -3831,6 +3831,8 @@ from local browser. It also cleans LeetCode cookies in `url-cookie-file'."
   ;; (load-library (expand-file-name "secrets.el.gpg" user-emacs-directory)
   ;; (setopt leetcode-session-cookie my/leetcode-session-cookie)
 
+  (setopt leetcode-prefer-language "golang")
+
   (bind-keys
    :map leetcode-solution-mode-map
    ("C-c C-c" . leetcode-submit)
