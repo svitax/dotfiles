@@ -3411,7 +3411,7 @@ BibTeX file."
           ;; have the keywords you need.
           denote-infer-keywords nil
           denote-sort-keywords t
-          denote-known-keywords '("emacs")
+          denote-known-keywords '("reference" "literature")
           ;; Prompt for title, keywords, and signature in Denote commands that
           ;; prompt for user input to construct a Denote file name.
           denote-prompts '(title keywords signature))
