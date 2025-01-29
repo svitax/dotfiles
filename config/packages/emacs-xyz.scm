@@ -510,3 +510,22 @@ tidy org-mode property drawers")
      (synopsis "")
      (description "")
      (license (list gpl3+)))))
+
+(define-public +emacs-jtsx
+  (package
+    (name "emacs-jtsx")
+    (version "0.5.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/llemaitre19/jtsx")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0z8z41hy4ssyyb4skzzysayw72jc441bffhbw1mgmgpjr7412b94"))))
+    (build-system emacs-build-system)
+    (home-page "https://github.com/llemaitre19/jtsx")
+    (synopsis "This package extends Emacs' built-in JSX/TSX support.")
+    (description "jtsx is an Emacs package for editing JSX or TSX files. It provides the major modes jtsx-jsx-mode and jtsx-tsx-mode implemented respectively on top of js-ts-mode and tsx-ts-mode.")
+    (license gpl3+)))

@@ -2614,6 +2614,18 @@ When the region is active, comment its lines instead."
   :config
   (setopt go-ts-mode-indent-offset 4))
 
+;;;;;;;;;;;;;
+;;;; web ;;;;
+
+(use-package jtsx
+  :mode (("\\.jsx?\\'" . jtsx-jsx-mode)
+         ("\\.tsx\\'" . jtsx-tsx-mode)
+         ("\\.ts\\'" . jtsx-typescript-mode))
+  :config
+  (add-to-list
+   'eglot-server-programs
+   '((jtsx-jsx-mode jtsx-tsx-mode jtsx-typescript-mode)
+     . ("typescript-language-server" "--stdio"))))
 
 ;;;;;;;;;;;;;
 ;;;; org ;;;;
