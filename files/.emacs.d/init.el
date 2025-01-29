@@ -2593,19 +2593,27 @@ When the region is active, comment its lines instead."
    ("x" . eval-defun)
    (":" . eval-expression)))
 
-;;;;;;;;
-;; go ;;
+;;;;;;;;;;;;
+;;;; go ;;;;
 
 ;; TODO document go-ts-mode
 (use-package go-ts-mode
   :init
+  ;; TODO find a better way to eglot-ensure all modes i'm interested in. maybe a
+  ;; use-package keyword?
+  (add-hook 'go-ts-mode-hook #'eglot-ensure)
+
+  ;; TODO should i use :mode use-package keyword instead of this?
   (add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))
   (add-to-list 'auto-mode-alist '("/go\\.mod\\'" . go-mod-ts-mode))
-  (setopt go-ts-mode-indent-offset 4)
+
   ;; TODO find a way to add onto eglot-workspace-configuration
   (setq-default eglot-workspace-configuration
-                '((:gopls . (:ui.completion.usePlaceholders t
-                              :hoverKind "FullDocumentation")))))
+                '((:gopls . ( :ui.completion.usePlaceholders t
+                              :hoverKind "FullDocumentation"))))
+  :config
+  (setopt go-ts-mode-indent-offset 4))
+
 
 ;;;;;;;;;;;;;
 ;;;; org ;;;;
