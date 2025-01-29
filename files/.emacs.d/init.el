@@ -3292,6 +3292,8 @@ continue, per `org-agenda-skip-function'."
    ("C-c 3" . org-srs-review-rate-hard)
    ("C-c 4" . org-srs-review-rate-again)))
 
+(use-package gnosis)
+
 ;;;;;;;;;;;;;;;;;;;;;;
 ;;;; bibliography ;;;;
 
