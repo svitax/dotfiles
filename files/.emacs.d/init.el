@@ -1204,7 +1204,10 @@ together."
 (use-package tempel-collection)
 
 ;; TODO document eglot-tempel
-(use-package eglot-tempel)
+(use-package eglot-tempel
+  :init
+  (add-hook 'eglot-managed-mode-hook #'eglot-tempel-mode))
+
 
 ;;;;;;;;;;;;;;;;;
 ;;;; project ;;;;
