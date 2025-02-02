@@ -4982,3 +4982,32 @@ exec -a dapDebugServer " node " " exe " " "$@\n"
 
 (define-public node-eslint node-eslint-8.17.0)
 
+(define-public node-prettier-3.4.2
+  (package
+   (name "node-prettier")
+   (version "3.4.2")
+   (source
+    (origin
+     (method url-fetch)
+     (uri "https://registry.npmjs.org/prettier/-/prettier-3.4.2.tgz")
+     (sha256
+      (base32
+       "00w4h9d67piqs73vqr84n8gkgmhx4119164imb4lf4x8ci9f7xyv"))))
+   (build-system node-build-system)
+   (arguments
+    `(#:tests?
+      #f
+      #:node ,node-stable
+      #:phases
+      (modify-phases
+       %standard-phases
+       (delete 'configure)
+       (delete 'build))))
+   (home-page "https://prettier.io")
+   (synopsis
+    "Prettier is an opinionated code formatter. ")
+   (description
+    "Prettier is an opinionated code formatter. It enforces a consistent style by parsing your code and re-printing it with its own rules that take the maximum line length into account, wrapping code when necessary.")
+   (license license:expat)))
+
+(define-public node-prettier node-prettier-3.4.2)
