@@ -1,5 +1,6 @@
 (define-module (config home services emacs-config)
   #:use-module (config packages emacs-xyz)
+  #:use-module (config packages node-xyz)
   #:use-module (gnu home)
   #:use-module (gnu home services)
   #:use-module (gnu packages python)
@@ -41,6 +42,11 @@
         tree-sitter-typescript
         tree-sitter-json
         +emacs-jtsx
+        ;; TODO find a way to have these node packages installed per package
+        node-typescript
+        node-typescript-language-server
+        node-eslint
+        node-prettier
         ;; emacs-lsp-booster
         ;; emacs-eglot-booster
         ;; emacs-dape
