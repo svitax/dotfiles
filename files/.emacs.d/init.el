@@ -1206,7 +1206,7 @@ together."
 ;; TODO document eglot-tempel
 (use-package eglot-tempel
   :init
-  (add-hook 'eglot-managed-mode-hook #'eglot-tempel-mode))
+  (eglot-tempel-mode t))
 
 
 ;;;;;;;;;;;;;;;;;
