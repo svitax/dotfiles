@@ -34,7 +34,7 @@
         emacs-move-text
         emacs-expand-region
         +emacs-multiple-cursors ; @1.4.0 | commit c870c18
-        ;; emacs-apheleia
+        emacs-apheleia
         tree-sitter
         tree-sitter-go
         tree-sitter-gomod

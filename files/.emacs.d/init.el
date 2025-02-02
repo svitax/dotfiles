@@ -2366,6 +2366,21 @@ When the region is active, comment its lines instead."
    ("M-g M-n" . flymake-goto-next-error)
    ("M-g M-p" . flymake-goto-prev-error)))
 
+;;;;;;;;;;;;;;;;;;;;
+;;;; formatting ;;;;
+
+;; TODO document apheleia
+(use-package apheleia
+  ;; Apheleia is a code auto-formatter. Its main selling point is that it does
+  ;; all its formatting without moving the point. It comes pre-configured with a
+  ;; few formatters, but it's possible to add more by configuring the
+  ;; `apheleia-formatters' alist and `apheleia-mode-alist' to automatically
+  ;; activate these formatters for major modes and filetypes. Check their
+  ;; docstring for more details.
+  :config
+  (bind-keys
+   :map global-map
+   ("C-c f" . apheleia-format-buffer)))
 
 ;;;;;;;;;;;;;;;;;
 ;; tree-sitter ;;
