@@ -162,6 +162,9 @@ source files.")
                                               "--with-intl=system-icu"))
                                           ((#:phases phases)
                                            `(modify-phases ,phases
+                                                           ;; Current node-lts patches `test/parallel/test-stdin-from-file-spawn.js'
+                                                           ;; which doesn't exist in older versions.
+                                                           (delete 'patch-additional-hardcoded-program-references)
                                                            (replace 'set-bootstrap-host-rpath
                                                                     (lambda* (#:key native-inputs inputs #:allow-other-keys)
                                                                       (let* ((inputs        (or native-inputs inputs))
