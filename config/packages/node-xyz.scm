@@ -3526,7 +3526,7 @@ exec -a dapDebugServer " node " " exe " " "$@\n"
    (source
     (origin
      (method url-fetch)
-     (uri "https://registry.npmjs.org/acorn/-/acorn-8.7.1.tgz")
+     (uri "https://registry.npmjs.org/acornjs/-/acorn-8.7.1.tgz")
      (sha256
       (base32
        "1ic4hy4mhgk7lfcf6d1jwhn6z1fh9zmjry3sj60v7x1mb15566gm"))))
