@@ -4979,3 +4979,6 @@ exec -a dapDebugServer " node " " exe " " "$@\n"
    (description
     "An AST-based pattern checker for JavaScript.")
    (license license:expat)))
+
+(define-public node-eslint node-eslint-8.17.0)
+
