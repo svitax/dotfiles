@@ -2632,15 +2632,35 @@ When the region is active, comment its lines instead."
 ;;;;;;;;;;;;;
 ;;;; web ;;;;
 
+;; TODO do i really need jtsx? is it more trouble than its worth? can i not just
+;; stick to typescript-ts-mode?
 (use-package jtsx
+  ;; "/home/evermind/.guix-home/profile/lib/node_modules/typescript/lib" ; tsserver-library
+  ;; "/home/evermind/.guix-home/profile/bin/typescript-language-server" ; ts-lsp-executable
+  ;; "/home/evermind/.guix-home/profile/bin/node" ; node-executable
+  ;; "/home/evermind/.guix-home/profile/bin/eslint" ; eslint-executable
+  ;; "/home/evermind/.guix-home/profile/bin/dapDebugServer" ; vscode-js-debug-executable
   :mode (("\\.jsx?\\'" . jtsx-jsx-mode)
          ("\\.tsx\\'" . jtsx-tsx-mode)
          ("\\.ts\\'" . jtsx-typescript-mode))
   :config
+  ;; TODO find a way to not have to bake in tsserver.path. maybe have typescript
+  ;; package installed through a project guix.scm
   (add-to-list
    'eglot-server-programs
-   '((jtsx-jsx-mode jtsx-tsx-mode jtsx-typescript-mode)
-     . ("typescript-language-server" "--stdio"))))
+   '((jtsx-jsx-mode :language-id "javascriptreact")
+     . ("/home/evermind/.guix-home/profile/bin/typescript-language-server" "--stdio"
+        :initializationOptions
+        (:tsserver
+         (:path "/home/evermind/.guix-home/profile/lib/node_modules/typescript/lib")))))
+
+  ;; TODO remove all the apheleia-npx calls because they don't work with my setup
+  (setf (alist-get 'prettier-javascript apheleia-formatters)
+        '("prettier" "--stdin-filepath" filepath "--parser=babel-flow"
+          (apheleia-formatters-js-indent "--use-tabs" "--tab-width")))
+
+  (setf (alist-get 'jtsx-jsx-mode apheleia-mode-alist)
+        'prettier-javascript))
 
 ;;;;;;;;;;;;;
 ;;;; org ;;;;
