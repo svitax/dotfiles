@@ -2702,7 +2702,8 @@ When the region is active, comment its lines instead."
           org-cycle-separator-lines 0
           org-loop-over-headlines-in-active-region 'start-level
           org-insert-heading-respect-content t
-          org-fontify-quote-and-verse-blocks t)
+          org-fontify-quote-and-verse-blocks t
+          org-bookmark-names-plist nil)
 
   ;; One of the many use-cases for Org is to maintain a plain text to-do list. A
   ;; heading that starts with a to-do keyword, such as "TODO", is treated as a
