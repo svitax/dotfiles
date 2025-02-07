@@ -3674,6 +3674,8 @@ marginal notes file will be \"DATE==SIGNATURE--TITLE__literature.org\"
 in your `denote-directory'."
     (let* ((source-filename (cond ((eq major-mode 'nov-mode)
                                    (file-name-nondirectory nov-file-name))
+                                  ((eq major-mode 'pdf-view-mode)
+                                   (file-name-nondirectory buffer-file-name))
                                   (t
                                    (org-remark-source-find-file-name))))
            ;; (source-filename (file-name-sans-extension (file-name-nondirectory (org-remark-source-find-file-name))))
