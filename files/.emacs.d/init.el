@@ -551,6 +551,8 @@ writeable."
 
 (use-package guix
   :config
+  ;; NOTE find a way to only activate this when necessary
+  (add-hook 'scheme-mode-hook #'guix-devel-mode)
   (bind-keys
    :map +guix-prefix-map
    ("g" . guix)))
