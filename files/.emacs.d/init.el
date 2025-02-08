@@ -2366,6 +2366,9 @@ When the region is active, comment its lines instead."
    ("M-g M-n" . flymake-goto-next-error)
    ("M-g M-p" . flymake-goto-prev-error)))
 
+;; TODO document flymake-collection
+(use-package flymake-collection)
+
 ;;;;;;;;;;;;;;;;;;;;
 ;;;; formatting ;;;;
 
@@ -2660,7 +2663,13 @@ When the region is active, comment its lines instead."
           (apheleia-formatters-js-indent "--use-tabs" "--tab-width")))
 
   (setf (alist-get 'jtsx-jsx-mode apheleia-mode-alist)
-        'prettier-javascript))
+        'prettier-javascript)
+
+  ;; TODO create a :lint use-package keyword to do this for me
+  (add-hook 'jtsx-jsx-mode-hook
+            (defun jtsx-mode-setup-flymake ()
+              (add-hook 'flymake-diagnostic-functions 'flymake-collection-eslint nil t)
+              (flymake-mode +1))))
 
 ;;;;;;;;;;;;;
 ;;;; org ;;;;
