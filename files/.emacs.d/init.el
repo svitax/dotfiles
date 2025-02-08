@@ -747,7 +747,6 @@ writeable."
   ;; contents.
   (global-auto-revert-mode))
 
-;; TODO savehist
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;;; minibuffer ;;;;
@@ -817,6 +816,40 @@ writeable."
   (setopt file-name-shadow-properties
           '(face file-name-shadow field shadow invisible t intangible t))
   (file-name-shadow-mode 1))
+
+(use-package savehist
+  :config
+  ;; Minibuffer prompts can have their own history. When they do not, they share
+  ;; a common history of user inputs. Emacs keeps track of that history in the
+  ;; current session, but loses it as soon as we close it. With `savehist-mode'
+  ;; enabled, all minibuffer histories are written to a file and are restored
+  ;; when we start Emacs again.
+  ;;
+  ;; Histories are useful in two ways:
+  ;;
+  ;; 1. Recent choices appear at the top, so we can find them more easily.
+  ;;
+  ;; 2. The `M-p' (`previous-history-element') and `M-n'
+  ;; (`next-history-element') commands it the minibuffer will be useful right
+  ;; away upon restoring Emacs.
+  ;;
+  ;; Since we are already recording minibuffer histories, we can instruct
+  ;; `savehist-mode' to also keep track of additional variables and restore them
+  ;; next time we use Emacs. Hence `savehist-additional-variables'. I do this in
+  ;; a few places: `corfu', `register', and `shell'.
+  ;;
+  ;; Note that the user option `history-length' applies to each individual
+  ;; history variable: it is not about all histories combined.
+  ;;
+  ;; Overall, I am happy with this feature and benefit from it on a daily basis.
+  (setopt history-length 100
+          history-delete-duplicates t
+          savehist-save-minibuffer-history t
+          savehist-file (locate-user-emacs-file "savehist"))
+
+  (add-to-list 'savehist-additional-variables 'kill-ring)
+
+  (savehist-mode))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;;; marginalia ;;;;
