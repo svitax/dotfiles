@@ -3844,10 +3844,10 @@ in your `denote-directory'."
                               '(modus-vivendi
                                 modus-vivendi-tinted
                                 modus-vivendi-tritanopia
-                                modus-vivendi-deuteranopia))
+                                modus-vivendi-deuteranopia)))
           (pdf-view-midnight-minor-mode 1)
         (pdf-view-midnight-minor-mode -1))
-      (+pdf-tools-backdrop))))
+      (+pdf-tools-backdrop)))
 
   (defun +pdf-tools-themes-toggle (&rest _)
     (mapc
