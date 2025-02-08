@@ -747,6 +747,13 @@ writeable."
   ;; contents.
   (global-auto-revert-mode))
 
+;; TODO document saveplace
+(use-package saveplace
+  :config
+  ;; Tell Emacs to record where we were in the file, so we resume there on next
+  ;; visit. Turn on place saving globally.
+  (save-place-mode))
+
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;;; minibuffer ;;;;
