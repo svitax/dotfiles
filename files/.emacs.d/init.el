@@ -2438,6 +2438,17 @@ When the region is active, comment its lines instead."
   ;; where to look for them.
   (setopt treesit-extra-load-path '("~/.guix-home/profile/lib/tree-sitter")))
 
+;;;;;;;;;;;;;
+;;;; lsp ;;;;
+
+;; NOTE document eglot
+(use-package eglot
+  :init
+  ;; Ask Eglot to stay away from completely taking over Flymake. Just add it as
+  ;; another item.
+  (add-to-list 'eglot-stay-out-of 'flymake)
+  (add-hook 'flymake-diagnostic-functions 'eglot-flymake-backend))
+
 ;;;;;;;;;;;;;;;;;
 ;;;; compile ;;;;
 
