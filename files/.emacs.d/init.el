@@ -3780,9 +3780,18 @@ in your `denote-directory'."
   ;; Modus themes, we need to also account for the current theme and control the
   ;; activation of `pdf-view-midnight-minor-mode'. To which end we arrive at
   ;; something like the following:
+  (defun +in-list-p (val list)
+    "Return t if VAL is in LIST, otherwise nil."
+    (when (member val list) t))
+
   (defun +pdf-tools-midnight-mode-toggle (&rest _)
     (when (derived-mode-p 'pdf-view-mode)
-      (if (eq (car custom-enabled-themes) 'modus-vivendi)
+      (if (+in-list-p (car custom-enabled-themes)
+                      (append ef-themes-dark-themes
+                              '(modus-vivendi
+                                modus-vivendi-tinted
+                                modus-vivendi-tritanopia
+                                modus-vivendi-deuteranopia))
           (pdf-view-midnight-minor-mode 1)
         (pdf-view-midnight-minor-mode -1))
       (+pdf-tools-backdrop)))
