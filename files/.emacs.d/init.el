@@ -647,6 +647,8 @@ writeable."
 
   (modus-themes-select 'modus-vivendi))
 
+(use-package ef-themes)
+
 (use-package pulsar
   :config
   ;; Temporarily highlight the current line after a given function is invoked.

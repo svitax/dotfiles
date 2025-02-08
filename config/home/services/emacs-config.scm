@@ -16,6 +16,7 @@
         emacs-which-key
         emacs-fontaine
         emacs-modus-themes ; @4.5.0
+        emacs-ef-themes
         emacs-pulsar
         +emacs-cursory ; @1.1.0
         emacs-envrc
