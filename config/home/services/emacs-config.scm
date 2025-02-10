@@ -14,6 +14,7 @@
         emacs-guix
         +emacs-bind
         emacs-which-key
+        emacs-evil
         emacs-fontaine
         emacs-modus-themes ; @4.5.0
         emacs-ef-themes

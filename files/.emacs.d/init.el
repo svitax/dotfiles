@@ -456,6 +456,7 @@ writeable."
     "E" 'evil-window-bottom
     "ge" 'evil-end-of-line
     "U" 'evil-redo
+    (kbd "C-s") 'save-buffer
     (kbd "C-r") 'isearch-backward
     "gc" '+comment-dwim
     "gd" 'xref-find-definitions
@@ -482,6 +483,25 @@ writeable."
     (evil-define-key '(normal motion visual) global-map
       (kbd "C-d") #'+golden-ratio-scroll-screen-down
       (kbd "C-u") #'+golden-ratio-scroll-screen-up))
+
+  (with-eval-after-load 'mowie
+    (evil-define-key '(normal motion visual basic) global-map
+      (kbd "gy") #'+beginning-of-line
+      (kbd "ge") #'+end-of-line))
+
+  (with-eval-after-load 'magit
+    (evil-define-key '(visual basic) magit-status-mode-map
+      (kbd "K") #'magit-discard)
+    (evil-define-key 'basic magit-status-mode-map
+      (kbd "l") #'magit-log)
+    (evil-define-key 'visual magit-status-mode-map
+      (kbd "s") #'magit-stage
+      (kbd "u") #'magit-unstage))
+
+  (with-eval-after-load 'org
+    (evil-define-key '(normal visual motion) org-mode-map
+      (kbd "<tab>") #'org-cycle
+      (kbd "<return>") #'org-ctrl-c-ctrl-c))
 
   (evil-mode 1))
 
@@ -2621,12 +2641,6 @@ When the region is active, comment its lines instead."
   :config
   (setopt magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
 
-  (with-eval-after-load 'evil
-    (evil-define-key '(visual basic) magit-status-mode-map (kbd "K") #'magit-discard)
-    (evil-define-key 'basic magit-status-mode-map (kbd "l") #'magit-log)
-    (evil-define-key 'visual magit-status-mode-map (kbd "s") #'magit-stage)
-    (evil-define-key 'visual magit-status-mode-map (kbd "u") #'magit-unstage))
-
   (bind-keys
    :map +project-prefix-map
    ("v" . magit-project-status)
@@ -3027,12 +3041,7 @@ See also `org-save-all-org-buffers'."
                                         ; (alias for C-c ')
    :map org-src-mode-map
    ("M-," . org-edit-src-exit) ; see M-. above
-   )
-
-  (with-eval-after-load 'evil
-    (evil-define-key '(normal visual motion) org-mode-map
-      (kbd "<tab>") #'org-cycle
-      (kbd "<return>") #'org-ctrl-c-ctrl-c))
+   ))
 
 (use-package org-capture
   :config
