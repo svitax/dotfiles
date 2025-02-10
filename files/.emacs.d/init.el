@@ -522,6 +522,10 @@ writeable."
       "v" 'evil-visual-char
       "V" 'evil-visual-line))
 
+  (with-eval-after-load 'help
+    (evil-define-key 'basic help-mode-map
+      (kbd "C-i") 'help-go-forward
+      (kbd "C-o") 'help-go-back))
 
   (with-eval-after-load 'compile
     (evil-define-key 'basic compilation-mode-map
