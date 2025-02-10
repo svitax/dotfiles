@@ -876,9 +876,22 @@ writeable."
 ;;;;;;;;;;;;;;;;;;;;
 ;;;; marginalia ;;;;
 
-;; NOTE document marginalia
 (use-package marginalia
   :config
+  ;; The `marginalia' package, co-authored by Daniel Mendler and Omar Antolin
+  ;; Camarena, provides helpful annotations to the side of completion
+  ;; candidates. We see its effect, for example, when we call `M-x': each
+  ;; command has a brief description next to it (taken from its doc string) as
+  ;; well as a key binding, if it has one.
+  ;;
+  ;; Annotations are provided on a per-category basis. Categories are metadata
+  ;; associated with the completion table, which describe what the candidates
+  ;; are about.
+  ;;
+  ;; The out-of-the-box settings of `marginalia' are perfectly usable. We can
+  ;; always write our own functions or opt out of some annotations by modifying
+  ;; the user option `marginalia-annotator-registry'. I used to do that, but
+  ;; ultimately decided that I did not need to make any changes.
   (setopt marginalia-max-relative-age 0 ; absolute time
           marginalia-align 'right)
   (bind-keys :map minibuffer-local-map
