@@ -154,6 +154,9 @@
   (defvar-keymap +registers-prefix-map
     :doc "Prefix map for registers."
     :prefix '+registers-prefix-map)
+  (defvar-keymap +search-prefix-map
+    :doc "Prefix map for search."
+    :prefix '+search-prefix-map)
   (defvar-keymap +tab-prefix-map
     :doc "Prefix map for tabs."
     :prefix '+tab-prefix-map)
@@ -176,8 +179,9 @@
     )
 
   (bind-keys
-   ;; :map +prefix-map
-   :map ctl-x-map
+   :map global-map
+   ("C-x" . +prefix-map)
+   :map +prefix-map
    ; ("a" . )
    ("b" . consult-buffer) ("C-b" . ibuffer)  ; list-buffers
    ("c" . org-capture) ("C-c" . save-buffers-kill-emacs)
@@ -195,19 +199,16 @@
    ("p" . +project-prefix-map) ("C-p" . mark-page)
    ("q" . kbd-macro-query) ("C-q" . read-only-mode)
    ("r" . +registers-prefix-map) ("C-r" . find-file-read-only)
-   ;; ("s" . )
-   ("C-s" . save-buffer) ; save-some-buffers
+   ("s" . +search-prefix-map) ("C-s" . save-buffer) ; save-some-buffers
    ("t" . +tab-prefix-map) ("C-t" . transpose-lines)
    ;; "u" undo? undo-prefix?
    ("v" . +vc-prefix-map) ("C-v" . find-alternate-file)
    ("w" . +window-prefix-map) ("C-w" . write-file)
    ("x" . +toggle-prefix-map) ("C-x" . exchange-point-and-mark)
    ;; ("y" . )
+   ("TAB" . indent-rigidly)
    ("z" . +notes-prefix-map) ; "zettelkasten" mnemonic
-   ("TAB" . indent-rigidly)))
-
-;; TODO replace with embark
-(use-package which-key)
+   ))
 
 ;;;;;;;;;;;;;;
 ;;;; evil ;;;;
@@ -223,7 +224,6 @@
 ;;
 ;; TODO maybe use phisearch for / and ?
 (use-package evil
-  :disabled t
   :config
   ;; The "basic" state
   (defvar +evil-basic-tag " <BA> "
@@ -274,8 +274,11 @@
     "Return to normal or basic state per `+evil-need-basic-p'."
     (interactive)
     (if (+evil-need-basic-p)
-        (evil-force-basic-state)
+        (evil-basic-state)
       (evil-force-normal-state)))
+
+  (dolist (mode +evil-basic-state-modes)
+    (evil-set-initial-state mode 'basic))
 
   ;; Shift commands
   (defun +evil-shift-left (&optional beg end)
@@ -620,12 +623,22 @@ writeable."
 (use-package modus-themes
   :config
   (setopt modus-themes-common-palette-overrides
-          `((bg-region bg-sage)
-            ;; With `modus-themes-preset-overrides-faint' the grays are toned
+          `(;; With `modus-themes-preset-overrides-faint' the grays are toned
             ;; down, gray backgrounds are removed from some contexts, and almost
-            ;; all accent colors are desaturated. Is makes the themes less
+            ;; all accent colors are desaturated. It makes the themes less
             ;; attention-grabbing.
             ,@modus-themes-preset-overrides-faint))
+
+  (setopt modus-operandi-palette-overrides
+          `((bg-region bg-sage)
+            (bg-mode-line-active bg-blue-intense)
+            (fg-mode-line-active fg-main)))
+
+  (setopt modus-vivendi-palette-overrides
+          `((cursor yellow-warmer)
+            (bg-region bg-lavender)
+            (bg-mode-line-active bg-lavender)
+            (fg-mode-line-active fg-main)))
 
   ;; We use the `enable-theme-functions' hook to ensure that these values are
   ;; updated after we switch themes. This special hook available in Emacs 29+
@@ -1121,16 +1134,16 @@ first one. Else do `vertico-extit'."
    ("M-y" . consult-yank-pop)
    :map goto-map
    ("g" . consult-goto-line)
-   :map search-map
-   ("M-b" . consult-buffer)
-   ("M-f" . consult-find) ; fd
-   ("M-g" . consult-grep) ; rg
-   ("M-h" . consult-history)
+   :map +search-prefix-map
+   ("b" . consult-buffer)
+   ("f" . consult-find) ; fd
+   ("g" . consult-grep) ; rg
+   ("h" . consult-history)
    ("i" . consult-imenu)
-   ("M-i" . consult-info)
-   ("M-l" . consult-line)
-   ("M-m" . consult-mark)
-   ("M-s" . consult-outline)
+   ("I" . consult-info)
+   ("l" . consult-line)
+   ("m" . consult-mark)
+   ("s" . consult-outline)
    :map consult-narrow-map
    ;; Available filters are displayed with the `consult-narrow-help' command at
    ;; the prompt
@@ -1733,7 +1746,7 @@ Add this to `dired-mode-hook'."
   :no-require
   :config
   (bind-keys
-   :map ctl-x-map
+   :map +prefix-map
    ("k" . +kill-current-buffer)
    :map +buffer-prefix-map
    ("c" . clone-indirect-buffer-other-window)
@@ -2468,7 +2481,7 @@ When the region is active, comment its lines instead."
   (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
 
   (bind-keys
-   :map ctl-x-map
+   :map +prefix-map
    ("," . project-compile)
    ("." . recompile)))
 
@@ -2487,7 +2500,7 @@ When the region is active, comment its lines instead."
   ;; the targets from a Makefile and generates actions for them. This allows us
   ;; to construct rich command interfaces.
   (bind-keys
-   :map ctl-x-map
+   :map +prefix-map
    ("/" . compile-multi)))
 
 (use-package consult-compile-multi
@@ -2515,7 +2528,7 @@ When the region is active, comment its lines instead."
   ;; following project types: projection (simply presents available projection
   ;; commands for the matching project types), CMake, Make, Poetry Poe, and Tox.
   (bind-keys
-   :map ctl-x-map
+   :map +prefix-map
    ("/" . projection-multi-compile)))
 
 ;;;;;;;;;;;;;;
@@ -2594,6 +2607,12 @@ When the region is active, comment its lines instead."
 (use-package magit
   :config
   (setopt magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+
+  (with-eval-after-load 'evil
+    (evil-define-key '(visual basic) magit-status-mode-map (kbd "K") #'magit-discard)
+    (evil-define-key 'basic magit-status-mode-map (kbd "l") #'magit-log)
+    (evil-define-key 'visual magit-status-mode-map (kbd "s") #'magit-stage)
+    (evil-define-key 'visual magit-status-mode-map (kbd "u") #'magit-unstage))
 
   (bind-keys
    :map +project-prefix-map
@@ -2995,7 +3014,12 @@ See also `org-save-all-org-buffers'."
                                         ; (alias for C-c ')
    :map org-src-mode-map
    ("M-," . org-edit-src-exit) ; see M-. above
-   ))
+   )
+
+  (with-eval-after-load 'evil
+    (evil-define-key '(normal visual motion) org-mode-map
+      (kbd "<tab>") #'org-cycle
+      (kbd "<return>") #'org-ctrl-c-ctrl-c))
 
 (use-package org-capture
   :config
@@ -3102,7 +3126,7 @@ See also `org-save-all-org-buffers'."
   ;;   (org-capture nil "@"))
 
   (bind-keys
-   :map ctl-x-map
+   :map +prefix-map
    ("c" . org-capture)
    ("i" . +org-capture-inbox)
    ;; :map notmuch-search-mode-map
@@ -3368,7 +3392,7 @@ continue, per `org-agenda-skip-function'."
     (org-agenda nil "A"))
 
   (bind-keys
-   :map ctl-x-map
+   :map +prefix-map
    ;; NOTE replaced abbrev maps, find somewhere to relocate them later
    ("a" . +org-agenda-custom)
    ("C-a" . org-agenda)))
@@ -3616,7 +3640,7 @@ BibTeX file."
    ("g" . consult-denote-grep)
    :map +file-prefix-map
    ("n" . consult-denote-find)
-   :map search-map
+   :map +search-prefix-map
    ("n" . consult-denote-grep)))
 
 (use-package citar-denote
