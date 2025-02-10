@@ -2549,8 +2549,14 @@ When the region is active, comment its lines instead."
   (setopt compilation-scroll-output t)
   ;; Kill compilation process before starting another.
   (setopt compilation-always-kill t)
+  ;; Don't underline.
+  (setopt compilation-message-face 'default)
   ;; Translate ANSI escape sequences into faces
-  (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
+  (defun +compile-ansi-color-apply ()
+    "Translate control sequences into text properties in `compile' buffer."
+    (interactive)
+    (ansi-color-apply-on-region (point-min) (point-max)))
+  (add-hook 'compilation-filter-hook '+compile-ansi-color-apply)
 
   (bind-keys
    :map +prefix-map
