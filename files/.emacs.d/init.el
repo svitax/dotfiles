@@ -281,6 +281,22 @@
   (dolist (mode +evil-basic-state-modes)
     (evil-set-initial-state mode 'basic))
 
+  ;; Make sure some modes start out in the Emacs state.
+  (setq +evil-emacs-state-modes
+        '(comint-mode
+          rcirc-mode
+          eshell-mode
+          inferior-emacs-lisp-mode
+          reb-mode
+          shell-mode
+          term-mode
+          wdired-mode
+          log-edit-mode
+          git-commit-mode))
+
+  (dolist (mode +evil-emacs-state-modes)
+    (evil-set-initial-state mode 'emacs))
+
   ;; Shift commands
   (defun +evil-shift-left (&optional beg end)
     "Left shift the region and keep it highlighted.
