@@ -246,6 +246,7 @@
     "V" 'evil-visual-line)
   (setq +evil-basic-state-modes
         '(completion-list-mode
+          compilation-mode
           Buffer-menu-mode
           Custom-mode
           edebug-mode
@@ -520,6 +521,11 @@ writeable."
       "e" 'evil-forward-char
       "v" 'evil-visual-char
       "V" 'evil-visual-line))
+
+
+  (with-eval-after-load 'compile
+    (evil-define-key 'basic compilation-mode-map
+      "gr" 'recompile))
 
   (evil-mode 1))
 
