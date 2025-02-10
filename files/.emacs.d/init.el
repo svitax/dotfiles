@@ -503,6 +503,24 @@ writeable."
       (kbd "<tab>") #'org-cycle
       (kbd "<return>") #'org-ctrl-c-ctrl-c))
 
+  (with-eval-after-load 'nov
+    (evil-define-key 'basic nov-mode-map
+      (kbd "C-f") #'nov-scroll-up
+      (kbd "C-b") #'nov-scroll-down
+      (kbd "C-d") #'nov-scroll-up
+      (kbd "C-u") #'nov-scroll-down
+      "d" #'nov-scroll-up
+      "u" #'nov-scroll-down
+      "f" #'+ace-link-nov
+      "gy" 'evil-beginning-of-line
+      "ge" 'evil-end-of-line
+      "y" 'evil-backward-char
+      "h" 'evil-next-line
+      "a" 'evil-previous-line
+      "e" 'evil-forward-char
+      "v" 'evil-visual-char
+      "V" 'evil-visual-line))
+
   (evil-mode 1))
 
 ;; TODO I don't think I need devil if I can make home-row mods work.
