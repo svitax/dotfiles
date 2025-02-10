@@ -31,6 +31,7 @@
         ;; +emacs-projection
         emacs-popper
         emacs-avy
+        emacs-ace-link
         +emacs-better-jumper
         +emacs-mowie ; @0.1.1
         emacs-move-text

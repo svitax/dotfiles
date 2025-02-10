@@ -2100,6 +2100,21 @@ buffer's window as well."
    :map global-map
    ("C-," . avy-goto-char-timer)))
 
+;; TODO document ace-link
+(use-package ace-link
+  :config
+  (bind-keys
+   :map compilation-mode-map
+   ("f" . ace-link-compilation)
+   :map help-mode-map
+   ("f" . ace-link-help)
+   ;; :map Info-mode-map
+   ;; ("f" . ace-link-info)
+   ;; :map woman-mode-map
+   ;; ("f" . ace-link-woman)
+   :map eww-mode-map
+   ("f" . ace-link-eww)))
+
 (use-package dogears
   :disabled t
   :load-path "plugins/dogears/"
@@ -3946,6 +3961,19 @@ in your `denote-directory'."
   ;; Activate nov-mode for epub files
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
   :config
+  (defun +ace-link--nov-action (pt)
+    (when (number-or-marker-p pt)
+      (goto-char (1+ pt))
+      (nov-browse-url)))
+  (defun +ace-link-nov ()
+    "Open a visible link in a `nov-mode' buffer."
+    (interactive)
+    (let ((pt (avy-with ace-link-eww
+                (avy--process
+                 (mapcar #'cdr (ace-link--eww-collect))
+                 (avy--style-fn avy-style)))))
+      (+ace-link--nov-action pt)))
+
   (setq nov-text-width 80))
 
 ;;;;;;;;;;;;;;;;;;
