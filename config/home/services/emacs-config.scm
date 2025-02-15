@@ -7,6 +7,7 @@
   #:use-module (gnu packages emacs)
   #:use-module (gnu packages emacs-xyz)
   #:use-module (gnu packages tree-sitter)
+  #:use-module (gnu packages node)
   #:export (home-emacs-config-service-type))
 
 (define (home-emacs-config-profile-service config)
@@ -47,6 +48,7 @@
         tree-sitter-json
         +emacs-jtsx
         ;; TODO find a way to have these node packages installed per package
+        node
         node-typescript
         node-typescript-language-server
         node-eslint

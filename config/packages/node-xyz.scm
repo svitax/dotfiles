@@ -4982,6 +4982,748 @@ exec -a dapDebugServer " node " " exe " " "$@\n"
 
 (define-public node-eslint node-eslint-8.17.0)
 
+(define-public node-object-keys-1.1.1
+  (package
+    (name "node-object-keys")
+    (version "1.1.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/object-keys/-/object-keys-1.1.1.tgz")
+       (sha256
+        (base32
+         "04pjwxszvk8alk6z5lzk02ba3q56i2g70cs02f57qxhraq2xjy4n"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (home-page "https://github.com/ljharb/object-keys")
+    (synopsis
+     "An Object.keys shim. Invoke its 'shim' method to shim Object.keys if it is unavailable.")
+    (description
+     "An Object.keys shim. Invoke its 'shim' method to shim Object.keys if it is unavailable.")
+    (license license:expat)))
+
+(define-public node-es-errors-1.3.0
+  (package
+    (name "node-es-errors")
+    (version "1.3.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/es-errors/-/es-errors-1.3.0.tgz")
+       (sha256
+        (base32
+         "14q935xgv4cblmy8lk3brx4ypwxpgrid77r1lfnbilsbbg1x2kfi"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (home-page "https://github.com/ljharb/es-errors")
+    (synopsis
+     "A simple cache for a few of the JS Error constructors.")
+    (description
+     "A simple cache for a few of the JS Error constructors.")
+    (license license:expat)))
+
+(define-public node-es-object-atoms-1.1.1
+  (package
+    (name "node-es-object-atoms")
+    (version "1.1.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/es-object-atoms/-/es-object-atoms-1.1.1.tgz")
+       (sha256
+        (base32
+         "1kkrwpp6nz2nc32zxin52xnngyg7qg38c5ljy5xyx2l1azby861y"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (inputs
+     `(("node-es-errors" ,node-es-errors-1.3.0)))
+    (home-page "https://github.com/ljharb/es-object-atoms")
+    (synopsis
+     "ES Object-related atoms: Object, ToObject, RequireObjectCoercible.")
+    (description
+     "ES Object-related atoms: Object, ToObject, RequireObjectCoercible.")
+    (license license:expat)))
+
+(define-public node-es-define-property-1.0.1
+  (package
+    (name "node-es-define-property")
+    (version "1.0.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/es-define-property/-/es-define-property-1.0.1.tgz")
+       (sha256
+        (base32
+         "1xw50gnqd3d7nyfcl5a5lzrhxa0sjq7qyzaw1n5hld1166qvi1jr"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (home-page "https://github.com/ljharb/es-define-property")
+    (synopsis
+     "Object.defineProperty, but not IE 8's broken one.")
+    (description
+     "Object.defineProperty, but not IE 8's broken one.")
+    (license license:expat)))
+
+(define-public node-has-property-descriptors-1.0.2
+  (package
+    (name "node-has-property-descriptors")
+    (version "1.0.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/has-property-descriptors/-/has-property-descriptors-1.0.2.tgz")
+       (sha256
+        (base32
+         "11zsidd9sb9v0bzq7ia9iw4h5mgjdwn5mxgzdvmqw9ifygcbn682"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (inputs
+     `(("node-es-define-property" ,node-es-define-property-1.0.1)))
+    (home-page "https://github.com/inspect-js/has-property-descriptors")
+    (synopsis
+     "Does the environment have full property descriptor support? Handles IE 8's broken defineProperty/gOPD.")
+    (description
+     "Does the environment have full property descriptor support? Handles IE 8's broken defineProperty/gOPD.")
+    (license license:expat)))
+
+(define-public node-gopd-1.2.0
+  (package
+    (name "node-gopd")
+    (version "1.2.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/gopd/-/gopd-1.2.0.tgz")
+       (sha256
+        (base32
+         "10nskxn4cwbfd9i9nzy2r7pf0zm46j9z7dzvd0adr1fj9pgd0dnm"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (home-page "https://github.com/ljharb/gopd")
+    (synopsis
+     "Object.getOwnPropertyDescriptor, but accounts for IE's broken implementation.")
+    (description
+     "Object.getOwnPropertyDescriptor, but accounts for IE's broken implementation.")
+    (license license:expat)))
+
+(define-public node-define-data-property-1.1.4
+  (package
+    (name "node-define-data-property")
+    (version "1.1.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/define-data-property/-/define-data-property-1.1.4.tgz")
+       (sha256
+        (base32
+         "1lp423qridddixk0b6sgkccdf770knbaha1wcal4qdpi7pbllc0n"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (inputs
+     `(("node-es-define-property" ,node-es-define-property-1.0.1)
+       ("node-es-errors" ,node-es-errors-1.3.0)
+       ("node-gopd" ,node-gopd-1.2.0)))
+    (home-page "https://github.com/ljharb/define-data-property")
+    (synopsis
+     "Define a data property on an object. Will fall back to assignment in an engine without descriptors.")
+    (description
+     "Define a data property on an object. Will fall back to assignment in an engine without descriptors.")
+    (license license:expat)))
+
+(define-public node-define-properties-1.2.1
+  (package
+    (name "node-define-properties")
+    (version "1.2.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/define-properties/-/define-properties-1.2.1.tgz")
+       (sha256
+        (base32
+         "1x20dff3wz5pp7ciyxbyhglgxvggwsavd56l7ivrvvmd9y0f7rsx"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (inputs
+     `(("node-define-data-property" ,node-define-data-property-1.1.4)
+       ("node-has-property-descriptors" ,node-has-property-descriptors-1.0.2)
+       ("node-object-keys" ,node-object-keys-1.1.1)))
+    (home-page "https://github.com/ljharb/define-properties")
+    (synopsis
+     "Define multiple non-enumerable properties at once. Uses Object.defineProperty when available; falls back to standard assignment in older engines. Existing properties are not overridden. Accepts a map of property names to a predicate that, when true, force-overrides.")
+    (description
+     "Define multiple non-enumerable properties at once. Uses Object.defineProperty when available; falls back to standard assignment in older engines. Existing properties are not overridden. Accepts a map of property names to a predicate that, when true, force-overrides.")
+    (license license:expat)))
+
+(define-public node-call-bound-1.0.3
+  (package
+    (name "node-call-bound")
+    (version "1.0.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/call-bound/-/call-bound-1.0.3.tgz")
+       (sha256
+        (base32
+         "0vyp25g7palr0m6j54pd8zpr9rz0r1sdmsj9apr6cklmmhsmghgg"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (inputs
+     `(("node-call-bind-apply-helpers" ,node-call-bind-apply-helpers-1.0.1)
+       ("node-get-intrinsic" ,node-get-intrinsic-1.2.7)))
+    (home-page "https://github.com/ljharb/call-bound")
+    (synopsis
+     "Robust call-bound JavaScript intrinsics, using call-bind and get-intrinsic.")
+    (description
+     "Robust call-bound JavaScript intrinsics, using call-bind and get-intrinsic.")
+    (license license:expat)))
+
+(define-public node-call-bind-apply-helpers-1.0.1
+  (package
+    (name "node-call-bind-apply-helpers")
+    (version "1.0.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/call-bind-apply-helpers/-/call-bind-apply-helpers-1.0.1.tgz")
+       (sha256
+        (base32
+         "1ddxj9738d8vlcsz602hmiql1rl6iwsha12hc8vvjfl5i3iasapx"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (inputs
+     `(("node-es-errors" ,node-es-errors-1.3.0)
+       ("node-function-bind" ,node-function-bind-1.1.2)))
+    (home-page "https://github.com/ljharb/call-bind-apply-helpers")
+    (synopsis
+     "Helper functions around Function call/apply/bind, for use in call-bind.")
+    (description
+     "Helper functions around Function call/apply/bind, for use in call-bind.")
+    (license license:expat)))
+
+(define-public node-set-function-length-1.2.2
+  (package
+    (name "node-set-function-length")
+    (version "1.2.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/set-function-length/-/set-function-length-1.2.2.tgz")
+       (sha256
+        (base32
+         "0jibjpyi630gp59w40fjhnarmmhjaa8n8x0kw8zpll53vxqdyfd3"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (inputs
+     `(("node-define-data-property" ,node-define-data-property-1.1.4)
+       ("node-es-errors" ,node-es-errors-1.3.0)
+       ("node-function-bind" ,node-function-bind-1.1.2)
+       ("node-get-intrinsic" ,node-get-intrinsic-1.2.7)
+       ("node-gopd" ,node-gopd-1.2.0)
+       ("node-has-property-descriptors" ,node-has-property-descriptors-1.0.2)))
+    (home-page "https://github.com/ljharb/set-function-length")
+    (synopsis
+     "Set a function’s length.")
+    (description
+     "Set a function’s length.")
+    (license license:expat)))
+
+(define-public node-math-intrinsics-1.1.0
+  (package
+    (name "node-math-intrinsics")
+    (version "1.1.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/math-intrinsics/-/math-intrinsics-1.1.0.tgz")
+       (sha256
+        (base32
+         "19s3yi9ziz007ymq0r1k2xk1nrg2m5lc9kw8vy3c0ga9fmaw7hmq"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (home-page "https://github.com/es-shims/math-intrinsics")
+    (synopsis
+     "ES Math-related intrinsics and helpers, robustly cached.")
+    (description
+     "ES Math-related intrinsics and helpers, robustly cached.")
+    (license license:expat)))
+
+(define-public node-hasown-2.0.2
+  (package
+    (name "node-hasown")
+    (version "2.0.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/hasown/-/hasown-2.0.2.tgz")
+       (sha256
+        (base32
+         "0zc0za6zy8y2iwy31ayzwmi4j912j382iwr9xsv09bhirp9c9kah"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (inputs
+     `(("node-function-bind" ,node-function-bind-1.1.2)))
+    (home-page "https://github.com/inspect-js/hasOwn")
+    (synopsis
+     "A robust, ES3 compatible, 'has own property' predicate.")
+    (description
+     "A robust, ES3 compatible, 'has own property' predicate.")
+    (license license:expat)))
+
+(define-public node-has-symbols-1.1.0
+  (package
+    (name "node-has-symbols")
+    (version "1.1.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/has-symbols/-/has-symbols-1.1.0.tgz")
+       (sha256
+        (base32
+         "1ig7dbwgg0kbjg2wc7arp7a28g6l2rwc27lsvhnxzf185x9wfq24"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (home-page "https://github.com/inspect-js/has-symbols")
+    (synopsis
+     "Determine if the JS environment has Symbol support. Supports spec, or shams.")
+    (description
+     "Determine if the JS environment has Symbol support. Supports spec, or shams.")
+    (license license:expat)))
+
+(define-public node-dunder-proto-1.0.1
+  (package
+    (name "node-dunder-proto")
+    (version "1.0.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/dunder-proto/-/dunder-proto-1.0.1.tgz")
+       (sha256
+        (base32
+         "1nyg4r9qjc33kmgixdi5xpb0qsjivy2dcn8wjbwhvhc2ihi444zd"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (inputs
+     `(("node-call-bind-apply-helpers" ,node-call-bind-apply-helpers-1.0.1)
+       ("node-es-errors" ,node-es-errors-1.3.0)
+       ("node-gopd" ,node-gopd-1.2.0)))
+    (home-page "https://github.com/es-shims/dunder-proto")
+    (synopsis
+     "If available, the Object.prototype.__proto__ accessor and mutator, call-bound.")
+    (description
+     "If available, the Object.prototype.__proto__ accessor and mutator, call-bound.")
+    (license license:expat)))
+
+(define-public node-get-proto-1.0.1
+  (package
+    (name "node-get-proto")
+    (version "1.0.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/get-proto/-/get-proto-1.0.1.tgz")
+       (sha256
+        (base32
+         "1086swsp92367j7m6canvgf6zwghh0iqr9f2bwndh7qzzcmcab7b"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (inputs
+     `(("node-dunder-proto" ,node-dunder-proto-1.0.1)
+       ("node-es-object-atoms" ,node-es-object-atoms-1.1.1)))
+    (home-page "https://github.com/ljharb/get-proto")
+    (synopsis
+     "Robustly get the [[Prototype]] of an object. Uses the best available method.")
+    (description
+     "Robustly get the [[Prototype]] of an object. Uses the best available method.")
+    (license license:expat)))
+
+(define-public node-function-bind-1.1.2
+  (package
+    (name "node-function-bind")
+    (version "1.1.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz")
+       (sha256
+        (base32
+         "1ah7x13hmwwfslk72h2rs21c5vqnsxyzqifl2x7lb8823djh4i3h"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (home-page "https://github.com/Raynos/function-bind")
+    (synopsis
+     "Implementation of function.prototype.bind")
+    (description
+     "Implementation of function.prototype.bind")
+    (license license:expat)))
+
+(define-public node-get-intrinsic-1.2.7
+  (package
+    (name "node-get-intrinsic")
+    (version "1.2.7")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/get-intrinsic/-/get-intrinsic-1.2.7.tgz")
+       (sha256
+        (base32
+         "04mw6x1nvkz1k5v4gzk3amv9w359zqb602ap9ky6wss9nq7s689l"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (inputs
+     `(("node-call-bind-apply-helpers" ,node-call-bind-apply-helpers-1.0.1)
+       ("node-es-define-property" ,node-es-define-property-1.0.1)
+       ("node-es-errors" ,node-es-errors-1.3.0)
+       ("node-es-object-atoms" ,node-es-object-atoms-1.1.1)
+       ("node-function-bind" ,node-function-bind-1.1.2)
+       ("node-get-proto" ,node-get-proto-1.0.1)
+       ("node-gopd" ,node-gopd-1.2.0)
+       ("node-has-symbols" ,node-has-symbols-1.1.0)
+       ("node-hasown" ,node-hasown-2.0.2)
+       ("node-math-intrinsics" ,node-math-intrinsics-1.1.0)))
+    (home-page "https://github.com/ljharb/get-intrinsic")
+    (synopsis
+     "Get and robustly cache all JS language-level intrinsics at first require time.")
+    (description
+     "Get and robustly cache all JS language-level intrinsics at first require time.")
+    (license license:expat)))
+
+(define-public node-call-bind-1.0.8
+  (package
+    (name "node-call-bind")
+    (version "1.0.8")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/call-bind/-/call-bind-1.0.8.tgz")
+       (sha256
+        (base32
+         "08q5gghb493kzi1hx8wzgrwlrgsw2ks1s5p4g9915h00rvrvvqih"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (inputs
+     `(("node-call-bind-apply-helpers" ,node-call-bind-apply-helpers-1.0.1)
+       ("node-es-define-property" ,node-es-define-property-1.0.1)
+       ("node-get-intrinsic" ,node-get-intrinsic-1.2.7)
+       ("node-set-function-length" ,node-set-function-length-1.2.2)))
+    (home-page "https://github.com/ljharb/call-bind")
+    (synopsis
+     "Robustly .call.bind() a function.")
+    (description
+     "Robustly .call.bind() a function.")
+    (license license:expat)))
+
+(define-public node-object-entries-1.1.8
+  (package
+    (name "node-object-entries")
+    (version "1.1.8")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/object-entries/-/object-entries-1.1.8.tgz")
+       (sha256
+        (base32
+         "1in47jci92n7pq7446lmcra1apdalnwn6cfp462320jbjkmpmhrx"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (inputs
+     `(("node-call-bind" ,node-call-bind-1.0.8)
+       ("node-define-properties" ,node-define-properties-1.2.1)
+       ("node-es-object-atoms" ,node-es-object-atoms-1.1.1)))
+    (home-page "https://github.com/ljharb/object.assign")
+    (synopsis
+     "An ES2017 spec-compliant Object.entries shim. Invoke its 'shim' method to shim Object.entries if it is unavailable or noncompliant.")
+    (description
+     "An ES2017 spec-compliant Object.entries shim. Invoke its 'shim' method to shim Object.entries if it is unavailable or noncompliant.")
+    (license license:expat)))
+
+(define-public node-object-assign-4.1.7
+  (package
+    (name "node-object-assign")
+    (version "4.1.7")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/object-assign/-/object-assign-4.1.7.tgz")
+       (sha256
+        (base32
+         "1in47jci92n7pq7446lmcra1apdalnwn6cfp462320jbjkmpmhrx"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (inputs
+     `(("node-call-bind" ,node-call-bind-1.0.8)
+       ("node-call-bound" ,node-call-bound-1.0.3)
+       ("node-define-properties" ,node-define-properties-1.2.1)
+       ("node-es-object-atoms" ,node-es-object-atoms-1.1.1)
+       ("node-has-symbols" ,node-has-symbols-1.1.0)
+       ("node-object-keys" ,node-object-keys-1.1.1)))
+    (home-page "https://github.com/ljharb/object.assign")
+    (synopsis
+     "An Object.assign shim. Invoke its 'shim' method to shim Object.assign if it is unavailable.")
+    (description
+     "An Object.assign shim. Invoke its 'shim' method to shim Object.assign if it is unavailable.")
+    (license license:expat)))
+
+(define-public node-confusing-browser-globals-1.0.11
+  (package
+    (name "node-confusing-browser-globals")
+    (version "1.0.11")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/confusing-browser-globals/-/confusing-browser-globals-1.0.11.tgz")
+       (sha256
+        (base32
+         "1in47jci92n7pq7446lmcra1apdalnwn6cfp462320jbjkmpmhrx"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (home-page "https://www.npmjs.com/package/confusing-browser-globals")
+    (synopsis
+     "A curated list of browser globals that commonly cause confusion and are not recommended to use without an explicit window. qualifier.")
+    (description
+     "A curated list of browser globals that commonly cause confusion and are not recommended to use without an explicit window. qualifier.")
+    (license license:expat)))
+
+(define-public node-eslint-config-airbnb-base-15.0.0
+  (package
+    (name "node-eslint-config-airbnb-base")
+    (version "15.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/eslint-config-airbnb-base/-/eslint-config-airbnb-base-15.0.0.tgz")
+       (sha256
+        (base32
+         "1lkg0i95375l7xibim8996zhkf12xyxsqs4lqmcay1ghzs0iyjsb"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (inputs
+     `(("node-confusing-browser-locals" ,node-confusing-browser-globals-1.0.11)
+       ("node-object-assign" ,node-object-assign-4.1.7)
+       ("node-object-entries" ,node-object-entries-1.1.8)
+       ("node-semver" ,node-semver-7.3.7)))
+    (home-page "https://github.com/airbnb/javascript")
+    (synopsis
+     "This package provides Airbnb's base JS .eslintrc (without React plugins) as an extensible shared config.")
+    (description
+     "This package provides Airbnb's base JS .eslintrc (without React plugins) as an extensible shared config.")
+    (license license:expat)))
+
+(define-public node-eslint-config-airbnb
+  (package
+    (name "node-eslint-config-airbnb")
+    (version "19.0.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri "https://registry.npmjs.org/eslint-config-airbnb/-/eslint-config-airbnb-19.0.4.tgz")
+       (sha256
+        (base32
+         "12sppq3dyj9xxjwa32hlp1ma7agpvvs34wpzh5gyqa19v2scpjvw"))))
+    (build-system node-build-system)
+    (arguments
+     `(#:tests?
+       #f
+       #:node ,node-stable
+       #:phases
+       (modify-phases
+           %standard-phases
+         (delete 'configure)
+         (delete 'build))))
+    (inputs
+     `(("node-eslint-config-airbnb-base" ,node-config-airbnb-base-15.0.0)
+       ("node-object-assign" ,node-object-assign-4.1.7)
+       ("node-object-entries" ,node-object-entries-1.1.8)
+       ("node-eslint" ,node-eslint-8.17.0)))
+    (home-page "https://github.com/airbnb/javascript")
+    (synopsis
+     "This package provides Airbnb's .eslintrc as an extensible shared config")
+    (description
+     "This package provides Airbnb's .eslintrc as an extensible shared config")
+    (license license:expat)))
+
 (define-public node-prettier-3.4.2
   (package
    (name "node-prettier")
