@@ -33,7 +33,8 @@
   (packages (append (list (specification->package "i3-wm")
                           (specification->package "i3status")
                           (specification->package "dmenu")
-                          (specification->package "st"))
+                          (specification->package "st")
+                          (specification->package "nss-certs"))
                     %base-packages))
 
   ;; Below is the list of system services.  To search for available
